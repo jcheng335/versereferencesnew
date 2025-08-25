@@ -29,8 +29,8 @@ class AccurateInlineProcessor:
             'Micah': 'Micah', 'Nahum': 'Nahum', 'Hab': 'Habakkuk', 'Zeph': 'Zephaniah', 'Hag': 'Haggai',
             'Zech': 'Zechariah', 'Mal': 'Malachi',
             'Matt': 'Matthew', 'Mark': 'Mark', 'Luke': 'Luke', 'John': 'John', 'Acts': 'Acts',
-            'Rom': 'Romans', '1 Cor': '1 Corinthians', '2 Cor': '2 Corinthians', 'Gal': 'Galatians',
-            'Eph': 'Ephesians', 'Phil': 'Philippians', 'Col': 'Colossians', '1 Thes': '1 Thessalonians',
+            'Rom': 'Romans', 'Romans': 'Romans', '1 Cor': '1 Corinthians', '2 Cor': '2 Corinthians', 'Gal': 'Galatians',
+            'Eph': 'Ephesians', 'Ephesians': 'Ephesians', 'Phil': 'Philippians', 'Col': 'Colossians', '1 Thes': '1 Thessalonians',
             '2 Thes': '2 Thessalonians', '1 Tim': '1 Timothy', '2 Tim': '2 Timothy', 'Titus': 'Titus',
             'Philem': 'Philemon', 'Heb': 'Hebrews', 'James': 'James', '1 Pet': '1 Peter', '2 Pet': '2 Peter',
             '1 John': '1 John', '2 John': '2 John', '3 John': '3 John', 'Jude': 'Jude', 'Rev': 'Revelation'
@@ -164,27 +164,32 @@ class AccurateInlineProcessor:
         """
         references = []
         
-        # Pattern 1: Full references like "1 Cor. 12:14", "Eph. 4:7"
+        # Pattern 1: Full references like "1 Cor. 12:14", "Eph. 4:7", "Rom. 5:1-11"
+        # Improved pattern to handle more book abbreviations and formats
         full_ref_pattern = r'(?:cf\.\s+)?([123]?\s*[A-Za-z]+\.?)\s+(\d+):(\d+)(?:-(\d+))?'
         for match in re.finditer(full_ref_pattern, line):
             book_abbrev = match.group(1).strip().replace('.', '')
             book_name = self.book_abbreviations.get(book_abbrev, book_abbrev)
+            
+            # Check if this looks like a valid book name
+            if book_name == book_abbrev and len(book_abbrev) < 2:
+                continue  # Skip single letters that aren't books
+                
             chapter = int(match.group(2))
             start_verse = int(match.group(3))
             end_verse = int(match.group(4)) if match.group(4) else start_verse
             
-            # Only add if this is in an outline point, not a Scripture Reading
-            if self._is_outline_point(line):
-                references.append({
-                    'type': 'full_reference',
-                    'book': book_name,
-                    'chapter': chapter,
-                    'start_verse': start_verse,
-                    'end_verse': end_verse,
-                    'line_idx': line_idx,
-                    'position': match.span(),
-                    'original_text': match.group(0)
-                })
+            # Add reference regardless of outline structure for better coverage
+            references.append({
+                'type': 'full_reference',
+                'book': book_name,
+                'chapter': chapter,
+                'start_verse': start_verse,
+                'end_verse': end_verse,
+                'line_idx': line_idx,
+                'position': match.span(),
+                'original_text': match.group(0)
+            })
         
         # Pattern 2: Verse-only references like "v. 7", "vv. 15-16"
         verse_only_pattern = r'v{1,2}\.\s*(\d+)(?:-(\d+))?'
@@ -286,32 +291,45 @@ class AccurateInlineProcessor:
                 refs_by_line[line_idx] = []
             refs_by_line[line_idx].append(ref)
         
-        for line_idx, line in enumerate(lines):
-            # Preserve exact original line with proper formatting
+        # Process lines and insert verses at the end of complete outline points
+        i = 0
+        while i < len(lines):
+            line = lines[i]
             formatted_line = self._preserve_outline_formatting(line)
             result_lines.append(formatted_line)
             
-            # Add verses for this line if any
-            if line_idx in refs_by_line:
-                # Add verses immediately after the reference line
-                for ref in refs_by_line[line_idx]:
+            # Check if this line has references
+            if i in refs_by_line:
+                # Find the end of this outline point (before next outline marker or empty line)
+                end_idx = i + 1
+                while end_idx < len(lines):
+                    next_line = lines[end_idx].strip()
+                    # Stop if we hit another outline point or empty line
+                    if not next_line or self._is_outline_point(next_line):
+                        break
+                    # Add continuation lines
+                    result_lines.append(self._preserve_outline_formatting(lines[end_idx]))
+                    end_idx += 1
+                
+                # Now insert verses after the complete outline point
+                for ref in refs_by_line[i]:
                     # Get verse text for each verse in the range
                     for verse_num in range(ref['start_verse'], ref['end_verse'] + 1):
                         verse_data = self.db.lookup_verse(ref['book'], ref['chapter'], verse_num)
                         if verse_data and 'text' in verse_data:
-                            # Format verse reference and text with proper indentation
+                            # Format as "Reference - verse text" on same line
                             book_abbrev = self._get_book_abbreviation(ref['book'])
+                            verse_ref = f"{book_abbrev} {ref['chapter']}:{verse_num}"
+                            verse_text = verse_data['text']
                             
-                            # Create verse reference line
-                            ref_line = f"<span class='verse-ref'>{book_abbrev} {ref['chapter']}:{verse_num}</span>"
-                            result_lines.append(ref_line)
-                            
-                            # Create verse text line with proper indentation
-                            verse_text = f"<span class='verse-text'>{verse_data['text']}</span>"
-                            result_lines.append(verse_text)
+                            # Create single line with reference - verse
+                            verse_line = f"<span class='verse-insert'>{verse_ref} - {verse_text}</span>"
+                            result_lines.append(verse_line)
                 
-                # Add empty line after verses for readability
-                result_lines.append("")
+                # Skip lines we've already processed
+                i = end_idx - 1
+            
+            i += 1
         
         return '\n'.join(result_lines)
     
