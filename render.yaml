@@ -1,0 +1,76 @@
+services:
+  # Backend API Service
+  - type: web
+    name: bible-outline-backend
+    env: python
+    buildCommand: |
+      cd bible-outline-enhanced-backend
+      pip install -r requirements.txt
+    startCommand: |
+      cd bible-outline-enhanced-backend/src
+      python -m flask run --host=0.0.0.0 --port=$PORT
+    envVars:
+      - key: FLASK_APP
+        value: main.py
+      - key: FLASK_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bible-outline-db
+          property: connectionString
+      - key: SMTP_SERVER
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USERNAME
+        sync: false  # Set manually in Render dashboard
+      - key: SMTP_PASSWORD
+        sync: false  # Set manually in Render dashboard
+      - key: SECRET_KEY
+        generateValue: true
+    healthCheckPath: /api/health
+
+  # Frontend React Service
+  - type: web
+    name: bible-outline-frontend
+    env: node
+    buildCommand: |
+      cd bible-outline-enhanced-frontend
+      npm install
+      npm run build
+    staticPublishPath: bible-outline-enhanced-frontend/dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://bible-outline-backend.onrender.com
+
+  # Scheduled Task for LSM Webcast Scraping
+  - type: cron
+    name: lsm-outline-scraper
+    env: python
+    schedule: "0 9 * * 1"  # Every Monday at 9 AM UTC
+    buildCommand: |
+      cd bible-outline-enhanced-backend
+      pip install -r requirements.txt
+    startCommand: |
+      cd bible-outline-enhanced-backend
+      python scripts/weekly_scraper.py
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bible-outline-db
+          property: connectionString
+      - key: SMTP_SERVER
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+
+databases:
+  # PostgreSQL database for scheduling and user data
+  - name: bible-outline-db
+    databaseName: bible_outline_db
+    user: bible_outline_user
+
