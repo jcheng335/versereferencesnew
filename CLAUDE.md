@@ -2,9 +2,9 @@
 
 ## Project Overview
 A comprehensive Bible verse reference application that uses a **hybrid approach** combining:
-1. **Regex patterns** for initial verse detection
-2. **OpenAI LLM** for context understanding and validation
-3. **Machine Learning** for continuous improvement and scoring
+1. **Regex patterns** for initial verse detection ✅
+2. **OpenAI LLM** for context understanding and validation ✅
+3. **Machine Learning** for continuous improvement and scoring ⚠️ (Temporarily disabled due to Render Python 3.13 issues)
 
 ## Core Requirements
 - **OpenAI API Key**: REQUIRED - The hybrid system depends on OpenAI for context understanding
@@ -144,8 +144,10 @@ DATABASE_URL=postgresql://...  # For production database
 **Issue**: OpenAI not initialized
 **Solution**: Ensure OPENAI_API_KEY is set in environment
 
-**Issue**: Module compilation errors
-**Solution**: Pin versions - numpy==1.24.3, pandas==2.0.3, scikit-learn==1.3.2
+**Issue**: Module compilation errors with Python 3.13
+**Solution**: Temporarily removed ML dependencies (scikit-learn, pandas, numpy)
+**Status**: System works with Regex + OpenAI LLM (2/3 hybrid components)
+**TODO**: Re-add ML when Render supports Python version specification
 
 ### 2. Verse Insertion Problems
 **Issue**: Verses breaking sentences
