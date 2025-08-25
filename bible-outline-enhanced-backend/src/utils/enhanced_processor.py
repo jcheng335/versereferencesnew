@@ -205,7 +205,9 @@ class EnhancedProcessor:
                 'use_llm': use_llm,
                 'llm_outline': llm_outline  # Store LLM outline structure if available
             }
+            print(f"Saving session {session_id} with {len(ref_dicts)} references")
             self.session_manager.save_session(session_id, session_data)
+            print(f"Session {session_id} saved successfully")
             
             # Add to training data (for future model improvement)
             sample_id = self.training_manager.add_training_sample(
@@ -248,9 +250,12 @@ class EnhancedProcessor:
             Populated content with verses in margin
         """
         # Retrieve session from persistent storage
+        print(f"Attempting to retrieve session {session_id}")
         session = self.session_manager.get_session(session_id)
         if not session:
+            print(f"Session {session_id} not found in storage")
             return {'success': False, 'error': 'Session not found'}
+        print(f"Session {session_id} retrieved successfully")
         content = session['original_content']
         references = session['references']
         llm_outline = session.get('llm_outline')
@@ -463,9 +468,12 @@ class EnhancedProcessor:
             Feedback processing result
         """
         # Retrieve session from persistent storage
+        print(f"Attempting to retrieve session {session_id}")
         session = self.session_manager.get_session(session_id)
         if not session:
+            print(f"Session {session_id} not found in storage")
             return {'success': False, 'error': 'Session not found'}
+        print(f"Session {session_id} retrieved successfully")
         sample_id = session.get('sample_id')
         
         if sample_id:

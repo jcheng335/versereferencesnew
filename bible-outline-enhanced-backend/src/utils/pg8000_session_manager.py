@@ -116,8 +116,10 @@ class PG8000SessionManager:
             conn = self._get_connection()
             cursor = conn.cursor()
             
-            # Convert data to JSON string
-            json_data = json.dumps(data)
+            # Convert data to JSON string, handling special types
+            json_data = json.dumps(data, default=str)
+            
+            logger.info(f"Saving session {session_id} to PostgreSQL")
             
             # Use UPSERT pattern
             cursor.execute('''
@@ -149,6 +151,8 @@ class PG8000SessionManager:
             Session data or None if not found
         """
         try:
+            logger.info(f"Retrieving session {session_id} from PostgreSQL")
+            
             conn = self._get_connection()
             cursor = conn.cursor()
             
@@ -161,7 +165,10 @@ class PG8000SessionManager:
             conn.close()
             
             if result:
+                logger.info(f"Session {session_id} found in PostgreSQL")
                 return json.loads(result[0])
+            else:
+                logger.warning(f"Session {session_id} not found in PostgreSQL")
             return None
             
         except Exception as e:
