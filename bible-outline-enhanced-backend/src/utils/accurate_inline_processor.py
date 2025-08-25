@@ -270,7 +270,7 @@ class AccurateInlineProcessor:
                 'error': f'Error populating verses: {str(e)}'
             }
     
-        def _insert_verses_accurately(self, content: str, references: List[Dict]) -> str:
+    def _insert_verses_accurately(self, content: str, references: List[Dict]) -> str:
         """
         Insert verses with accurate placement and perfect formatting preservation
         """
