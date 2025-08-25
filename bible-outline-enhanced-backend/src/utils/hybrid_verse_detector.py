@@ -9,11 +9,7 @@ import json
 import pickle
 from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
-try:
-    from openai import OpenAI
-except ImportError:
-    OpenAI = None
-    print("Warning: OpenAI module not available")
+from openai import OpenAI
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
@@ -42,13 +38,10 @@ class HybridVerseDetector:
             model_path: Path to trained ML model
         """
         self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')
-        self.openai_client = None
+        if not self.openai_api_key:
+            raise ValueError("OpenAI API key is required for hybrid verse detection. Set OPENAI_API_KEY environment variable.")
         
-        if self.openai_api_key and OpenAI:
-            try:
-                self.openai_client = OpenAI(api_key=self.openai_api_key)
-            except Exception as e:
-                print(f"Warning: Could not initialize OpenAI client: {e}")
+        self.openai_client = OpenAI(api_key=self.openai_api_key)
         
         self.model_path = model_path
         self.ml_model = None
