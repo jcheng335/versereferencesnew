@@ -14,12 +14,20 @@ from .training_data_manager import TrainingDataManager
 from .sqlite_bible_database import SQLiteBibleDatabase
 from .session_manager import SessionManager
 
+# PostgreSQL Bible database is optional - use if available
+try:
+    from .postgres_bible_database import PostgresBibleDatabase
+    POSTGRES_BIBLE_AVAILABLE = True
+except ImportError:
+    POSTGRES_BIBLE_AVAILABLE = False
+    print("PostgreSQL Bible database not available - using SQLite")
+
 # PostgreSQL session manager is optional - only use if available
 try:
-    from .postgres_session_manager import PostgresSessionManager
-    POSTGRES_AVAILABLE = True
+    from .pg8000_session_manager import PG8000SessionManager
+    POSTGRES_SESSION_AVAILABLE = True
 except ImportError:
-    POSTGRES_AVAILABLE = False
+    POSTGRES_SESSION_AVAILABLE = False
     print("PostgreSQL session manager not available - using SQLite")
 
 # Model scheduler is optional - depends on ML libraries
@@ -40,12 +48,23 @@ class EnhancedProcessor:
             openai_key: OpenAI API key (optional, uses env var if not provided)
             use_llm_first: Whether to use LLM-first approach (default True)
         """
-        self.bible_db = SQLiteBibleDatabase(db_path)
+        # Use PostgreSQL for Bible verses if available (on Render), otherwise SQLite
+        if POSTGRES_BIBLE_AVAILABLE and os.getenv('DATABASE_URL'):
+            try:
+                self.bible_db = PostgresBibleDatabase()
+                print("Using PostgreSQL for Bible verse storage")
+            except Exception as e:
+                print(f"Failed to initialize PostgreSQL Bible database: {e}")
+                self.bible_db = SQLiteBibleDatabase(db_path)
+                print("Falling back to SQLite for Bible verses")
+        else:
+            self.bible_db = SQLiteBibleDatabase(db_path)
+            print("Using SQLite for Bible verse storage")
         
         # Use PostgreSQL for sessions if available (on Render), otherwise SQLite
-        if POSTGRES_AVAILABLE and (os.getenv('DATABASE_URL') or os.getenv('POSTGRES_INTERNAL_URL')):
+        if POSTGRES_SESSION_AVAILABLE and os.getenv('DATABASE_URL'):
             try:
-                self.session_manager = PostgresSessionManager()
+                self.session_manager = PG8000SessionManager()
                 print("Using PostgreSQL for session storage")
             except Exception as e:
                 print(f"Failed to initialize PostgreSQL session manager: {e}")

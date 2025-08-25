@@ -30,6 +30,7 @@ requests==2.31.0
 beautifulsoup4==4.12.2
 APScheduler==3.10.4
 psycopg2-binary==2.9.7
+pg8000==1.31.2
 python-dotenv==1.0.0
 gunicorn==21.2.0
 # PyMuPDF==1.23.5  # Commented out - very slow to build, using other PDF libraries
