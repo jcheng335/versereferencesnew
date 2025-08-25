@@ -8,6 +8,7 @@ from flask import Flask, send_from_directory
 from flask_cors import CORS
 from src.routes.bible import bible_bp
 from src.routes.document import document_bp
+from src.routes.enhanced_document import enhanced_bp
 from src.health_check import health_bp
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
@@ -19,6 +20,7 @@ CORS(app)
 # Register blueprints
 app.register_blueprint(bible_bp, url_prefix='/api')
 app.register_blueprint(document_bp, url_prefix='/api')
+app.register_blueprint(enhanced_bp, url_prefix='/api/enhanced')
 app.register_blueprint(health_bp)
 
 @app.route('/', defaults={'path': ''})
