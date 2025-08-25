@@ -23,8 +23,8 @@ class TrainingDataManager:
     
     def _init_database(self):
         """Initialize SQLite database for training data"""
-        self.conn = sqlite3.connect(self.db_path)
-        cursor = self.conn.cursor()
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
         
         # Create tables
         cursor.execute('''
@@ -32,7 +32,7 @@ class TrainingDataManager:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 original_text TEXT NOT NULL,
                 processed_text TEXT,
-                references TEXT,
+                verse_references TEXT,
                 user_corrections TEXT,
                 confidence_score REAL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -60,7 +60,8 @@ class TrainingDataManager:
             )
         ''')
         
-        self.conn.commit()
+        conn.commit()
+        conn.close()
     
     def add_training_sample(self, original_text: str, references: List[Dict], 
                            processed_text: str = None, confidence: float = None) -> int:
@@ -74,7 +75,7 @@ class TrainingDataManager:
         cursor = conn.cursor()
         
         cursor.execute('''
-            INSERT INTO training_samples (original_text, processed_text, references, confidence_score)
+            INSERT INTO training_samples (original_text, processed_text, verse_references, confidence_score)
             VALUES (?, ?, ?, ?)
         ''', (
             original_text,
@@ -122,7 +123,7 @@ class TrainingDataManager:
         cursor = conn.cursor()
         
         query = '''
-            SELECT id, original_text, processed_text, references, user_corrections, confidence_score
+            SELECT id, original_text, processed_text, verse_references, user_corrections, confidence_score
             FROM training_samples
             WHERE is_validated = 1
             ORDER BY created_at DESC

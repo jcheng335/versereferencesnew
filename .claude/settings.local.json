@@ -21,7 +21,9 @@
       "mcp__render__create_web_service",
       "mcp__render__get_postgres",
       "Bash(curl:*)",
-      "Bash(python test:*)"
+      "Bash(python test:*)",
+      "Bash(python:*)",
+      "Bash(pip install:*)"
     ],
     "deny": [],
     "ask": []
