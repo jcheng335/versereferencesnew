@@ -22,33 +22,54 @@ class EnhancedProcessor:
             db_path: Path to Bible database
             openai_key: OpenAI API key (optional, uses env var if not provided)
         """
-        self.bible_db = SQLiteBibleDatabase(db_path)
+        try:
+            self.bible_db = SQLiteBibleDatabase(db_path)
+        except Exception as e:
+            print(f"Warning: Could not initialize Bible database: {e}")
+            self.bible_db = None
+            
         self.sessions = {}
         
         # Initialize hybrid detector
-        self.detector = HybridVerseDetector(
-            openai_api_key=openai_key,
-            model_path='models/verse_detector.pkl'
-        )
+        try:
+            self.detector = HybridVerseDetector(
+                openai_api_key=openai_key,
+                model_path='models/verse_detector.pkl'
+            )
+        except Exception as e:
+            print(f"Warning: Could not initialize hybrid detector: {e}")
+            self.detector = None
         
         # Initialize training data manager
-        self.training_manager = TrainingDataManager('training_data.db')
+        try:
+            self.training_manager = TrainingDataManager('training_data.db')
+        except Exception as e:
+            print(f"Warning: Could not initialize training manager: {e}")
+            self.training_manager = None
         
         # Create models directory if not exists
-        os.makedirs('models', exist_ok=True)
+        try:
+            os.makedirs('models', exist_ok=True)
+        except Exception as e:
+            print(f"Warning: Could not create models directory: {e}")
         
         # Initialize model scheduler for automated retraining
-        self.scheduler = ModelScheduler(
-            training_manager=self.training_manager,
-            detector=self.detector,
-            check_interval_hours=24,  # Check daily
-            min_new_samples=100,
-            min_feedback_count=50
-        )
-        
-        # Start scheduler in production (check environment variable)
-        if os.getenv('ENABLE_AUTO_RETRAIN', 'false').lower() == 'true':
-            self.scheduler.start()
+        self.scheduler = None
+        if self.training_manager and self.detector:
+            try:
+                self.scheduler = ModelScheduler(
+                    training_manager=self.training_manager,
+                    detector=self.detector,
+                    check_interval_hours=24,  # Check daily
+                    min_new_samples=100,
+                    min_feedback_count=50
+                )
+                
+                # Start scheduler in production (check environment variable)
+                if os.getenv('ENABLE_AUTO_RETRAIN', 'false').lower() == 'true':
+                    self.scheduler.start()
+            except Exception as e:
+                print(f"Warning: Could not initialize scheduler: {e}")
     
     def process_document(self, file_path: str, filename: str, use_llm: bool = True) -> Dict[str, Any]:
         """
@@ -62,6 +83,12 @@ class EnhancedProcessor:
         Returns:
             Processing result with session ID and detected references
         """
+        if not self.detector:
+            return {
+                'success': False,
+                'error': 'Enhanced detection not available. Please check configuration.'
+            }
+            
         try:
             # Generate session ID
             session_id = str(uuid.uuid4())

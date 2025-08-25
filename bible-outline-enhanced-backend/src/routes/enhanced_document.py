@@ -10,12 +10,24 @@ from src.utils.enhanced_processor import EnhancedProcessor
 
 enhanced_bp = Blueprint('enhanced', __name__)
 
-# Initialize enhanced processor
-bible_db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'bible_verses.db')
-enhanced_processor = EnhancedProcessor(bible_db_path)
+# Global variable for enhanced processor (lazy initialization)
+enhanced_processor = None
 
 UPLOAD_FOLDER = tempfile.gettempdir()
 ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'txt'}
+
+def get_enhanced_processor():
+    """Get or create the enhanced processor instance"""
+    global enhanced_processor
+    if enhanced_processor is None:
+        try:
+            bible_db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'bible_verses.db')
+            enhanced_processor = EnhancedProcessor(bible_db_path)
+        except Exception as e:
+            print(f"Warning: Could not initialize EnhancedProcessor: {e}")
+            # Return a basic processor that will return errors
+            return None
+    return enhanced_processor
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -37,13 +49,18 @@ def enhanced_upload():
     use_llm = request.form.get('use_llm', 'true').lower() == 'true'
     
     try:
+        # Get processor
+        processor = get_enhanced_processor()
+        if not processor:
+            return jsonify({'error': 'Enhanced processing not available'}), 503
+        
         # Save uploaded file
         filename = secure_filename(file.filename)
         file_path = os.path.join(UPLOAD_FOLDER, filename)
         file.save(file_path)
         
         # Process with enhanced detector
-        result = enhanced_processor.process_document(file_path, filename, use_llm=use_llm)
+        result = processor.process_document(file_path, filename, use_llm=use_llm)
         
         # Clean up uploaded file
         os.remove(file_path)
@@ -60,7 +77,11 @@ def enhanced_populate(session_id):
     format_type = data.get('format', 'inline')
     
     try:
-        result = enhanced_processor.populate_verses(session_id, format_type)
+        processor = get_enhanced_processor()
+        if not processor:
+            return jsonify({'error': 'Enhanced processing not available'}), 503
+        
+        result = processor.populate_verses(session_id, format_type)
         return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -74,7 +95,11 @@ def provide_feedback(session_id):
         return jsonify({'error': 'Corrections data required'}), 400
     
     try:
-        result = enhanced_processor.provide_feedback(session_id, data['corrections'])
+        processor = get_enhanced_processor()
+        if not processor:
+            return jsonify({'error': 'Enhanced processing not available'}), 503
+        
+        result = processor.provide_feedback(session_id, data['corrections'])
         return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -86,7 +111,11 @@ def train_model():
     min_samples = data.get('min_samples', 50)
     
     try:
-        result = enhanced_processor.train_model(min_samples)
+        processor = get_enhanced_processor()
+        if not processor:
+            return jsonify({'error': 'Enhanced processing not available'}), 503
+        
+        result = processor.train_model(min_samples)
         return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -95,7 +124,11 @@ def train_model():
 def training_report():
     """Get training data statistics and recommendations"""
     try:
-        report = enhanced_processor.get_training_report()
+        processor = get_enhanced_processor()
+        if not processor:
+            return jsonify({'error': 'Enhanced processing not available'}), 503
+        
+        report = processor.get_training_report()
         return jsonify(report)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -104,7 +137,11 @@ def training_report():
 def export_session(session_id):
     """Export session data for analysis"""
     try:
-        session_data = enhanced_processor.export_session(session_id)
+        processor = get_enhanced_processor()
+        if not processor:
+            return jsonify({'error': 'Enhanced processing not available'}), 503
+        
+        session_data = processor.export_session(session_id)
         if session_data:
             return jsonify(session_data)
         else:
@@ -130,7 +167,9 @@ def api_settings():
         # Update OpenAI key if provided
         if 'openai_key' in data:
             os.environ['OPENAI_API_KEY'] = data['openai_key']
-            enhanced_processor.detector.openai_api_key = data['openai_key']
+            processor = get_enhanced_processor()
+            if processor:
+                processor.detector.openai_api_key = data['openai_key']
             
         return jsonify({'success': True, 'message': 'Settings updated'})
 
@@ -143,8 +182,13 @@ def test_llm():
         return jsonify({'error': 'Test text required'}), 400
     
     try:
+        # Get processor
+        processor = get_enhanced_processor()
+        if not processor:
+            return jsonify({'error': 'Enhanced processing not available'}), 503
+        
         # Test with a small sample
-        references = enhanced_processor.detector.detect_verses(
+        references = processor.detector.detect_verses(
             data['text'], 
             use_llm=True
         )
@@ -165,12 +209,12 @@ def test_llm():
             'success': True,
             'references_found': len(references),
             'references': ref_list,
-            'llm_available': bool(enhanced_processor.detector.openai_api_key)
+            'llm_available': bool(processor.detector.openai_api_key) if processor else False
         })
         
     except Exception as e:
         return jsonify({
             'success': False,
             'error': str(e),
-            'llm_available': bool(enhanced_processor.detector.openai_api_key)
+            'llm_available': bool(processor.detector.openai_api_key) if processor else False
         })

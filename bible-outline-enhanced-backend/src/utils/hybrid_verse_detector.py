@@ -9,7 +9,11 @@ import json
 import pickle
 from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
-import openai
+try:
+    from openai import OpenAI
+except ImportError:
+    OpenAI = None
+    print("Warning: OpenAI module not available")
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
@@ -38,8 +42,13 @@ class HybridVerseDetector:
             model_path: Path to trained ML model
         """
         self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')
-        if self.openai_api_key:
-            openai.api_key = self.openai_api_key
+        self.openai_client = None
+        
+        if self.openai_api_key and OpenAI:
+            try:
+                self.openai_client = OpenAI(api_key=self.openai_api_key)
+            except Exception as e:
+                print(f"Warning: Could not initialize OpenAI client: {e}")
         
         self.model_path = model_path
         self.ml_model = None
@@ -117,7 +126,7 @@ class HybridVerseDetector:
             candidates = self._ml_scoring(candidates, text)
         
         # Step 3: LLM validation and context understanding
-        if use_llm and self.openai_api_key:
+        if use_llm and self.openai_client:
             candidates = self._llm_validation(candidates, text)
         
         # Step 4: Determine optimal insertion points
@@ -175,7 +184,11 @@ class HybridVerseDetector:
             context = self._prepare_llm_context(candidates, text)
             
             # Call OpenAI API
-            response = openai.ChatCompletion.create(
+            if not self.openai_client:
+                print("OpenAI client not initialized")
+                return candidates
+                
+            response = self.openai_client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {
