@@ -8,7 +8,13 @@ from src.utils.ocr_service import OCRService
 document_bp = Blueprint('document', __name__)
 
 # Initialize the accurate inline processor
-bible_db_path = '/home/ubuntu/recovery_version_bible_final.db'
+# Use relative path to find the database file
+bible_db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'bible_verses.db')
+if not os.path.exists(bible_db_path):
+    # Fallback to alternative locations
+    alt_path = '/home/ubuntu/recovery_version_bible_final.db'
+    if os.path.exists(alt_path):
+        bible_db_path = alt_path
 doc_processor = AccurateInlineProcessor(bible_db_path)
 ocr_service = OCRService()
 

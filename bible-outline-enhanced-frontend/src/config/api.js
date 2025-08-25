@@ -2,7 +2,7 @@
 const isDevelopment = import.meta.env.DEV
 const API_BASE_URL = isDevelopment 
   ? '/api' 
-  : 'https://bible-outline-backend.onrender.com'
+  : 'https://bible-outline-backend.onrender.com/api'
 
 export const getApiUrl = (endpoint) => {
   // Remove leading slash if present
