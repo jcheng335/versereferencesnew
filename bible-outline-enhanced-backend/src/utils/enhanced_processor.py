@@ -13,7 +13,14 @@ from .llm_verse_detector import LLMVerseDetector
 from .training_data_manager import TrainingDataManager
 from .sqlite_bible_database import SQLiteBibleDatabase
 from .session_manager import SessionManager
-from .postgres_session_manager import PostgresSessionManager
+
+# PostgreSQL session manager is optional - only use if available
+try:
+    from .postgres_session_manager import PostgresSessionManager
+    POSTGRES_AVAILABLE = True
+except ImportError:
+    POSTGRES_AVAILABLE = False
+    print("PostgreSQL session manager not available - using SQLite")
 
 # Model scheduler is optional - depends on ML libraries
 try:
@@ -36,11 +43,16 @@ class EnhancedProcessor:
         self.bible_db = SQLiteBibleDatabase(db_path)
         
         # Use PostgreSQL for sessions if available (on Render), otherwise SQLite
-        if os.getenv('DATABASE_URL') or os.getenv('POSTGRES_INTERNAL_URL'):
-            self.session_manager = PostgresSessionManager()
-            print("Using PostgreSQL for session storage")
+        if POSTGRES_AVAILABLE and (os.getenv('DATABASE_URL') or os.getenv('POSTGRES_INTERNAL_URL')):
+            try:
+                self.session_manager = PostgresSessionManager()
+                print("Using PostgreSQL for session storage")
+            except Exception as e:
+                print(f"Failed to initialize PostgreSQL session manager: {e}")
+                self.session_manager = SessionManager()  # Fallback to SQLite
+                print("Falling back to SQLite for session storage")
         else:
-            self.session_manager = SessionManager()  # Fallback to SQLite
+            self.session_manager = SessionManager()  # Use SQLite
             print("Using SQLite for session storage")
             
         self.use_llm_first = use_llm_first

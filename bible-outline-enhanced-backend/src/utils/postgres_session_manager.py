@@ -5,11 +5,17 @@ Uses PostgreSQL database for production-ready session persistence
 
 import json
 import os
-import psycopg2
-from psycopg2.extras import RealDictCursor
 from datetime import datetime, timedelta
 from typing import Dict, Any, Optional
 import logging
+
+try:
+    import psycopg2
+    from psycopg2.extras import RealDictCursor
+    PSYCOPG2_AVAILABLE = True
+except ImportError:
+    PSYCOPG2_AVAILABLE = False
+    print("psycopg2 not available - PostgreSQL session manager disabled")
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +27,9 @@ class PostgresSessionManager:
         Args:
             connection_string: PostgreSQL connection string (uses DATABASE_URL env var if not provided)
         """
+        if not PSYCOPG2_AVAILABLE:
+            raise ImportError("psycopg2 is not available - cannot use PostgreSQL session manager")
+            
         if connection_string is None:
             # Get from environment variable (Render provides this)
             connection_string = os.getenv('DATABASE_URL')
