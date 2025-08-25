@@ -5,7 +5,7 @@ Only inserts verses where specifically referenced, preserves original structure
 
 import os
 import uuid
-import fitz  # PyMuPDF
+import pdfplumber
 from docx import Document
 import tempfile
 import re
@@ -84,10 +84,11 @@ class AccurateInlineProcessor:
         """Extract text from PDF"""
         text = ""
         try:
-            doc = fitz.open(file_path)
-            for page in doc:
-                text += page.get_text()
-            doc.close()
+            with pdfplumber.open(file_path) as pdf:
+                for page in pdf.pages:
+                    page_text = page.extract_text()
+                    if page_text:
+                        text += page_text
         except Exception as e:
             raise Exception(f"Error extracting PDF text: {str(e)}")
         
