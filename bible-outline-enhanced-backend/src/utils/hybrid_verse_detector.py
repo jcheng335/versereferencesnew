@@ -193,11 +193,17 @@ class HybridVerseDetector:
                 messages=[
                     {
                         "role": "system",
-                        "content": """You are a Bible verse reference expert. Analyze the given text and:
-                        1. Validate if the detected references are correct
-                        2. Identify the best insertion point for each verse (after complete sentences/thoughts)
-                        3. Detect any missed references
-                        4. Return JSON with validated references and insertion instructions"""
+                        "content": """You are a Bible verse reference expert analyzing sermon outlines. 
+                        CRITICAL RULES:
+                        1. Verses should be inserted on the SAME LINE as the outline point they reference
+                        2. NEVER insert verses in the middle of a sentence
+                        3. For outline points (I., II., A., B., 1., 2., etc.), place verses at the END of that outline point's text
+                        4. If an outline point spans multiple lines, place the verse at the end of the LAST line of that point
+                        5. Example: "II. A. The church is the Body of Christ" becomes "II. A. The church is the Body of Christ Eph 1:23 - verse text"
+                        
+                        Return JSON with:
+                        - validated_references: array of {original_text, line_number, should_insert_at_line}
+                        - The line_number where the verse appears and should_insert_at_line where it should be placed"""
                     },
                     {
                         "role": "user",
@@ -264,10 +270,30 @@ class HybridVerseDetector:
                 continue
             
             match = candidate['match']
-            line_idx = candidate.get('insertion_line', candidate['line_idx'])
+            line_idx = candidate['line_idx']
             
-            # Find end of complete thought/sentence
-            insertion_point = self._find_sentence_end(lines, line_idx)
+            # Find the line where this verse reference appears
+            ref_line = lines[line_idx] if line_idx < len(lines) else ""
+            
+            # Determine where to insert the verse text
+            # If the line with the reference is part of an outline point, 
+            # find the END of that outline point
+            insertion_point = line_idx  # Default to same line
+            
+            # Check if we need to find the end of an outline section
+            if ref_line.strip():
+                # Look backwards to find the start of this outline section
+                outline_start = line_idx
+                for i in range(line_idx - 1, -1, -1):
+                    prev_line = lines[i].strip()
+                    if re.match(r'^(?:[IVX]+\.|[A-Z]\.|[1-9]\d*\.|[a-z]\.)\s*', prev_line):
+                        outline_start = i
+                        break
+                    if not prev_line:  # Empty line might indicate section break
+                        break
+                
+                # Now find the end of this outline section
+                insertion_point = self._find_sentence_end(lines, outline_start)
             
             # Extract book, chapter, verse information
             groups = match.groups()
@@ -289,25 +315,37 @@ class HybridVerseDetector:
         return references
     
     def _find_sentence_end(self, lines: List[str], start_idx: int) -> int:
-        """Find the end of a complete sentence or thought"""
-        # Look for sentence ending punctuation
+        """Find the end of a complete outline point, not just a sentence"""
         current_idx = start_idx
+        current_line = lines[start_idx].strip() if start_idx < len(lines) else ""
         
-        while current_idx < len(lines):
-            line = lines[current_idx].strip()
-            
-            # Check if line ends with sentence-ending punctuation
-            if line and line[-1] in '.!?:;':
-                return current_idx
-            
-            # Check if next line starts with outline marker
-            if current_idx + 1 < len(lines):
-                next_line = lines[current_idx + 1].strip()
-                if re.match(r'^[A-Z]\.|^[IVX]+\.|^\d+\.|^[a-z]\.', next_line):
-                    return current_idx
-            
-            current_idx += 1
+        # Check if this line starts with an outline marker
+        outline_pattern = r'^(?:[IVX]+\.|[A-Z]\.|[1-9]\d*\.|[a-z]\.)\s*'
+        current_has_marker = bool(re.match(outline_pattern, current_line))
         
+        # If this is an outline point, find where it ends
+        if current_has_marker:
+            # Look ahead to find the next outline marker or end of section
+            test_idx = start_idx + 1
+            while test_idx < len(lines):
+                next_line = lines[test_idx].strip()
+                
+                # If we hit another outline marker, the previous line was the end
+                if next_line and re.match(outline_pattern, next_line):
+                    return test_idx - 1
+                
+                # If we hit a blank line followed by text, check if it's a new section
+                if not next_line and test_idx + 1 < len(lines):
+                    following_line = lines[test_idx + 1].strip()
+                    if following_line and re.match(outline_pattern, following_line):
+                        return test_idx - 1
+                
+                test_idx += 1
+            
+            # If we reached the end without finding another marker
+            return len(lines) - 1
+        
+        # For non-outline lines, just return the same line
         return start_idx
     
     def _normalize_book_name(self, book_text: str) -> Optional[str]:

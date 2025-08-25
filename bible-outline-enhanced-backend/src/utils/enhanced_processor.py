@@ -165,30 +165,41 @@ class EnhancedProcessor:
             
             # Process each line
             for i, line in enumerate(lines):
-                result_lines.append(line)
+                # Check if this line contains a verse reference
+                has_reference = False
+                verses_for_this_line = []
                 
-                # Check if we should insert verses after this line
-                verses_to_insert = []
                 for ref in references:
                     if ref['insertion_point'] == i and i not in inserted_at:
                         # Fetch verse text
                         verse_text = self._fetch_verse_text(ref)
                         if verse_text:
-                            verses_to_insert.append((ref, verse_text))
+                            verses_for_this_line.append((ref, verse_text))
+                            has_reference = True
                 
-                # Insert verses with proper formatting
-                if verses_to_insert:
-                    for ref, verse_text in verses_to_insert:
+                # If this line has references, append them to the SAME line
+                if has_reference and verses_for_this_line:
+                    # Add space and verse references to the end of the current line
+                    modified_line = line
+                    for ref, verse_text in verses_for_this_line:
                         if format_type == 'inline':
-                            # Format: "Rom 5:18 - Therefore just as through one offense..."
-                            formatted_verse = f"{ref['original_text']} - {verse_text}"
-                            result_lines.append(formatted_verse)
+                            # Add space after outline point, then reference - verse text
+                            modified_line += f" {ref['original_text']} - {verse_text}"
                         else:
                             # Footnote style
-                            result_lines.append(f"[{ref['original_text']}]")
+                            modified_line += f" [{ref['original_text']}]"
+                    
+                    result_lines.append(modified_line)
+                    
+                    # If footnote style, add verse texts below
+                    if format_type == 'footnote':
+                        for ref, verse_text in verses_for_this_line:
                             result_lines.append(f"    {verse_text}")
                     
                     inserted_at.add(i)
+                else:
+                    # No references for this line, keep as is
+                    result_lines.append(line)
             
             populated_content = '\n'.join(result_lines)
             
