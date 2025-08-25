@@ -9,7 +9,7 @@ A comprehensive Bible verse reference application that uses a **hybrid approach*
 ## Core Requirements
 - **OpenAI API Key**: REQUIRED - The hybrid system depends on OpenAI for context understanding
 - **Bible Database**: SQLite database with all Bible verses (bible_verses.db)
-- **Python 3.8+**: For backend (avoid 3.13 due to scikit-learn build issues)
+- **Python 3.11.10**: Specified in runtime.txt (Python 3.13 has C extension compatibility issues)
 - **Node.js 18+**: For frontend
 
 ## Architecture
@@ -138,11 +138,14 @@ DATABASE_URL=postgresql://...  # For production database
 ## Common Issues & Solutions
 
 ### 1. Deployment Failures
-**Issue**: scikit-learn build fails
-**Solution**: Use unpinned version, let pip choose compatible version
+**Issue**: pandas/scikit-learn build fails with C extension errors
+**Solution**: Use Python 3.11.10 (specified in runtime.txt), not 3.13
 
 **Issue**: OpenAI not initialized
 **Solution**: Ensure OPENAI_API_KEY is set in environment
+
+**Issue**: Module compilation errors
+**Solution**: Pin versions - numpy==1.24.3, pandas==2.0.3, scikit-learn==1.3.2
 
 ### 2. Verse Insertion Problems
 **Issue**: Verses breaking sentences

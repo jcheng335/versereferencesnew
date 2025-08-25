@@ -10,10 +10,17 @@ import pickle
 from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
 from openai import OpenAI
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.feature_extraction.text import TfidfVectorizer
-import pandas as pd
-import numpy as np
+
+# ML components are optional - system works with just regex + LLM
+try:
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    import pandas as pd
+    import numpy as np
+    ML_AVAILABLE = True
+except ImportError:
+    ML_AVAILABLE = False
+    print("ML libraries not available - using regex + LLM only")
 from datetime import datetime
 
 @dataclass
@@ -115,7 +122,7 @@ class HybridVerseDetector:
         candidates = self._regex_detection(text)
         
         # Step 2: ML model scoring (if available)
-        if self.ml_model:
+        if ML_AVAILABLE and self.ml_model:
             candidates = self._ml_scoring(candidates, text)
         
         # Step 3: LLM validation and context understanding
@@ -148,7 +155,7 @@ class HybridVerseDetector:
     
     def _ml_scoring(self, candidates: List[Dict], text: str) -> List[Dict]:
         """Score candidates using ML model"""
-        if not self.ml_model or not candidates:
+        if not ML_AVAILABLE or not self.ml_model or not candidates:
             return candidates
         
         # Extract features for each candidate
@@ -331,6 +338,10 @@ class HybridVerseDetector:
         Args:
             training_data: List of dictionaries with 'text', 'references', and 'correct_placements'
         """
+        if not ML_AVAILABLE:
+            print("ML libraries not available - cannot train model")
+            return
+            
         if not training_data:
             print("No training data provided")
             return
@@ -357,12 +368,15 @@ class HybridVerseDetector:
                     y.append(0)  # Incorrect reference
         
         # Vectorize features
-        self.vectorizer = TfidfVectorizer(max_features=100)
-        X_vec = self.vectorizer.fit_transform(X)
-        
-        # Train Random Forest model
-        self.ml_model = RandomForestClassifier(n_estimators=100, random_state=42)
-        self.ml_model.fit(X_vec, y)
+        if ML_AVAILABLE:
+            self.vectorizer = TfidfVectorizer(max_features=100)
+            X_vec = self.vectorizer.fit_transform(X)
+            
+            # Train Random Forest model
+            self.ml_model = RandomForestClassifier(n_estimators=100, random_state=42)
+            self.ml_model.fit(X_vec, y)
+        else:
+            print("ML libraries not available - cannot train model")
         
         # Save model
         self.save_model()

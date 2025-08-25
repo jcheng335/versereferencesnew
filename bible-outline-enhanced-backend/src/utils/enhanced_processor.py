@@ -11,7 +11,14 @@ from docx import Document
 from .hybrid_verse_detector import HybridVerseDetector, VerseReference
 from .training_data_manager import TrainingDataManager
 from .sqlite_bible_database import SQLiteBibleDatabase
-from .model_scheduler import ModelScheduler
+
+# Model scheduler is optional - depends on ML libraries
+try:
+    from .model_scheduler import ModelScheduler
+    SCHEDULER_AVAILABLE = True
+except ImportError:
+    SCHEDULER_AVAILABLE = False
+    print("Model scheduler not available - ML features disabled")
 
 class EnhancedProcessor:
     def __init__(self, db_path: str, openai_key: str = None):
@@ -37,18 +44,24 @@ class EnhancedProcessor:
         # Create models directory if not exists
         os.makedirs('models', exist_ok=True)
         
-        # Initialize model scheduler for automated retraining
-        self.scheduler = ModelScheduler(
-            training_manager=self.training_manager,
-            detector=self.detector,
-            check_interval_hours=24,  # Check daily
-            min_new_samples=100,
-            min_feedback_count=50
-        )
-        
-        # Start scheduler in production (check environment variable)
-        if os.getenv('ENABLE_AUTO_RETRAIN', 'false').lower() == 'true':
-            self.scheduler.start()
+        # Initialize model scheduler for automated retraining (if available)
+        self.scheduler = None
+        if SCHEDULER_AVAILABLE:
+            try:
+                self.scheduler = ModelScheduler(
+                    training_manager=self.training_manager,
+                    detector=self.detector,
+                    check_interval_hours=24,  # Check daily
+                    min_new_samples=100,
+                    min_feedback_count=50
+                )
+                
+                # Start scheduler in production (check environment variable)
+                if os.getenv('ENABLE_AUTO_RETRAIN', 'false').lower() == 'true':
+                    self.scheduler.start()
+            except Exception as e:
+                print(f"Could not initialize scheduler: {e}")
+                self.scheduler = None
     
     def process_document(self, file_path: str, filename: str, use_llm: bool = True) -> Dict[str, Any]:
         """

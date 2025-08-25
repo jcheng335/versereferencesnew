@@ -33,10 +33,6 @@ psycopg2-binary==2.9.7
 python-dotenv==1.0.0
 gunicorn==21.2.0
 # PyMuPDF==1.23.5  # Commented out - very slow to build, using other PDF libraries
-# ML and AI dependencies
+# ML and AI dependencies (simplified - no ML for now to get deployment working)
 openai==1.12.0
-scikit-learn==1.3.2
-joblib==1.3.2
-pandas==2.0.3
 schedule==1.2.0
-numpy==1.24.3
