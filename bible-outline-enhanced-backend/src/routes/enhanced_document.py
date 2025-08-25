@@ -11,15 +11,22 @@ from openai import OpenAI
 
 enhanced_bp = Blueprint('enhanced', __name__)
 
-# Initialize enhanced processor with OpenAI (REQUIRED for hybrid approach)
-try:
-    bible_db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'bible_verses.db')
-    enhanced_processor = EnhancedProcessor(bible_db_path)
-    print("Enhanced processor initialized successfully with hybrid detection")
-except Exception as e:
-    print(f"ERROR: Could not initialize EnhancedProcessor: {e}")
-    print("Make sure OPENAI_API_KEY is set in .env file or environment variables")
-    enhanced_processor = None
+# Global variable for enhanced processor (lazy initialization)
+enhanced_processor = None
+
+def get_enhanced_processor():
+    """Get or create the enhanced processor instance (lazy loading)"""
+    global enhanced_processor
+    if enhanced_processor is None:
+        try:
+            bible_db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'bible_verses.db')
+            enhanced_processor = EnhancedProcessor(bible_db_path)
+            print("Enhanced processor initialized successfully with hybrid detection")
+        except Exception as e:
+            print(f"ERROR: Could not initialize EnhancedProcessor: {e}")
+            print("Make sure OPENAI_API_KEY is set in .env file or environment variables")
+            raise e
+    return enhanced_processor
 
 UPLOAD_FOLDER = tempfile.gettempdir()
 ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'txt'}
@@ -43,8 +50,10 @@ def enhanced_upload():
     # Check if LLM should be used (from request or default to True)
     use_llm = request.form.get('use_llm', 'true').lower() == 'true'
     
-    if not enhanced_processor:
-        return jsonify({'error': 'Enhanced processing not available. OpenAI API key required.'}), 503
+    try:
+        processor = get_enhanced_processor()
+    except Exception as e:
+        return jsonify({'error': 'Enhanced processing not available. Check logs for details.'}), 503
     
     try:
         # Save uploaded file
@@ -53,7 +62,7 @@ def enhanced_upload():
         file.save(file_path)
         
         # Process with enhanced detector
-        result = enhanced_processor.process_document(file_path, filename, use_llm=use_llm)
+        result = processor.process_document(file_path, filename, use_llm=use_llm)
         
         # Clean up uploaded file
         os.remove(file_path)
@@ -69,11 +78,13 @@ def enhanced_populate(session_id):
     data = request.get_json() or {}
     format_type = data.get('format', 'margin')  # Default to margin format like MSG12VerseReferences.pdf
     
-    if not enhanced_processor:
-        return jsonify({'error': 'Enhanced processing not available. OpenAI API key required.'}), 503
+    try:
+        processor = get_enhanced_processor()
+    except Exception as e:
+        return jsonify({'error': 'Enhanced processing not available. Check logs for details.'}), 503
     
     try:
-        result = enhanced_processor.populate_verses(session_id, format_type)
+        result = processor.populate_verses(session_id, format_type)
         return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -86,11 +97,13 @@ def provide_feedback(session_id):
     if not data or 'corrections' not in data:
         return jsonify({'error': 'Corrections data required'}), 400
     
-    if not enhanced_processor:
-        return jsonify({'error': 'Enhanced processing not available. OpenAI API key required.'}), 503
+    try:
+        processor = get_enhanced_processor()
+    except Exception as e:
+        return jsonify({'error': 'Enhanced processing not available. Check logs for details.'}), 503
     
     try:
-        result = enhanced_processor.provide_feedback(session_id, data['corrections'])
+        result = processor.provide_feedback(session_id, data['corrections'])
         return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -101,11 +114,13 @@ def train_model():
     data = request.get_json() or {}
     min_samples = data.get('min_samples', 50)
     
-    if not enhanced_processor:
-        return jsonify({'error': 'Enhanced processing not available. OpenAI API key required.'}), 503
+    try:
+        processor = get_enhanced_processor()
+    except Exception as e:
+        return jsonify({'error': 'Enhanced processing not available. Check logs for details.'}), 503
     
     try:
-        result = enhanced_processor.train_model(min_samples)
+        result = processor.train_model(min_samples)
         return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -113,11 +128,13 @@ def train_model():
 @enhanced_bp.route('/training-report', methods=['GET'])
 def training_report():
     """Get training data statistics and recommendations"""
-    if not enhanced_processor:
-        return jsonify({'error': 'Enhanced processing not available. OpenAI API key required.'}), 503
+    try:
+        processor = get_enhanced_processor()
+    except Exception as e:
+        return jsonify({'error': 'Enhanced processing not available. Check logs for details.'}), 503
     
     try:
-        report = enhanced_processor.get_training_report()
+        report = processor.get_training_report()
         return jsonify(report)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -125,11 +142,13 @@ def training_report():
 @enhanced_bp.route('/export/<session_id>', methods=['GET'])
 def export_session(session_id):
     """Export session data for analysis"""
-    if not enhanced_processor:
-        return jsonify({'error': 'Enhanced processing not available. OpenAI API key required.'}), 503
+    try:
+        processor = get_enhanced_processor()
+    except Exception as e:
+        return jsonify({'error': 'Enhanced processing not available. Check logs for details.'}), 503
     
     try:
-        session_data = enhanced_processor.export_session(session_id)
+        session_data = processor.export_session(session_id)
         if session_data:
             return jsonify(session_data)
         else:
@@ -155,9 +174,8 @@ def api_settings():
         # Update OpenAI key if provided
         if 'openai_key' in data:
             os.environ['OPENAI_API_KEY'] = data['openai_key']
-            if enhanced_processor:
-                enhanced_processor.detector.openai_api_key = data['openai_key']
-                enhanced_processor.detector.openai_client = OpenAI(api_key=data['openai_key'])
+            # Update will be applied on next processor initialization
+            # The lazy loading will pick up the new environment variable
             
         return jsonify({'success': True, 'message': 'Settings updated'})
 
@@ -170,11 +188,13 @@ def test_llm():
         return jsonify({'error': 'Test text required'}), 400
     
     try:
-        if not enhanced_processor:
-            return jsonify({'error': 'Enhanced processing not available. OpenAI API key required.'}), 503
-        
+        processor = get_enhanced_processor()
+    except Exception as e:
+        return jsonify({'error': 'Enhanced processing not available. Check logs for details.'}), 503
+    
+    try:
         # Test with a small sample
-        references = enhanced_processor.detector.detect_verses(
+        references = processor.detector.detect_verses(
             data['text'], 
             use_llm=True
         )
@@ -195,12 +215,12 @@ def test_llm():
             'success': True,
             'references_found': len(references),
             'references': ref_list,
-            'llm_available': bool(enhanced_processor.detector.openai_api_key) if enhanced_processor else False
+            'llm_available': bool(processor.detector.openai_api_key)
         })
         
     except Exception as e:
         return jsonify({
             'success': False,
             'error': str(e),
-            'llm_available': bool(enhanced_processor.detector.openai_api_key) if enhanced_processor else False
+            'llm_available': bool(processor.detector.openai_api_key)
         })

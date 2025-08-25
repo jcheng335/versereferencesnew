@@ -18,9 +18,32 @@ A comprehensive Bible verse reference application that automatically detects and
 
 ## Core Requirements
 - **OpenAI API Key**: REQUIRED for hybrid detection
-- **Bible Database**: SQLite database with all 66 Bible books
+- **Bible Database**: PostgreSQL 17 on Render with 31,005 verses
 - **Python 3.11+**: Backend server
 - **Node.js 18+**: Frontend application
+
+## CRITICAL TESTING REQUIREMENT
+**IMPORTANT**: After ANY code changes, MUST test the application using an agent with these EXACT files:
+1. **Test Input**: W24ECT12en.pdf (original outline)
+2. **Expected Output**: MSG12VerseReferences.pdf (correct output with verses)
+3. Test procedure:
+   - Upload W24ECT12en.pdf to the application
+   - Process and populate verses
+   - Compare output to MSG12VerseReferences.pdf
+   - Verify ALL verses are detected and properly formatted
+4. Success criteria:
+   - Session persists between upload and populate
+   - All verse references detected (100% accuracy)
+   - Output matches MSG12VerseReferences.pdf format
+
+Use the Task tool with general-purpose agent to test the deployed application at:
+- Backend: https://bible-outline-backend.onrender.com
+- Frontend: https://bible-outline-frontend.onrender.com
+
+## Current Issues (2025-08-25)
+- **Session Persistence**: Sessions not being found after upload
+- **PostgreSQL Integration**: Using pg8000 driver for Python 3.13 compatibility
+- **Database**: PostgreSQL 17 with 31,005 verses from Jubilee app
 
 ## Architecture
 

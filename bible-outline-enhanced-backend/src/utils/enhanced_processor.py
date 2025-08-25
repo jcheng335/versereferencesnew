@@ -213,7 +213,7 @@ class EnhancedProcessor:
             sample_id = self.training_manager.add_training_sample(
                 original_text=content,
                 references=ref_dicts,
-                confidence=sum(r.confidence for r in references) / len(references) if references else 0
+                confidence=sum(r['confidence'] for r in ref_dicts) / len(ref_dicts) if ref_dicts else 0
             )
             
             # Store sample ID in session for feedback tracking
@@ -225,10 +225,10 @@ class EnhancedProcessor:
                 'success': True,
                 'session_id': session_id,
                 'content': content,
-                'references_found': len(references),
-                'total_verses': sum(r.end_verse - r.start_verse + 1 for r in references),
+                'references_found': len(ref_dicts),
+                'total_verses': sum(r['end_verse'] - r['start_verse'] + 1 for r in ref_dicts),
                 'filename': filename,
-                'average_confidence': sum(r.confidence for r in references) / len(references) if references else 0,
+                'average_confidence': sum(r['confidence'] for r in ref_dicts) / len(ref_dicts) if ref_dicts else 0,
                 'sample_id': sample_id  # For feedback tracking
             }
             
@@ -290,8 +290,31 @@ class EnhancedProcessor:
                 
                 for point in llm_outline:
                     for verse in point.get('verses', []):
-                        if verse.get('text') and verse['text'] != '[Verse text not found in database]':
-                            result_lines.append(f"{verse['reference']}: {verse['text']}")
+                        verse_text = verse.get('text')
+                        
+                        # If LLM didn't provide verse text or provided invalid text, fetch from database
+                        # Invalid text includes: empty, error messages, or just reference numbers
+                        is_invalid_text = (
+                            not verse_text or 
+                            verse_text == '[Verse text not found in database]' or
+                            len(verse_text) < 10 or  # Too short, likely just reference numbers
+                            verse_text.count(':') > 0 and len(verse_text.split()) <= 3  # Looks like reference format
+                        )
+                        
+                        if is_invalid_text:
+                            # Parse the reference and fetch from database
+                            parsed = self._parse_reference_string(verse['reference'])
+                            if parsed:
+                                ref_dict = {
+                                    'book': parsed['book'],
+                                    'chapter': parsed['chapter'],
+                                    'start_verse': parsed['start_verse'],
+                                    'end_verse': parsed['end_verse']
+                                }
+                                verse_text = self._fetch_verse_text(ref_dict)
+                        
+                        if verse_text:
+                            result_lines.append(f"{verse['reference']}: {verse_text}")
                 
                 populated_content = '\n'.join(result_lines)
                 
