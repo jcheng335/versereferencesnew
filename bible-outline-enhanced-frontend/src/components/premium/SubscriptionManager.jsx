@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '@/config/api';
 
 const SubscriptionManager = () => {
   const [subscription, setSubscription] = useState(null);
@@ -11,7 +12,7 @@ const SubscriptionManager = () => {
 
   const loadSubscription = async () => {
     try {
-      const response = await fetch('/api/subscription/status');
+      const response = await fetch(getApiUrl('subscription/status'));
       if (response.ok) {
         const data = await response.json();
         setSubscription(data.subscription);
@@ -30,7 +31,7 @@ const SubscriptionManager = () => {
     }
 
     try {
-      const response = await fetch('/api/subscription/create', {
+      const response = await fetch(getApiUrl('subscription/create'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, plan: 'premium' })
@@ -54,7 +55,7 @@ const SubscriptionManager = () => {
     }
 
     try {
-      const response = await fetch('/api/subscription/cancel', {
+      const response = await fetch(getApiUrl('subscription/cancel'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });

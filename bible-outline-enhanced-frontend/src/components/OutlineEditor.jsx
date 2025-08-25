@@ -16,6 +16,7 @@ import {
   Loader2,
   Copy
 } from 'lucide-react'
+import { getApiUrl } from '@/config/api'
 
 const OutlineEditor = ({ sessionData }) => {
   const [content, setContent] = useState('')
@@ -44,7 +45,7 @@ const OutlineEditor = ({ sessionData }) => {
     setSuccess(null)
 
     try {
-      const response = await fetch('/api/process-document', {
+      const response = await fetch(getApiUrl('process-document'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -78,7 +79,7 @@ const OutlineEditor = ({ sessionData }) => {
     setError(null)
 
     try {
-      const response = await fetch(`/api/export/${sessionData.session_id}`)
+      const response = await fetch(getApiUrl(`export/${sessionData.session_id}`))
       
       if (response.ok) {
         const blob = await response.blob()
@@ -106,7 +107,7 @@ const OutlineEditor = ({ sessionData }) => {
     if (!sessionData?.session_id) return
 
     try {
-      const response = await fetch(`/api/session/${sessionData.session_id}`, {
+      const response = await fetch(getApiUrl(`session/${sessionData.session_id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -130,7 +131,7 @@ const OutlineEditor = ({ sessionData }) => {
 
     try {
       // Get clean text from backend
-      const response = await fetch(`/api/export-clean/${sessionData.session_id}`)
+      const response = await fetch(getApiUrl(`export-clean/${sessionData.session_id}`))
       const result = await response.json()
       
       if (result.success && result.clean_text) {

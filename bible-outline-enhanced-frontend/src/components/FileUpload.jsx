@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Progress } from '@/components/ui/progress.jsx'
 import { Alert, AlertDescription } from '@/components/ui/alert.jsx'
 import { Upload, FileText, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { getApiUrl } from '@/config/api'
 
 const FileUpload = ({ onFileProcessed }) => {
   const [isDragging, setIsDragging] = useState(false)
@@ -79,7 +80,7 @@ const FileUpload = ({ onFileProcessed }) => {
         })
       }, 200)
 
-      const response = await fetch('/api/upload', {
+      const response = await fetch(getApiUrl('upload'), {
         method: 'POST',
         body: formData
       })

@@ -13,6 +13,7 @@ import {
   FileText,
   Eye
 } from 'lucide-react'
+import { getApiUrl } from '@/config/api'
 
 const MobileUpload = ({ onFileProcessed }) => {
   const [isDragging, setIsDragging] = useState(false)
@@ -96,7 +97,7 @@ const MobileUpload = ({ onFileProcessed }) => {
         })
       }, 300)
 
-      const response = await fetch('/api/upload-image', {
+      const response = await fetch(getApiUrl('upload-image'), {
         method: 'POST',
         body: formData
       })

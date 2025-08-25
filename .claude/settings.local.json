@@ -15,7 +15,11 @@
       "mcp__render__update_static_site",
       "Bash(npm install)",
       "Bash(npm run build:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "mcp__render__get_deploy",
+      "mcp__render__list_postgres_instances",
+      "mcp__render__create_web_service",
+      "mcp__render__get_postgres"
     ],
     "deny": [],
     "ask": []

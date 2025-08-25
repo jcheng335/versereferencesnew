@@ -13,6 +13,7 @@ import {
   AlertCircle,
   Loader2
 } from 'lucide-react'
+import { getApiUrl } from '@/config/api'
 
 const VerseSearch = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -33,7 +34,7 @@ const VerseSearch = () => {
     setSearchResults([])
 
     try {
-      const response = await fetch(`/api/verses/search?query=${encodeURIComponent(searchQuery)}&limit=20`)
+      const response = await fetch(getApiUrl(`verses/search?query=${encodeURIComponent(searchQuery)}&limit=20`))
       const result = await response.json()
 
       if (result.success) {
@@ -59,7 +60,7 @@ const VerseSearch = () => {
     setReferenceResults([])
 
     try {
-      const response = await fetch(`/api/verses/lookup?reference=${encodeURIComponent(referenceQuery)}`)
+      const response = await fetch(getApiUrl(`verses/lookup?reference=${encodeURIComponent(referenceQuery)}`))
       const result = await response.json()
 
       if (result.success) {

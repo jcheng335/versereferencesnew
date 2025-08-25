@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getApiUrl } from '@/config/api';
 
 const PremiumFeatures = () => {
   const [email, setEmail] = useState('');
@@ -8,7 +9,7 @@ const PremiumFeatures = () => {
   const handleDownloadLatest = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/download-latest', {
+      const response = await fetch(getApiUrl('download-latest'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,7 +39,7 @@ const PremiumFeatures = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/schedule-weekly', {
+      const response = await fetch(getApiUrl('schedule-weekly'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './PremiumDashboard.css';
+import { getApiUrl } from '@/config/api';
 
 const PremiumDashboard = () => {
   const [userPlan, setUserPlan] = useState('free');
@@ -15,7 +16,7 @@ const PremiumDashboard = () => {
   const loadUserData = async () => {
     try {
       // Load user subscription and scheduled tasks
-      const response = await fetch('/api/user/subscription');
+      const response = await fetch(getApiUrl('user/subscription'));
       if (response.ok) {
         const data = await response.json();
         setUserPlan(data.plan || 'free');
@@ -28,7 +29,7 @@ const PremiumDashboard = () => {
 
   const loadConferences = async () => {
     try {
-      const response = await fetch('/api/conferences');
+      const response = await fetch(getApiUrl('conferences'));
       if (response.ok) {
         const data = await response.json();
         setConferences(data.conferences || []);
@@ -46,7 +47,7 @@ const PremiumDashboard = () => {
   const handleDownloadLatest = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/download-latest', {
+      const response = await fetch(getApiUrl('download-latest'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ language: 'en' })
@@ -67,7 +68,7 @@ const PremiumDashboard = () => {
 
   const handleScheduleWeekly = async (email) => {
     try {
-      const response = await fetch('/api/schedule-weekly', {
+      const response = await fetch(getApiUrl('schedule-weekly'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, conference_code: 'auto' })
