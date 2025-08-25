@@ -34,5 +34,5 @@ python-dotenv==1.0.0
 gunicorn==21.2.0
 # PyMuPDF==1.23.5  # Commented out - very slow to build, using other PDF libraries
 # ML and AI dependencies (simplified - no ML for now to get deployment working)
-openai==1.12.0
+openai==1.54.3
 schedule==1.2.0
