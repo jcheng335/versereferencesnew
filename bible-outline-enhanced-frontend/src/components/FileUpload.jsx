@@ -80,7 +80,7 @@ const FileUpload = ({ onFileProcessed }) => {
         })
       }, 200)
 
-      const response = await fetch(getApiUrl('upload'), {
+      const response = await fetch(getApiUrl('enhanced/upload'), {
         method: 'POST',
         body: formData
       })
