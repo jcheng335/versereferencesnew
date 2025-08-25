@@ -8,13 +8,29 @@ from src.utils.ocr_service import OCRService
 document_bp = Blueprint('document', __name__)
 
 # Initialize the accurate inline processor
-# Use relative path to find the database file
-bible_db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'bible_verses.db')
-if not os.path.exists(bible_db_path):
-    # Fallback to alternative locations
-    alt_path = '/home/ubuntu/recovery_version_bible_final.db'
-    if os.path.exists(alt_path):
-        bible_db_path = alt_path
+# Try different possible paths for the database file
+possible_paths = [
+    # Path when running from src directory (production on Render)
+    os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', 'bible_verses.db'),
+    # Path when running from project root
+    os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'bible_verses.db'),
+    # Absolute path on Render
+    '/opt/render/project/src/bible-outline-enhanced-backend/bible_verses.db',
+    # Legacy path
+    '/home/ubuntu/recovery_version_bible_final.db'
+]
+
+bible_db_path = None
+for path in possible_paths:
+    if os.path.exists(path):
+        bible_db_path = path
+        print(f"Found database at: {path}")
+        break
+
+if not bible_db_path:
+    print(f"Warning: Could not find bible database. Searched paths: {possible_paths}")
+    bible_db_path = possible_paths[0]  # Use first path as fallback
+
 doc_processor = AccurateInlineProcessor(bible_db_path)
 ocr_service = OCRService()
 
