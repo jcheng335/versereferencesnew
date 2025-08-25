@@ -59,7 +59,7 @@ const OutlineEditor = ({ sessionData }) => {
       const result = await response.json()
 
       if (result.success) {
-        setPopulatedContent(result.content)
+        setPopulatedContent(result.populated_content || result.content)
         setSuccess(`Successfully populated ${result.verse_count} verses!`)
         setActiveView('populated')
       } else {

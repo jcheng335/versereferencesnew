@@ -172,6 +172,26 @@ def export_clean_text(session_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@document_bp.route('/session/<session_id>', methods=['PUT'])
+def update_session(session_id):
+    """Update session content"""
+    data = request.get_json()
+    if not data or 'content' not in data:
+        return jsonify({'error': 'Content is required'}), 400
+    
+    try:
+        # Update the session with new content
+        if session_id in doc_processor.sessions:
+            doc_processor.sessions[session_id]['original_content'] = data['content']
+            # Re-find references in the updated content
+            references = doc_processor._find_inline_references(data['content'])
+            doc_processor.sessions[session_id]['references'] = references
+            return jsonify({'success': True, 'message': 'Content updated successfully'})
+        else:
+            return jsonify({'error': 'Session not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @document_bp.route('/ocr/process', methods=['POST'])
 def process_ocr():
     """Process image with OCR only"""
