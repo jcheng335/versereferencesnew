@@ -31,12 +31,11 @@ services:
     healthCheckPath: /api/health
 
   # Frontend React Service (Static Site)
-  - type: web
+  - type: static
     name: bible-outline-frontend
-    env: static
     buildCommand: |
       cd bible-outline-enhanced-frontend
-      npm install
+      npm install --legacy-peer-deps
       npm run build
     staticPublishPath: bible-outline-enhanced-frontend/dist
     routes:
