@@ -12,6 +12,8 @@ from .hybrid_verse_detector import HybridVerseDetector, VerseReference
 from .llm_verse_detector import LLMVerseDetector
 from .training_data_manager import TrainingDataManager
 from .sqlite_bible_database import SQLiteBibleDatabase
+from .session_manager import SessionManager
+from .postgres_session_manager import PostgresSessionManager
 
 # Model scheduler is optional - depends on ML libraries
 try:
@@ -32,7 +34,15 @@ class EnhancedProcessor:
             use_llm_first: Whether to use LLM-first approach (default True)
         """
         self.bible_db = SQLiteBibleDatabase(db_path)
-        self.sessions = {}
+        
+        # Use PostgreSQL for sessions if available (on Render), otherwise SQLite
+        if os.getenv('DATABASE_URL') or os.getenv('POSTGRES_INTERNAL_URL'):
+            self.session_manager = PostgresSessionManager()
+            print("Using PostgreSQL for session storage")
+        else:
+            self.session_manager = SessionManager()  # Fallback to SQLite
+            print("Using SQLite for session storage")
+            
         self.use_llm_first = use_llm_first
         
         # Initialize LLM detector if using LLM-first approach
@@ -155,8 +165,8 @@ class EnhancedProcessor:
                     }
                     ref_dicts.append(ref_dict)
             
-            # Store session data
-            self.sessions[session_id] = {
+            # Store session data persistently
+            session_data = {
                 'original_content': content,
                 'original_filename': filename,
                 'references': ref_dicts,
@@ -164,6 +174,7 @@ class EnhancedProcessor:
                 'use_llm': use_llm,
                 'llm_outline': llm_outline  # Store LLM outline structure if available
             }
+            self.session_manager.save_session(session_id, session_data)
             
             # Add to training data (for future model improvement)
             sample_id = self.training_manager.add_training_sample(
@@ -173,7 +184,9 @@ class EnhancedProcessor:
             )
             
             # Store sample ID in session for feedback tracking
-            self.sessions[session_id]['sample_id'] = sample_id
+            # Update session with sample_id
+            session_data['sample_id'] = sample_id
+            self.session_manager.save_session(session_id, session_data)
             
             return {
                 'success': True,
@@ -203,10 +216,10 @@ class EnhancedProcessor:
         Returns:
             Populated content with verses in margin
         """
-        if session_id not in self.sessions:
+        # Retrieve session from persistent storage
+        session = self.session_manager.get_session(session_id)
+        if not session:
             return {'success': False, 'error': 'Session not found'}
-        
-        session = self.sessions[session_id]
         content = session['original_content']
         references = session['references']
         llm_outline = session.get('llm_outline')
@@ -246,8 +259,9 @@ class EnhancedProcessor:
                 
                 populated_content = '\n'.join(result_lines)
                 
-                # Store populated content
+                # Store populated content back to persistent storage
                 session['populated_content'] = populated_content
+                self.session_manager.save_session(session_id, session)
                 
                 return {
                     'success': True,
@@ -337,8 +351,9 @@ class EnhancedProcessor:
             
             populated_content = '\n'.join(result_lines)
             
-            # Store populated content
+            # Store populated content back to persistent storage
             session['populated_content'] = populated_content
+            self.session_manager.save_session(session_id, session)
             
             return {
                 'success': True,
@@ -416,10 +431,10 @@ class EnhancedProcessor:
         Returns:
             Feedback processing result
         """
-        if session_id not in self.sessions:
+        # Retrieve session from persistent storage
+        session = self.session_manager.get_session(session_id)
+        if not session:
             return {'success': False, 'error': 'Session not found'}
-        
-        session = self.sessions[session_id]
         sample_id = session.get('sample_id')
         
         if sample_id:
@@ -558,10 +573,9 @@ class EnhancedProcessor:
     
     def export_session(self, session_id: str) -> Optional[Dict]:
         """Export session data for analysis"""
-        if session_id not in self.sessions:
+        session = self.session_manager.get_session(session_id)
+        if not session:
             return None
-        
-        session = self.sessions[session_id]
         return {
             'session_id': session_id,
             'original_content': session['original_content'],
