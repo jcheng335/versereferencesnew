@@ -18,7 +18,7 @@ try:
     print("Enhanced processor initialized successfully with hybrid detection")
 except Exception as e:
     print(f"ERROR: Could not initialize EnhancedProcessor: {e}")
-    print("Make sure OPENAI_API_KEY environment variable is set")
+    print("Make sure OPENAI_API_KEY is set in .env file or environment variables")
     enhanced_processor = None
 
 UPLOAD_FOLDER = tempfile.gettempdir()
@@ -67,7 +67,7 @@ def enhanced_upload():
 def enhanced_populate(session_id):
     """Populate verses with optimal placement"""
     data = request.get_json() or {}
-    format_type = data.get('format', 'inline')
+    format_type = data.get('format', 'margin')  # Default to margin format like MSG12VerseReferences.pdf
     
     if not enhanced_processor:
         return jsonify({'error': 'Enhanced processing not available. OpenAI API key required.'}), 503

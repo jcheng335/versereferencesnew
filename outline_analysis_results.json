@@ -1,0 +1,107 @@
+{
+  "summary": {
+    "outlines_analyzed": 12,
+    "total_original_verses": 1139,
+    "total_complete_verses": 0,
+    "overall_detection_rate": 0,
+    "average_detection_rate": 0.0
+  },
+  "pattern_statistics": {
+    "scripture_reading": 12,
+    "full_complex": 153,
+    "full_simple": 716,
+    "multi_semicolon": 136,
+    "standalone_single": 42,
+    "standalone_range": 12,
+    "standalone_list": 5,
+    "parenthetical": 28,
+    "cross_reference": 35
+  },
+  "missing_patterns": {},
+  "detailed_results": [
+    {
+      "outline": 1,
+      "original_verses": 71,
+      "complete_verses": 0,
+      "detection_rate": 0,
+      "missing_count": 0
+    },
+    {
+      "outline": 2,
+      "original_verses": 159,
+      "complete_verses": 0,
+      "detection_rate": 0,
+      "missing_count": 0
+    },
+    {
+      "outline": 3,
+      "original_verses": 33,
+      "complete_verses": 0,
+      "detection_rate": 0,
+      "missing_count": 0
+    },
+    {
+      "outline": 4,
+      "original_verses": 158,
+      "complete_verses": 0,
+      "detection_rate": 0,
+      "missing_count": 0
+    },
+    {
+      "outline": 5,
+      "original_verses": 44,
+      "complete_verses": 0,
+      "detection_rate": 0,
+      "missing_count": 0
+    },
+    {
+      "outline": 6,
+      "original_verses": 133,
+      "complete_verses": 0,
+      "detection_rate": 0,
+      "missing_count": 0
+    },
+    {
+      "outline": 7,
+      "original_verses": 88,
+      "complete_verses": 0,
+      "detection_rate": 0,
+      "missing_count": 0
+    },
+    {
+      "outline": 8,
+      "original_verses": 97,
+      "complete_verses": 0,
+      "detection_rate": 0,
+      "missing_count": 0
+    },
+    {
+      "outline": 9,
+      "original_verses": 79,
+      "complete_verses": 0,
+      "detection_rate": 0,
+      "missing_count": 0
+    },
+    {
+      "outline": 10,
+      "original_verses": 93,
+      "complete_verses": 0,
+      "detection_rate": 0,
+      "missing_count": 0
+    },
+    {
+      "outline": 11,
+      "original_verses": 47,
+      "complete_verses": 0,
+      "detection_rate": 0,
+      "missing_count": 0
+    },
+    {
+      "outline": 12,
+      "original_verses": 137,
+      "complete_verses": 0,
+      "detection_rate": 0,
+      "missing_count": 0
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=ISO-8859-1">
+<link type=text/css rel=stylesheet href=b.css></link>
+<script src=main.js></script>
+<script src=formretain.js></script>
+<script src=vdata.js></script>
+<style>
+/* Highlighted search words.  */
+u{font-weight:bold;text-decoration:none;color:#dd0340;
+background-color:#ffff77;}
+s{font-family:arial}
+a{cursor:pointer}
+</style>
+<script>
+function init()
+{
+  var s=get_param("ss")
+  if(s)document.f.ss.value=s
+  document.getElementById('options').style.display=
+    document.f.options_on.value=='1'?'':'none'
+  exec("isearch()")
+}
+onload_add(init)
+function cancel_search()
+{
+  exec("search_canceled=1")
+}
+function do_clear()
+{
+  cancel_search()
+  document.getElementById("status").innerHTML=''
+  document.getElementById("debug").innerHTML=''
+  document.getElementById("results").innerHTML=''
+  document.f.ss.value=''
+  document.f.ss.focus()
+}
+function show_help()
+{
+  document.getElementById("status").innerHTML="<b>Help</b>"
+  document.getElementById("results").innerHTML=
+    "Does indexed-searching. Very common words like `a' or `to' occur"
+    +" many times, and so indexed-searching for these words take a long"
+    +" time to execute. Always try searching for the least commonly-appearing"
+    +" words possible."
+}
+// Highlight one verse.
+function hi(i)
+{
+  var s=document.getElementById('p'+i).style
+  s.backgroundColor=(s.backgroundColor?"":"#ddeeff")
+}
+// Remove one verse.
+function rm(i)
+{
+  document.getElementById('p'+i).style.display="none"
+}
+function tgshow(id)
+{
+  var i,s=document.getElementById(id).style
+  if(s.display=='none'){i='1';s.display=''}
+  else{i='';s.display='none'}
+  eval("document.f."+id+"_on.value='"+i+"'")
+}
+// Show window statuses.
+function ns(){top.status=""}
+function hi1(){top.status="Click to highlight this verse."}
+function rm1(){top.status="Click to delete this verse."}
+// Set default options.
+function setdefaultoptions()
+{
+  var f=document.f
+  f.mc.checked=false
+  f.ww.checked=true
+  f.vv.checked=true
+  f.fn.checked=false
+  f.st.checked=false
+  f.bk.checked=false
+  f.bk1.options.selectedIndex=0
+  f.bk2.options.selectedIndex=65
+}
+</script>
+</head>
+<body>
+<form name=f action=vsearch.htm method=get>
+<table align=center width=100% cellpadding=0 cellspacing=0><tr>
+<td nowrap class=font>
+  &nbsp; <b><a class=font1 href=a.htm>Search for:</a></b>
+  <input class=font1 type=text name=ss style="width:250px;"
+         onfocus=hotkeys_disable();this.select()
+         onblur=hotkeys_enable()>
+  <input class=font1 type=submit value=Go>
+  <input class=font1 type=button value="Toggle Numbering"
+         onclick=hotkey_sups()>
+  <input class=font1 type=button value=Options onclick=tgshow('options')>
+  <input type=hidden name=options_on>
+  <input class=font1 type=button value=Cancel id=cancelbutton
+    style=visibility:hidden onclick=cancel_search()>
+</td>
+<td>&nbsp;</td>
+<td align=right nowrap class=font>
+  <a class=nb href=javascript:do_clear()>Clear</a>
+  | <a class=nb href=javascript:show_help()>Help</a>
+</td>
+</tr></table>
+
+<div id=options class=font style=display:none;margin-top:3px;>
+
+<!--input type=button value=Defaults onclick=setdefaultoptions()-->
+<input class=ptr type=checkbox name=mc id=mc_><label for=mc_>Match case</label>
+<input class=ptr type=checkbox name=ww id=ww_ checked><label for=ww_>Whole words</label>
+<input class=ptr type=checkbox name=vv id=vv_ checked><label for=vv_>Verses</label>
+<input class=ptr type=checkbox name=fn id=fn_><label for=fn_>Footnotes</label>
+<input class=ptr type=checkbox name=st id=st_><label for=st_>Intros+Outlines</label>
+
+<span style=white-space:nowrap><input
+type=checkbox name=bk id=bk_><label for=bk_>Books</label>
+<select name=bk1 onchange="
+  if(this.options.selectedIndex>document.f.bk2.options.selectedIndex)
+    document.f.bk2.options.selectedIndex=this.options.selectedIndex">
+<script>
+for(var i=0;i<NumBks;i++)
+  document.write('<option>'+BkAbbr[i]+'</option>')
+</script>
+</select>
+to
+<select name=bk2 onchange="
+  if(this.options.selectedIndex<document.f.bk1.options.selectedIndex)
+    document.f.bk1.options.selectedIndex=this.options.selectedIndex">
+<script>
+for(var i=0;i<NumBks;i++)
+  document.write('<option'+(i==65?' selected':'')+'>'+BkAbbr[i]+'</option>')
+</script>
+</select>
+</span>
+</div>
+
+</form>
+<div id=status1>&nbsp;<span id=status></span></div>
+<span id=debug></span>
+<div id=results></div>
+</body>
+</html>

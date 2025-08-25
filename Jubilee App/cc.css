@@ -1,0 +1,11 @@
+a,h1,h2,h5,h6,p,a:hover,a:visited,a.q{font-family:serif;}
+u{text-decoration:none}
+
+a,a:hover,a:visited{text-decoration:none;color:#2222cc;}
+a:hover{text-decoration:underline;}
+h1,h2,h5,h6{margin:0px;margin-top:4px;margin-bottom:4px;text-align:center;font-weight:normal;font-size:100%;}
+h1{margin:6px;font-size:120%;}
+h2{text-align:justify;border-top:1px solid #777792;}
+h5{padding-top:10px;border-top:1px solid #777792;}
+p{margin:0px;text-indent:-16px;margin-left:16px;text-align:justify;border:none;}
+a.q{font-weight:bold;color:#777777;}

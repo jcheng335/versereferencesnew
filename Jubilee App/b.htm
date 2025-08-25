@@ -1,0 +1,129 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>RVB-JE</title>
+<script src=main.js></script>
+<script src=formretain.js></script>
+<style>
+div{border:none;background-color:white}
+a,a:hover,a:visited{color:#5555ff}
+a,a:visited{text-decoration:none}
+a:hover{text-decoration:underline}
+p{text-align:center;margin:0px;padding:0px;margin-bottom:8px;}
+p.hr{margin:4px;padding:4px;border-bottom:1px solid #ccccdd}
+b{color:#777777;}
+q{display:block;quotes:none;text-align:center;margin:0px;padding:0px;font-size:70%;
+font-family:arial;color:#444444;}
+body{margin-left:20px;margin-right:20px}
+td.toc{font-size:90%;border:1px solid #cccccc;width:45px;height:35px;
+white-space:nowrap;text-align:center;cursor:pointer;font-weight:bold;
+color:#555555}
+.grp0{background-color:#fff6f6}
+.grp1{background-color:#ffffff}
+.grp2{background-color:#f6fff6}
+.grp3{background-color:#ffffff}
+.grp4{background-color:#f6f6ff}
+.grp5{background-color:#ffffff}
+.grp6{background-color:#ffffe6}
+.grp7{background-color:#ffffff}
+</style>
+<script src=vdata.js></script>
+<script>
+function toc_ov(o){o.style.backgroundColor="#e4e4e4";o.style.color="blue"}
+function toc_ou(o){o.style.backgroundColor="";o.style.color=""}
+function toggle_toc()
+{
+  var i=document.f.cur_toc_style.value
+  if(i=='1'){new_toc();i=''}else{old_toc();i='1'}
+  document.f.cur_toc_style.value=i
+}
+function init_toc()
+{
+  if(document.f.cur_toc_style.value=='1')old_toc()
+  else new_toc()
+}
+onload_add(init_toc)
+function new_toc()
+{
+  var grps=[5,12,5,5,12,4,14,9]
+  var s="<table align=center cellpadding=2 cellspacing=2 style=background-color:#fcfcfc>"
+  var bk=0,grp=0,grpcnt=0
+  for(var i=0;i<6;i++)
+  {
+    s+="<tr>"
+    for(var j=0;j<11;j++)
+    {
+      s+="<td class=\"toc grp"+grp+"\""
+        +" onmouseover=toc_ov(this) onmouseout=toc_ou(this)"
+        +" onclick=location.href='"+BkAbbr[bk]+".htm'>"
+        +BkAbbr[bk++]+"</td>"
+      if(++grpcnt>=grps[grp]){grp++;grpcnt=0}
+    }
+    s+="</tr>"
+  }
+  s+="</table>"
+  document.getElementById("toc").innerHTML=s
+}
+function old_toc()
+{
+  document.getElementById("toc").innerHTML=
+   "<p class=hr>"
+  +"<b>[Moses]</b> &nbsp;"
+  +"<a href=Gen.htm>Gen.</a> &nbsp; <a href=Exo.htm>Exo.</a> &nbsp; <a href=Lev.htm>Lev.</a> &nbsp; <a href=Num.htm>Num.</a> &nbsp; <a href=Deu.htm>Deut.</a>; &nbsp; &nbsp;"
+  +"<b>[Israel]</b> &nbsp;"
+  +"<a href=Jos.htm>Josh.</a> &nbsp; <a href=Jdg.htm>Judg.</a> &nbsp; <a href=Rut.htm>Ruth</a> &nbsp; <a href=1Sa.htm>1&nbsp;Sam.</a> &nbsp; <a href=2Sa.htm>2&nbsp;Sam.</a> &nbsp; <a href=1Ki.htm>1&nbsp;Kings</a> &nbsp; <a href=2Ki.htm>2&nbsp;Kings</a> &nbsp; <a href=1Ch.htm>1&nbsp;Chron.</a> &nbsp; <a href=2Ch.htm>2&nbsp;Chron.</a> &nbsp; <a href=Ezr.htm>Ezra</a> &nbsp; <a href=Neh.htm>Neh.</a> &nbsp; <a href=Est.htm>Esth.</a>; &nbsp; &nbsp;"
+  +"<b>[Poetry]</b> &nbsp;"
+  +"<a href=Job.htm>Job</a> &nbsp; <a href=Psa.htm>Psa.</a> &nbsp; <a href=Prv.htm>Prov.</a> &nbsp; <a href=Ecc.htm>Eccl.</a> &nbsp; <a href=SoS.htm>S.&nbsp;S.</a>; &nbsp; &nbsp;"
+  +"<b>[Major]</b> &nbsp;"
+  +"<a href=Isa.htm>Isa.</a> &nbsp; <a href=Jer.htm>Jer.</a> &nbsp; <a href=Lam.htm>Lam.</a> &nbsp; <a href=Ezk.htm>Ezek.</a> &nbsp; <a href=Dan.htm>Dan.</a>; &nbsp; &nbsp;"
+  +"<b>[Minor]</b> &nbsp;"
+  +"<a href=Hos.htm>Hosea</a> &nbsp; <a href=Joe.htm>Joel</a> &nbsp; <a href=Amo.htm>Amos</a> &nbsp; <a href=Oba.htm>Oba.</a> &nbsp; <a href=Jon.htm>Jonah</a> &nbsp; <a href=Mic.htm>Micah</a> &nbsp; <a href=Nah.htm>Nahum</a> &nbsp; <a href=Hab.htm>Hab.</a> &nbsp; <a href=Zep.htm>Zeph.</a> &nbsp; <a href=Hag.htm>Hag.</a> &nbsp; <a href=Zec.htm>Zech.</a> &nbsp; <a href=Mal.htm>Mal.</a>"
+  +"</p>"
+  +"<p>"
+  +"<b>[Gospels]</b> &nbsp;"
+  +"<a href=Mat.htm>Matt.</a> &nbsp; <a href=Mrk.htm>Mark</a> &nbsp; <a href=Luk.htm>Luke</a> &nbsp; <a href=Joh.htm>John</a>; &nbsp; &nbsp;"
+  +"<b>[Paul]</b> &nbsp;"
+  +"<a href=Act.htm>Acts</a> &nbsp; <a href=Rom.htm>Rom.</a> &nbsp; <a href=1Co.htm>1&nbsp;Cor.</a> &nbsp; <a href=2Co.htm>2&nbsp;Cor.</a> &nbsp; <a href=Gal.htm>Gal.</a> &nbsp; <a href=Eph.htm>Eph.</a> &nbsp; <a href=Phi.htm>Phil.</a> &nbsp; <a href=Col.htm>Col.</a>;&nbsp;"
+  +"<a href=1Th.htm>1&nbsp;Thes.</a> &nbsp; <a href=2Th.htm>2&nbsp;Thes.</a> &nbsp; <a href=1Ti.htm>1&nbsp;Tim.</a> &nbsp; <a href=2Ti.htm>2&nbsp;Tim.</a> &nbsp; <a href=Tit.htm>Titus</a> &nbsp; <a href=Phm.htm>Philem.</a>; &nbsp; &nbsp;"
+  +"<b>[Others]</b> &nbsp;"
+  +"<a href=Heb.htm>Heb.</a> &nbsp; <a href=Jam.htm>James</a> &nbsp; <a href=1Pe.htm>1&nbsp;Pet.</a> &nbsp; <a href=2Pe.htm>2&nbsp;Pet.</a> &nbsp; <a href=1Jo.htm>1&nbsp;John</a> &nbsp; <a href=2Jo.htm>2&nbsp;John</a> &nbsp; <a href=3Jo.htm>3&nbsp;John</a> &nbsp; <a href=Jud.htm>Jude</a> &nbsp; <a href=Rev.htm>Rev.</a>"
+  +"</p>"
+}
+</script>
+</head>
+<body>
+<form style=display:none name=f>
+<input type=hidden name=cur_toc_style>
+</form>
+<table cellpadding=0 cellspacing=0 height=100% width=100%><tr>
+<td align=center valign=center style=line-height:170%>
+<p><a href="javascript:toggle_toc()"
+ style=font-size:115%>The Holy Bible</a></p>
+<div id=toc></div>
+<q>[
+<script>
+document.write(parent.main
+  ?"<a target=_parent href=a.htm>No Frames</a>"
+  :"<a href=frames.htm>Use Frames</a>")
+</script>
+| <a href=vsearch.htm>Search</a>
+| <a href=listv.htm>List Verses</a>
+| <a href=bkinfo.htm>Books Information</a>
+| <a href=cc.htm>Concordance</a>
+| <a href=cm.htm>Charts & Maps</a>
+| <a href=about.htm>About</a>
+]</q>
+<script>
+if(parent.main)
+  document.write("<q><b style=font-family:arial>Hotkeys:</b> "
+    +"<a href=javascript:hotkey_ss()><b>S</b>earch</a>"
+    +", <a href=javascript:hotkey_vr()><b>L</b>ist verses</a>"
+    +", <a href=javascript:hotkey_gv()><b>G</b>o to verse</a>"
+    +", <a href=javascript:tg_all_sups()><b>T</b>oggle All Superscripts</a>"
+    +"</q>")
+</script>
+<br>
+</td>
+</tr></table>
+</body>
+</html>

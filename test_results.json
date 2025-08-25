@@ -1,0 +1,51 @@
+{
+  "original_analysis": {
+    "points": 50,
+    "verses": 98
+  },
+  "llm_result": {
+    "success": true,
+    "outline_points": [
+      {
+        "outline_number": "I",
+        "outline_text": "Ephesians 4:7-16 presents to us Christ as the Giver of gifts for the intrinsic building up of the organic Body of Christ; this building up is by the giving, the dispensing, of the divine grace according to the measure of the gift of Christ:",
+        "verses": [
+          {
+            "reference": "Eph. 4:7",
+            "text": "4:7"
+          },
+          {
+            "reference": "1 Cor. 12:14-22",
+            "text": "[Verse text not found in database]"
+          },
+          {
+            "reference": "Rom. 12:4-5",
+            "text": "4. 12:4 5. 12:5"
+          },
+          {
+            "reference": "2 Cor. 1:15",
+            "text": "1:15"
+          },
+          {
+            "reference": "Eph. 4:16",
+            "text": "4:16"
+          },
+          {
+            "reference": "Rom. 12:3",
+            "text": "12:3"
+          }
+        ]
+      }
+    ],
+    "total_verses": 6,
+    "verses_found": 5,
+    "success_rate": 83.33333333333334
+  },
+  "hybrid_result": null,
+  "comparison": {
+    "expected": 54,
+    "found": 7,
+    "missing": 47,
+    "rate": 12.962962962962962
+  }
+}

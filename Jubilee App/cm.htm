@@ -1,0 +1,92 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=ISO-8859-1">
+<link type=text/css rel=stylesheet href=b.css></link>
+<script src=main.js></script>
+<script>
+function init()
+{
+  if(location.search.length<=1){show_thumbnails();return}
+  var s=unescape(location.search.substring(1))
+  if(s.substring(0,2)=='s=')s=s.substring(2)
+  s=s.replace(/\+/g,' ')
+  document.f.s.value=unescape(s)
+  var i,o=document.f.s.options
+  for(i=o.length-1;i>=1;i--)
+  {
+    if(o[i].value==s)
+    {
+      document.getElementById("status").innerHTML=o[i].text
+      document.getElementById("picture").innerHTML=
+        "<a href="+s+".jpg><img border=0 src="+s+".jpg></a>"
+      return
+    }
+  }
+  show_thumbnails()
+}
+function show_thumbnails()
+{
+  var i,txt=[],img=[],o=document.f.s.options
+  for(i=1;i<o.length;i++)
+  {
+    var v=o[i].value,t=o[i].text
+    txt.push("<th width=140 align=center valign=top><b class=small>"+t+"</th>")
+    img.push("<td><a href="+v+".jpg><img border=0 src="+v+"-.png></a>")
+  }
+  
+  var sp="<td width=20></td>"
+  document.getElementById("picture").innerHTML=
+    "<table align=center>"
+    +"<tr>"+img[0]+sp+img[1]+sp+img[2]+sp+img[3]+"</tr>"
+    +"<tr>"+txt[0]+sp+txt[1]+sp+txt[2]+sp+txt[3]+"</tr>"
+    +"<tr height=20><td></td></tr>"
+    +"<tr>"+img[4]+sp+img[5]+sp+img[6]+sp+img[7]+"</tr>"
+    +"<tr>"+txt[4]+sp+txt[5]+sp+txt[6]+sp+txt[7]+"</tr>"
+    +"</table>"
+}
+function do_clear()
+{
+  document.f.s.selectedIndex=0
+  document.getElementById("status").innerHTML=
+  document.getElementById("debug").innerHTML=
+  document.getElementById("picture").innerHTML=""
+}
+function show_help()
+{
+  document.getElementById("status").innerHTML="<b class=font>Help</b>"
+  document.getElementById("picture").innerHTML=
+    "Select one of the options in the combo box to display the chart or map."
+
+}
+</script>
+</head>
+<body onload=init()>
+<form name=f>
+<table align=center width=100% cellpadding=0 cellspacing=0><tr>
+<td nowrap class=font>
+  &nbsp; <b><a class=font1 href=a.htm>Charts &amp; Maps:</a></b>
+  <select class=font1 name=s onchange=submit() style=width:250px>
+  <option>View All Thumbnails</option>
+  <option value=nteconomy>Chart 1. God's New Testament Economy</option>
+  <option value=70weeks>Chart 2. The Chart of the Seventy Weeks and the Coming of Christ, with the Rapture of the Saints</option>
+  <option value=genjesus>Chart 3. The Generation of Jesus Christ</option>
+  <option value=kingdoms>Chart 4. A Chart Showing the Difference Between the Kingdom of the Heavens and the Kingdom of God</option>
+  <option value=ancientot>Map 1. The Ancient Near East in Old Testament Times</option>
+  <option value=israelot>Map 2. Israel in Old Testament Times</option>
+  <option value=holylandnt>Map 3. The Holy Land in New Testament Times</option>
+  <option value=pauljourneys>Map 4. The Journeys of Paul</option>
+  </select>
+  <input class=font1 type=submit value=Go>
+</td>
+<td>&nbsp;</td>
+<td align=right nowrap class=font>
+  <a class=nb href=javascript:do_clear()>Clear</a>
+  | <a class=nb href=javascript:show_help()>Help</a>
+</td>
+</tr></table>
+</form>
+<div id=status1 style=margin-bottom:3px>&nbsp;<b><span id=status class=font1></span></b></div>
+<span id=debug></span>
+<div id=picture></div>
+</body>
+</html>

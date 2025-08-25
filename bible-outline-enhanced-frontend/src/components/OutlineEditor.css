@@ -1,0 +1,57 @@
+/* OutlineEditor.css - Styles for displaying verse references in margin format */
+
+.margin-format {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.margin-format .verse-ref {
+  min-width: 120px;
+  color: #2563eb;
+  font-weight: 500;
+  padding-right: 1rem;
+  flex-shrink: 0;
+}
+
+.margin-format .outline-text {
+  flex: 1;
+}
+
+.verse-footnotes {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 2px solid #e5e7eb;
+}
+
+.verse-footnotes h3 {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.verse-footnote-item {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.verse-footnote-item .ref {
+  color: #2563eb;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .margin-format .verse-ref {
+    color: #60a5fa;
+  }
+  
+  .verse-footnotes {
+    border-top-color: #374151;
+  }
+  
+  .verse-footnote-item .ref {
+    color: #60a5fa;
+  }
+}

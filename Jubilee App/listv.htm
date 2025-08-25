@@ -1,0 +1,101 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=ISO-8859-1">
+<link type=text/css rel=stylesheet href=b.css></link>
+<script src=main.js></script>
+<style>
+a{cursor:pointer}
+/* Bad vrefs.  */
+q{quotes:none;color:red;font-weight:bold;display:inline;cursor:pointer}
+/* Link to list all verses.  */
+p.more{text-align:center;color:#2222cc;border-bottom:none}
+</style>
+<script>
+function init()
+{
+  if(location.search.length<=1)return
+  var s=unescape(location.search.substring(1))
+  if(s.substring(0,3)=='vr=')s=s.substring(3)
+  s=s.replace(/\+/g,' ')
+  document.f.vr.value=unescape(s)
+  go_list()
+}
+onload_add(init)
+function go_list(i)
+{
+  exec("listv("+(i?i:"")+")")
+}
+function cancel_listv()
+{
+  exec("listv_canceled=1")
+}
+function do_clear()
+{
+  document.getElementById("lastlisted").innerHTML=''
+  document.getElementById("status").innerHTML=''
+  document.getElementById("debug").innerHTML=''
+  document.getElementById("listing").innerHTML=''
+  document.f.vr.value=''
+  document.f.vr.focus()
+}
+function show_help()
+{
+  document.getElementById("status").innerHTML="<b>Help</b>"
+  document.getElementById("listing").innerHTML=
+    "Type in one or more verse references in the box, then press enter"
+    +" or click on the `Go' button to show the verses."
+    +" Verse references following the notation of BookName Chapter:Verse."
+    +" For example, &ldquo;<a href=listv.htm?Gen%201:1>Gen 1:1</a>&rdquo;"
+    +" or &ldquo;<a href=listv.htm?Genesis%201:1>Genesis 1:1</a>&rdquo;"
+    +" will both work."
+    +" Try also &ldquo;<a href=listv.htm?Mat1-2>Mat1-2</a>&rdquo;,"
+    +" &ldquo;<a href=listv.htm?Mat%204:10-15;%20Rev.%202:1-10>"
+    +"Mat 4:10-15; Rev. 2:1-10</a>&rdquo; and so on."
+    +" Verse references can be separated by any character that cannot be"
+    +" parsed by the program, like `;' and `,'."
+}
+// Highlight one verse.
+function hi(i)
+{
+  var s=document.getElementById('p'+i).style
+  s.backgroundColor=(s.backgroundColor?"":"#ddeeff")
+}
+// Remove one verse.
+function rm(i)
+{
+  document.getElementById('p'+i).style.display="none"
+}
+// Show window statuses.
+function ns(){top.status=""}
+function hi1(){top.status="Click to highlight this verse."}
+function rm1(){top.status="Click to delete this verse."}
+</script>
+</head>
+<body>
+<span id=lastlisted style=display:none></span>
+<form name=f action=listv.htm method=get>
+<table align=center width=100% cellpadding=0 cellspacing=0><tr>
+<td nowrap class=font>
+  &nbsp; <b><a class=font1 href=a.htm>List Verses:</a></b>
+  <input class=font1 type=text name=vr style=width:250px
+         onkeypress=go_list(1)
+         onfocus=hotkeys_disable();this.select()
+         onblur=hotkeys_enable()>
+  <input class=font1 type=submit value=Go>
+  <input class=font1 type=button value="Toggle Numbering"
+         onclick=hotkey_sups()>
+  <input class=font1 type=button value=Cancel id=cancelbutton
+    style=visibility:hidden onclick=cancel_listv()>
+</td>
+<td>&nbsp;</td>
+<td align=right nowrap class=font>
+  <a class=nb href=javascript:do_clear()>Clear</a>
+  | <a class=nb href=javascript:show_help()>Help</a>
+</td>
+</tr></table>
+</form>
+<div id=status1>&nbsp;<span id=status></span></div>
+<span id=debug></span>
+<div id=listing></div>
+</body>
+</html>

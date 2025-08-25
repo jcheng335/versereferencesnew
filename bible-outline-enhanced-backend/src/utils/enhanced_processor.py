@@ -9,6 +9,7 @@ from typing import Dict, List, Any, Optional
 import pdfplumber
 from docx import Document
 from .hybrid_verse_detector import HybridVerseDetector, VerseReference
+from .llm_verse_detector import LLMVerseDetector
 from .training_data_manager import TrainingDataManager
 from .sqlite_bible_database import SQLiteBibleDatabase
 
@@ -21,18 +22,24 @@ except ImportError:
     print("Model scheduler not available - ML features disabled")
 
 class EnhancedProcessor:
-    def __init__(self, db_path: str, openai_key: str = None):
+    def __init__(self, db_path: str, openai_key: str = None, use_llm_first: bool = True):
         """
         Initialize enhanced processor with hybrid detection
         
         Args:
             db_path: Path to Bible database
             openai_key: OpenAI API key (optional, uses env var if not provided)
+            use_llm_first: Whether to use LLM-first approach (default True)
         """
         self.bible_db = SQLiteBibleDatabase(db_path)
         self.sessions = {}
+        self.use_llm_first = use_llm_first
         
-        # Initialize hybrid detector with OpenAI (REQUIRED for hybrid approach)
+        # Initialize LLM detector if using LLM-first approach
+        if self.use_llm_first:
+            self.llm_detector = LLMVerseDetector()
+        
+        # Initialize hybrid detector as fallback or primary (based on use_llm_first)
         self.detector = HybridVerseDetector(
             openai_api_key=openai_key,
             model_path='models/verse_detector.pkl'
@@ -82,23 +89,71 @@ class EnhancedProcessor:
             # Extract text based on file type
             content = self._extract_text(file_path, filename)
             
-            # Detect verses using hybrid approach
-            references = self.detector.detect_verses(content, use_llm=use_llm)
+            # Use LLM-first approach if enabled
+            llm_outline = None
             
-            # Convert VerseReference objects to dicts
-            ref_dicts = []
-            for ref in references:
-                ref_dict = {
-                    'book': ref.book,
-                    'chapter': ref.chapter,
-                    'start_verse': ref.start_verse,
-                    'end_verse': ref.end_verse,
-                    'context': ref.context,
-                    'confidence': ref.confidence,
-                    'insertion_point': ref.insertion_point,
-                    'original_text': ref.original_text
-                }
-                ref_dicts.append(ref_dict)
+            if self.use_llm_first and use_llm:
+                # Process with LLM to extract outline and verses
+                llm_result = self.llm_detector.process_document(content)
+                
+                if llm_result['success']:
+                    # Convert LLM results to reference format
+                    ref_dicts = []
+                    llm_outline = llm_result['outline_points']
+                    
+                    for point in llm_result['outline_points']:
+                        for verse in point.get('verses', []):
+                            # Parse the verse reference
+                            ref_text = verse['reference']
+                            parsed = self._parse_reference_string(ref_text)
+                            
+                            if parsed:
+                                ref_dict = {
+                                    'book': parsed['book'],
+                                    'chapter': parsed['chapter'],
+                                    'start_verse': parsed['start_verse'],
+                                    'end_verse': parsed['end_verse'],
+                                    'context': point['outline_text'],
+                                    'confidence': 0.95,  # High confidence for LLM results
+                                    'insertion_point': len(content),  # Will be updated in populate
+                                    'original_text': ref_text,
+                                    'verse_text': verse.get('text', '')
+                                }
+                                ref_dicts.append(ref_dict)
+                else:
+                    # Fallback to hybrid detector
+                    references = self.detector.detect_verses(content, use_llm=use_llm)
+                    ref_dicts = []
+                    
+                    for ref in references:
+                        ref_dict = {
+                            'book': ref.book,
+                            'chapter': ref.chapter,
+                            'start_verse': ref.start_verse,
+                            'end_verse': ref.end_verse,
+                            'context': ref.context,
+                            'confidence': ref.confidence,
+                            'insertion_point': ref.insertion_point,
+                            'original_text': ref.original_text
+                        }
+                        ref_dicts.append(ref_dict)
+            else:
+                # Use hybrid detector
+                references = self.detector.detect_verses(content, use_llm=use_llm)
+                ref_dicts = []
+                
+                for ref in references:
+                    ref_dict = {
+                        'book': ref.book,
+                        'chapter': ref.chapter,
+                        'start_verse': ref.start_verse,
+                        'end_verse': ref.end_verse,
+                        'context': ref.context,
+                        'confidence': ref.confidence,
+                        'insertion_point': ref.insertion_point,
+                        'original_text': ref.original_text
+                    }
+                    ref_dicts.append(ref_dict)
             
             # Store session data
             self.sessions[session_id] = {
@@ -106,7 +161,8 @@ class EnhancedProcessor:
                 'original_filename': filename,
                 'references': ref_dicts,
                 'populated_content': None,
-                'use_llm': use_llm
+                'use_llm': use_llm,
+                'llm_outline': llm_outline  # Store LLM outline structure if available
             }
             
             # Add to training data (for future model improvement)
@@ -136,16 +192,16 @@ class EnhancedProcessor:
                 'error': f'Error processing document: {str(e)}'
             }
     
-    def populate_verses(self, session_id: str, format_type: str = 'inline') -> Dict[str, Any]:
+    def populate_verses(self, session_id: str, format_type: str = 'margin') -> Dict[str, Any]:
         """
-        Populate document with verses at optimal insertion points
+        Populate document with verses in margin format (like MSG12VerseReferences.pdf)
         
         Args:
             session_id: Session identifier
-            format_type: Format type ('inline' or 'footnote')
+            format_type: Format type ('margin', 'inline', or 'footnote')
         
         Returns:
-            Populated content with verses
+            Populated content with verses in margin
         """
         if session_id not in self.sessions:
             return {'success': False, 'error': 'Session not found'}
@@ -153,14 +209,62 @@ class EnhancedProcessor:
         session = self.sessions[session_id]
         content = session['original_content']
         references = session['references']
+        llm_outline = session.get('llm_outline')
         
         try:
+            # If we have LLM outline structure, use it for better formatting
+            if llm_outline and format_type == 'margin':
+                result_lines = []
+                
+                for point in llm_outline:
+                    # Format verse references for margin
+                    if point.get('verses'):
+                        refs = ', '.join([v['reference'] for v in point['verses']])
+                        # Left column for references (20 chars), right column for outline text
+                        if point.get('outline_number'):
+                            formatted_line = f"{refs:<20} {point['outline_number']}. {point['outline_text']}"
+                        else:
+                            formatted_line = f"{refs:<20} {point['outline_text']}"
+                    else:
+                        if point.get('outline_number'):
+                            formatted_line = f"{'':20} {point['outline_number']}. {point['outline_text']}"
+                        else:
+                            formatted_line = f"{'':20} {point['outline_text']}"
+                    
+                    result_lines.append(formatted_line)
+                
+                # Add verse texts at the end
+                result_lines.append('')
+                result_lines.append('=' * 80)
+                result_lines.append('VERSE TEXTS:')
+                result_lines.append('=' * 80)
+                
+                for point in llm_outline:
+                    for verse in point.get('verses', []):
+                        if verse.get('text') and verse['text'] != '[Verse text not found in database]':
+                            result_lines.append(f"{verse['reference']}: {verse['text']}")
+                
+                populated_content = '\n'.join(result_lines)
+                
+                # Store populated content
+                session['populated_content'] = populated_content
+                
+                return {
+                    'success': True,
+                    'populated_content': populated_content,
+                    'format': format_type,
+                    'verse_count': sum(len(p.get('verses', [])) for p in llm_outline),
+                    'message': f'Successfully populated {sum(len(p.get("verses", [])) for p in llm_outline)} verses using LLM-first approach'
+                }
+            
+            # Fallback to original approach if no LLM outline
             # Sort references by insertion point
             references.sort(key=lambda x: x['insertion_point'])
             
             # Split content into lines
             lines = content.split('\n')
             result_lines = []
+            verse_footnotes = []  # Collect all verse texts for the end
             inserted_at = set()
             
             # Process each line
@@ -171,35 +275,65 @@ class EnhancedProcessor:
                 
                 for ref in references:
                     if ref['insertion_point'] == i and i not in inserted_at:
-                        # Fetch verse text
-                        verse_text = self._fetch_verse_text(ref)
-                        if verse_text:
-                            verses_for_this_line.append((ref, verse_text))
-                            has_reference = True
+                        # Just store the reference, we'll fetch text later if needed
+                        verses_for_this_line.append(ref)
+                        has_reference = True
                 
-                # If this line has references, append them to the SAME line
+                # Format based on type
                 if has_reference and verses_for_this_line:
-                    # Add space and verse references to the end of the current line
-                    modified_line = line
-                    for ref, verse_text in verses_for_this_line:
-                        if format_type == 'inline':
-                            # Add space after outline point, then reference - verse text
-                            modified_line += f" {ref['original_text']} - {verse_text}"
-                        else:
-                            # Footnote style
+                    if format_type == 'margin':
+                        # Create margin format like MSG12VerseReferences.pdf
+                        # Left column for references, right column for outline text
+                        refs_str = ', '.join([ref['original_text'] for ref in verses_for_this_line])
+                        # Use tab or spaces to create margin effect
+                        # Format: "RefList    OutlineText"
+                        result_lines.append(f"{refs_str:<15} {line}")
+                        
+                        # Collect verse texts for footnotes
+                        for ref in verses_for_this_line:
+                            verse_text = self._fetch_verse_text(ref)
+                            if verse_text:
+                                verse_footnotes.append(f"{ref['original_text']} {verse_text}")
+                    
+                    elif format_type == 'inline':
+                        # Old inline format (for backward compatibility)
+                        modified_line = line
+                        for ref in verses_for_this_line:
+                            verse_text = self._fetch_verse_text(ref)
+                            if verse_text:
+                                modified_line += f" {ref['original_text']} - {verse_text}"
+                        result_lines.append(modified_line)
+                    
+                    else:  # footnote
+                        # Footnote style
+                        modified_line = line
+                        for ref in verses_for_this_line:
                             modified_line += f" [{ref['original_text']}]"
-                    
-                    result_lines.append(modified_line)
-                    
-                    # If footnote style, add verse texts below
-                    if format_type == 'footnote':
-                        for ref, verse_text in verses_for_this_line:
-                            result_lines.append(f"    {verse_text}")
+                        result_lines.append(modified_line)
+                        
+                        # Add verse texts below
+                        for ref in verses_for_this_line:
+                            verse_text = self._fetch_verse_text(ref)
+                            if verse_text:
+                                result_lines.append(f"    {ref['original_text']}: {verse_text}")
                     
                     inserted_at.add(i)
                 else:
-                    # No references for this line, keep as is
-                    result_lines.append(line)
+                    # No references for this line
+                    if format_type == 'margin':
+                        # Add empty margin space for consistency
+                        result_lines.append(f"{'':15} {line}")
+                    else:
+                        result_lines.append(line)
+            
+            # For margin format, add all verse texts at the end
+            if format_type == 'margin' and verse_footnotes:
+                result_lines.append('')
+                result_lines.append('=' * 80)
+                result_lines.append('VERSE REFERENCES:')
+                result_lines.append('=' * 80)
+                for footnote in verse_footnotes:
+                    result_lines.append(footnote)
             
             populated_content = '\n'.join(result_lines)
             
@@ -211,7 +345,7 @@ class EnhancedProcessor:
                 'populated_content': populated_content,
                 'format': format_type,
                 'verse_count': len(references),
-                'message': f'Successfully populated {len(references)} verses with enhanced placement'
+                'message': f'Successfully populated {len(references)} verses in {format_type} format'
             }
             
         except Exception as e:
@@ -435,3 +569,30 @@ class EnhancedProcessor:
             'populated_content': session.get('populated_content'),
             'sample_id': session.get('sample_id')
         }
+    
+    def _parse_reference_string(self, ref_text: str) -> Optional[Dict]:
+        """Parse a verse reference string into components"""
+        import re
+        
+        # Handle various reference formats
+        patterns = [
+            r'([123]?\s*[A-Z][a-z]+\.?)\s+(\d+):(\d+)(?:-(\d+))?',  # Book Ch:V or Book Ch:V-V
+            r'([A-Z][a-z]+\.?)\s+(\d+):(\d+)(?:-(\d+))?',  # Book Ch:V or Book Ch:V-V
+        ]
+        
+        for pattern in patterns:
+            match = re.match(pattern, ref_text.strip())
+            if match:
+                book = match.group(1).strip().replace('.', '')
+                chapter = int(match.group(2))
+                start_verse = int(match.group(3))
+                end_verse = int(match.group(4)) if match.group(4) else start_verse
+                
+                return {
+                    'book': book,
+                    'chapter': chapter,
+                    'start_verse': start_verse,
+                    'end_verse': end_verse
+                }
+        
+        return None

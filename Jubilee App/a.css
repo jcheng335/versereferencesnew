@@ -1,0 +1,56 @@
+/* General tag list -- Don't use abbr,sub,sup.  */
+b,i,p,q,s,
+em,h1,h2,h3,h4,h5,h6,tt,
+big,del,dfn,kbd,ins,pre,small,var,
+cite,code,samp
+{display:inline;font-family:serif;font-size:100%;font-style:normal;quotes:none;margin:0px;padding:0px;text-decoration:none;vertical-align:baseline;text-align:justify;}
+/* General stuff.  */
+body{font-family:serif;text-align:justify;color:#000000;}
+a{text-decoration:none;}
+a,a:hover,a:visited{text-decoration:none;color:#0000ff;}
+a:hover{text-decoration:underline;}
+/* No underline.  */
+u{text-decoration:none}
+/* Sup.  */
+s{vertical-align:super;font-size:80%;color:red}
+/* Bold.  */
+b{font-weight:bold;color:#444444;}
+/* Note para.  */
+p{display:block;margin-bottom:4px;text-align:justify;font-weight:normal;}
+/* Poetry 1 & 2.  */
+q{display:block;margin-left:20px;}
+/* Italics.  */
+i{font-style:italic;}
+/* Gray box.  */
+div{display:block;text-align:justify;background-color:#eeeeee;padding:3px;margin-top:6px;margin-bottom:6px;border:1px solid #cccccc;font-weight:normal;}
+/* Title para.  */
+h2{display:block;text-align:center;margin-top:16px;font-size:115%;font-weight:normal;}
+/* Subtitle.  */
+h3,h3.hr{display:block;text-align:center;font-weight:normal;margin-bottom:10px;}
+h3.hr{border-bottom:1px solid #cccccc;margin-bottom:10px;padding-bottom:5px;}
+/* Blue box.  */
+h4{display:block;text-align:center;background-color:#eeeeff;padding:3px;margin-top:6px;margin-bottom:6px;border:1px solid #cccccc;font-weight:normal;}
+/* Outline text in verses.  */
+h1,tt,h5,del,var,code{font-weight:normal;display:block;text-indent:-20px;}
+/* ot1 */ h1{margin-left:20px;font-weight:bold;}
+/* ot2 */ tt{margin-left:30px;} tt.psa{text-indent:0px;margin-left:10px;}
+/* ot3 */ h5{margin-left:40px;}
+/* ot4 */ del{margin-left:50px;}
+/* ot5 */ var{margin-left:60px;}
+/* ot6 */ code{margin-left:70px;}
+/* Outline text in outline listing.  */
+kbd,em,h6,dfn,big,samp{font-weight:normal;display:block;text-indent:-20px;}
+/* ol1 */ kbd{margin-left:20px;font-weight:bold;}
+/* ol2 */ em{margin-left:35px;} em.psa{text-indent:0px;margin-left:15px;}
+/* ol3 */ h6{margin-left:50px;}
+/* ol4 */ dfn{margin-left:65px;}
+/* ol5 */ big{margin-left:80px;}
+/* ol6 */ samp{margin-left:95px;}
+/* Intro para.  */
+ins{display:block;text-indent:-20px;margin-left:20px;margin-bottom:3px;font-weight:normal;}
+/* Main title.  */
+pre{display:block;text-align:center;font-size:120%;margin-top:16px;margin-bottom:12px;white-space:normal}
+/* Footer.  */
+small{display:block;border-top:1px solid #ccccdd;padding-top:5px;text-align:center;color:#555555;margin-top:10px;margin-bottom:80%;}
+/* Center-aligned text: Psalm inserted text.  */
+span{display:block;text-align:center;margin-top:5px;margin-bottom:3px;}

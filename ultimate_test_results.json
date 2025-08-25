@@ -1,0 +1,70 @@
+{
+  "summary": {
+    "outlines_processed": 12,
+    "total_points": 601,
+    "total_verses": 2223,
+    "average_verses": 185.25
+  },
+  "details": {
+    "W24ECT01": {
+      "success": true,
+      "outline_points": 39,
+      "total_verses": 132
+    },
+    "W24ECT02": {
+      "success": true,
+      "outline_points": 69,
+      "total_verses": 337
+    },
+    "W24ECT03": {
+      "success": true,
+      "outline_points": 51,
+      "total_verses": 57
+    },
+    "W24ECT04": {
+      "success": true,
+      "outline_points": 57,
+      "total_verses": 298
+    },
+    "W24ECT05": {
+      "success": true,
+      "outline_points": 55,
+      "total_verses": 60
+    },
+    "W24ECT06": {
+      "success": true,
+      "outline_points": 59,
+      "total_verses": 217
+    },
+    "W24ECT07": {
+      "success": true,
+      "outline_points": 52,
+      "total_verses": 133
+    },
+    "W24ECT08": {
+      "success": true,
+      "outline_points": 34,
+      "total_verses": 221
+    },
+    "W24ECT09": {
+      "success": true,
+      "outline_points": 40,
+      "total_verses": 138
+    },
+    "W24ECT10": {
+      "success": true,
+      "outline_points": 54,
+      "total_verses": 202
+    },
+    "W24ECT11": {
+      "success": true,
+      "outline_points": 41,
+      "total_verses": 122
+    },
+    "W24ECT12": {
+      "success": true,
+      "outline_points": 50,
+      "total_verses": 306
+    }
+  }
+}

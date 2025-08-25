@@ -1,0 +1,22 @@
+.font,.font1,.small,#status1,#debug{font-family:tahoma,ms sans serif,arial;}
+.font{font-size:80%}
+.small{font-size:70%;}
+a,a:hover,a:visited{text-decoration:none;color:#5555ff;}
+a.nb{font-weight:normal;}
+a:hover{text-decoration:underline;}
+a.black{color:black}
+.graybox{border-top:1px solid #777792;border-left:1px solid #777792;border-bottom:1px solid #D8D2BD;border-right:1px solid #D8D2BD;background-color:#F4F4EE;width:100%;}
+#status1{font-size:90%;background-color:#f8f8ff;padding:3px;border:1px solid #cccccc;margin-top:5px}
+#debug{font-size:90%}
+form{display:inline}
+input.ptr,label{cursor:pointer}
+label{padding:2px}
+label:hover{color:blue;background-color:#e0e0ff}
+/* Paragraph to hold one verse.  */
+p{margin:0px;padding:3px;border-bottom:1px solid #ccccdd;}
+/* Result number.  */
+s{cursor:pointer;text-decoration:none;font-weight:bold;font-size:75%;}
+/* One result in leftbar.  */
+q,em{display:block;margin:0px;margin-bottom:5px;quotes:none;color:#447799;
+font-weight:bold}
+em{font-weight:normal;font-style:normal;}

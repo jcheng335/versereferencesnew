@@ -5,6 +5,13 @@ import { Textarea } from '@/components/ui/textarea.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import { Alert, AlertDescription } from '@/components/ui/alert.jsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select.jsx'
 import { 
   Download, 
   RefreshCw, 
@@ -17,6 +24,7 @@ import {
   Copy
 } from 'lucide-react'
 import { getApiUrl } from '@/config/api'
+import './OutlineEditor.css'
 
 const OutlineEditor = ({ sessionData }) => {
   const [content, setContent] = useState('')
@@ -28,6 +36,7 @@ const OutlineEditor = ({ sessionData }) => {
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
   const [activeView, setActiveView] = useState('original')
+  const [formatType, setFormatType] = useState('margin')
 
   useEffect(() => {
     if (sessionData) {
@@ -37,7 +46,7 @@ const OutlineEditor = ({ sessionData }) => {
     }
   }, [sessionData])
 
-  const handlePopulateVerses = async () => {
+  const handlePopulateVerses = async (format = 'margin') => {
     if (!sessionData?.session_id) return
 
     setIsProcessing(true)
@@ -45,14 +54,13 @@ const OutlineEditor = ({ sessionData }) => {
     setSuccess(null)
 
     try {
-      const response = await fetch(getApiUrl('process-document'), {
+      const response = await fetch(getApiUrl('enhanced/populate/' + sessionData.session_id), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          session_id: sessionData.session_id,
-          format: 'inline'
+          format: format  // Use margin format by default
         })
       })
 
@@ -60,7 +68,7 @@ const OutlineEditor = ({ sessionData }) => {
 
       if (result.success) {
         setPopulatedContent(result.populated_content || result.content)
-        setSuccess(`Successfully populated ${result.verse_count} verses!`)
+        setSuccess(`Successfully populated ${result.verse_count} verses in ${format} format!`)
         setActiveView('populated')
       } else {
         setError(result.error || 'Failed to populate verses')
@@ -161,8 +169,18 @@ const OutlineEditor = ({ sessionData }) => {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
+              <Select value={formatType} onValueChange={setFormatType}>
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder="Format" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="margin">Margin</SelectItem>
+                  <SelectItem value="inline">Inline</SelectItem>
+                  <SelectItem value="footnote">Footnote</SelectItem>
+                </SelectContent>
+              </Select>
               <Button
-                onClick={handlePopulateVerses}
+                onClick={() => handlePopulateVerses(formatType)}
                 disabled={isProcessing}
                 className="flex items-center gap-2"
               >
@@ -293,15 +311,9 @@ const OutlineEditor = ({ sessionData }) => {
             <CardContent>
               {populatedContent ? (
                 <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg max-h-96 overflow-y-auto">
-                  <div 
-                    className="text-sm font-mono whitespace-pre-wrap"
-                    dangerouslySetInnerHTML={{ 
-                      __html: populatedContent
-                        .replace(/\n/g, '<br>')
-                        .replace(/<span class='verse-ref'>/g, '<span class="verse-ref">')
-                        .replace(/<span class='verse-text'>/g, '<span class="verse-text">')
-                    }} 
-                  />
+                  <pre className="text-sm font-mono whitespace-pre-wrap">
+                    {populatedContent}
+                  </pre>
                 </div>
               ) : (
                 <div className="text-center py-8">

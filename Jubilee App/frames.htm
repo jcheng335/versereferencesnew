@@ -1,0 +1,471 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=ISO-8859-1">
+<title>Holy Bible Recovery Version - Jubilee Edition</title>
+<link type=text/css rel=stylesheet href=b.css></link>
+<style>
+#toptg,#bottomtg{width:100%;height:6px;cursor:pointer;border:1px solid white}
+#lefttg,#righttg{width:6px;height:100%;cursor:pointer;border:1px solid white}
+td.middle{text-align:center;vertical-align:middle}
+
+#leftbar{border-right:1px solid #D8D2BD;width:120px}
+#rightbar{border-left:1px solid #D8D2BD;width:100px}
+iframe{margin:0px;border:none;width:100%;height:100%}
+</style>
+<script src=std.js></script>
+<script src=xpmenu.js></script>
+<script src=formretain.js></script>
+<script src=vdata.js></script>
+<script src=quicklinks.js></script>
+<script src=idata.js></script>
+<script src=isearch.js></script>
+<script src=listv.js></script>
+<script src=goverse.js></script>
+<script>
+////////////////////////////////////////////////////////////////////
+// Set a status on the webpage itself, not on the status bar.
+function setstat(s)
+{
+  try{main.document.getElementById("status").innerHTML=s}catch(e){}
+}
+////////////////////////////////////////////////////////////////////
+// Print out debugging information.
+var debug_index=0
+function debug(s)
+{
+  try{
+  main.document.getElementById("debug").innerHTML
+    +="<div id=debug"+debug_index+">"+s
+    +"\xA0 <input type=button"
+    +" onclick=document.getElementById('debug')."
+    +"removeChild(document.getElementById('debug"+debug_index
+    +"')) value=Ok></div>"
+  debug_index++
+  }catch(e){ex("debug",e)}
+}
+////////////////////////////////////////////////////////////////////
+function keypresscode(e)
+{
+  return e.keyCode?e.keyCode:e.charCode
+}
+////////////////////////////////////////////////////////////////////
+// Fade effects for panel togglers.
+var code_0='0'.charCodeAt(0)
+var code_9='9'.charCodeAt(0)
+var code_a='a'.charCodeAt(0)
+var code_f='f'.charCodeAt(0)
+var code_A='A'.charCodeAt(0)
+var code_F='F'.charCodeAt(0)
+
+function hexvalue(xdigit)
+{
+  try{
+  var x=xdigit.charCodeAt(0)
+  if(x>=code_0&&x<=code_9)return x-code_0
+  if(x>=code_a&&x<=code_f)return x-code_a+10
+  if(x>=code_A&&x<=code_F)return x-code_A+10  
+  return -1
+  }catch(e){ex("hexvalue",e)}
+}
+function getrgb(hex)
+{
+  try{
+  if(hex.length!=6)return [0,0,0]
+  return [hexvalue(hex.charAt(0))*16+hexvalue(hex.charAt(1)),
+    hexvalue(hex.charAt(2))*16+hexvalue(hex.charAt(3)),
+    hexvalue(hex.charAt(4))*16+hexvalue(hex.charAt(5))]
+  }catch(e){ex("getrgb",e)}
+}
+var curfade=[],curfadecolors=[],curfadetocolors=[]
+function fade_up(id,delay,bgcolor,bordercolor)
+{
+  try{
+  // Timeout handle, delay millis, frombgcolor, tobgcolor,
+  // frombordercolor, tobordercolor
+  curfadetocolors[id]=[getrgb(bgcolor),getrgb(bordercolor)]
+  if(!curfade[id])
+  {
+    curfade[id]=[null,delay]
+    curfadecolors=[[255,255,255],[255,255,255]]
+  }
+  else
+    curfade[id][1]=delay
+  
+  fade_up_1(id)
+  }catch(e){ex("fade_up",e)}
+}
+var fade_step=2
+function fade_up_1(id)
+{
+  try{
+  var a=curfade[id]
+  if(!a)return
+  if(a[0]){clearTimeout(a[0]);a[0]=null}
+
+  var i,j,changed=0
+  for(j=0;j<2;j++)for(i=0;i<3;i++)
+  {
+    var target=curfadetocolors[id][j][i]
+    if(curfadecolors[j][i]>target)
+    {
+      changed=1
+      curfadecolors[j][i]-=fade_step
+      if(curfadecolors[j][i]<target)curfadecolors[j][i]=target
+    }
+    else if(curfadecolors[j][i]<target)
+    {
+      changed=1
+      curfadecolors[j][i]+=fade_step
+      if(curfadecolors[j][i]>target)curfadecolors[j][i]=target
+    }
+  }
+  if(!changed){a[0]=null;curfade[id]=a;return}
+  
+  document.getElementById(id).style.backgroundColor=
+    "rgb("+curfadecolors[0][0]+","+curfadecolors[0][1]+","
+    +curfadecolors[0][2]+")"
+
+  document.getElementById(id).style.borderColor=
+    "rgb("+curfadecolors[1][0]+","+curfadecolors[1][1]+","
+    +curfadecolors[1][2]+")"
+
+  curfade[id]=a
+  curfade[id][0]=setTimeout("fade_up_1('"+id+"')",a[1])
+  }catch(e){ex("fade_up_1",e)}
+}
+function fade_down(id,delay)
+{
+  try{
+  if(!curfade[id])return
+  if(curfade[id][0])clearTimeout(curfade[id][0])
+  curfade[id][1]=delay
+  curfadetocolors[id]=[[255,255,255],[255,255,255]]
+  fade_up_1(id)
+  }catch(e){ex("fade_down",e)}
+}
+function my_fade_up(id){fade_up(id,2,'EEEFF3','dddddd')}
+function my_fade_down(id){fade_down(id,20)}
+function my_fade_hide(id)
+{
+  try{
+  if(curfade[id]&&curfade[id][0])
+    {clearTimeout(curfade[id][0]);curfade[id][0]=null}
+  document.getElementById(id).style.backgroundColor=
+  document.getElementById(id).style.borderColor='#ffffff'
+  }catch(e){ex("my_fade_hide",e)}
+}
+////////////////////////////////////////////////////////////////////
+// Panel togglers.
+var panel_img=[]
+panel_img['top']=['down','up']
+panel_img['bottom']=['up','down']
+panel_img['left']=['right','left']
+panel_img['right']=['left','right']
+
+var panel_stat={top:"Menu Bar",bottom:"Verses Bar",
+left:"Search Results Panel",right:"Quick Links Panel"}
+
+function panel_over(p)
+{
+  try{
+  var i=(document.getElementById(p+"bar").style.display=='none'?0:1)
+  top.status="Click to "+(i?"hide":"show")+" the "+panel_stat[p]
+  my_fade_up(p+'tg')
+  document.getElementById(p+'img').src=panel_img[p][i]+'4x7.png'
+  }catch(e){ex("panel_over",e)}
+}
+function panel_out(p)
+{
+  try{
+  top.status=""
+  my_fade_down(p+'tg')
+  document.getElementById(p+'img').src='blank4x4.png'
+  }catch(e){ex("panel_out",e)}
+}
+function panel_click(p)
+{
+  try{
+  my_fade_hide(p+'tg')
+  document.getElementById(p+'img').src='blank4x4.png'
+  tgshow(p+'bar')
+  }catch(e){ex("panel_click",e)}
+}
+function tgshow(id)
+{
+  var i,s=document.getElementById(id).style
+  if(s.display=='none'){i='1';s.display=''}
+  else{i='';s.display='none'}
+  eval("document.data."+id+"_on.value='"+i+"'")
+}
+function setpanel(id,show)
+{
+  var i,s=document.getElementById(id).style
+  if(show){i='1';s.display=''}
+  else{i='';s.display='none'}
+  eval("document.data."+id+"_on.value='"+i+"'")
+}
+function set_all_panels(s)
+{
+  document.getElementById("topbar").style.display=
+  document.getElementById("leftbar").style.display=
+  document.getElementById("rightbar").style.display=
+  document.getElementById("bottombar").style.display=s
+}
+function hide_all_panels() {set_all_panels('none')}
+function show_all_panels() {set_all_panels('')}
+////////////////////////////////////////////////////////////////////
+// Toggle display of all superscripts on the current page.
+function tg_all_sups()
+{
+  try{
+  a=main.document.getElementsByTagName("s")
+  if(a.length)
+  {
+    var s="none"
+    if(a[0].style.display==s)s=""
+    for(var i=0;i<a.length;i++)a[i].style.display=s
+  }
+  }catch(e){ex("tg_all_sups",e)}
+}
+////////////////////////////////////////////////////////////////////
+// Shorthand for anchor links.
+function go(s){main.location.href=s}
+////////////////////////////////////////////////////////////////////
+// Allows the `main' window to execute something in this window.
+var exec_obj
+function check_exec()
+{
+  try{
+  exec_obj=document.getElementById("exec")
+  if(exec_obj){check_exec_1();return}
+  }catch(e){ex("check_exec",e)}
+  setTimeout(check_exec,10)
+}
+function check_exec_1()
+{
+  try{
+  var code=exec_obj.innerHTML
+  if(code.length)
+  {
+    exec_obj.innerHTML=""
+    eval(unescape(code))
+  }
+  }catch(e){ex("check_exec_1",e);alert("code: "+code+": "+e.message)}
+  setTimeout(check_exec_1,1)
+}
+////////////////////////////////////////////////////////////////////
+// Shorthand functions for invoking complex routines.
+function go_search()
+{
+  go("vsearch.htm?ss="+escape(document.f.ss.value))
+}
+function go_list()
+{
+  go("listv.htm?vr="+escape(document.f.vr.value))
+}
+function go_verse()
+{
+  goverse(document.f.gv.value)
+}
+////////////////////////////////////////////////////////////////////
+// Handle the xpmenu.
+function tgxpmenu()
+{
+  var t=(document.data.xpmenu_type.value=='1')
+  document.data.xpmenu_type.value=(t?'':'1')
+  setxpmenu()
+}
+// Onload initialization stuff.
+function setxpmenu()
+{
+  var t=(document.data.xpmenu_type.value=='1')
+  document.getElementById("xpmenu").innerHTML=
+    xpmenu_get_html(t?xpmenu_items1:xpmenu_items2)
+}
+////////////////////////////////////////////////////////////////////
+// Set the look of all 4 panels according to saved data.
+function setpanels()
+{
+  document.getElementById("topbar").style.display=
+    document.data.topbar_on.value=='1'?'':'none'
+  document.getElementById("leftbar").style.display=
+    document.data.leftbar_on.value=='1'?'':'none'
+  document.getElementById("rightbar").style.display=
+    document.data.rightbar_on.value=='1'?'':'none'
+  document.getElementById("bottombar").style.display=
+    document.data.bottombar_on.value=='1'?'':'none'
+}
+////////////////////////////////////////////////////////////////////
+// Go to another page if specified.
+function auto_redirect()
+{
+  if(location.search.length<=1)return
+  go(location.href.replace(/^[^\?]*\?/,""))
+}
+////////////////////////////////////////////////////////////////////
+// Many things to do onload, but optimized for fastest response time.
+function do_onload()
+{
+  setxpmenu()
+  setpanels()
+  auto_redirect()
+  check_exec()
+}
+onload_add(do_onload)
+////////////////////////////////////////////////////////////////////
+// List of hotkeys to focus on different textbox objects.
+function hotkey_ss()
+{
+  setpanel("topbar",1)
+  setTimeout("document.f.ss.select()",100)
+}
+function hotkey_vr()
+{
+  setpanel("bottombar",1)
+  setTimeout("document.f.vr.select()",100)
+}
+function hotkey_gv()
+{
+  setpanel("bottombar",1)
+  setTimeout("document.f.gv.select()",100)
+}
+
+var HotKeys={s:hotkey_ss,S:hotkey_ss,'/':hotkey_ss,l:hotkey_vr,
+L:hotkey_vr,g:hotkey_gv,G:hotkey_gv,"\x1B":hide_all_panels}
+
+function hotkeys(e)
+{
+  try{
+  if(window.event)e=window.event
+  var c=String.fromCharCode(e.keyCode?e.keyCode:e.charCode)
+  if(HotKeys[c])
+  {
+    // IE puts the key into the input box! (Bad)
+    try{if(e.keyCode)e.keyCode=0}catch(e){}
+    HotKeys[c]()
+  }
+  }catch(e){ex("hotkeys",e)}
+}
+document.onkeypress=hotkeys
+////////////////////////////////////////////////////////////////////
+// Use for onfocus and onblur in textboxes.
+function hotkeys_disable(){document.onkeypress=null}
+function hotkeys_enable(){document.onkeypress=hotkeys}
+////////////////////////////////////////////////////////////////////
+</script>
+</head>
+<body style=margin:0px>
+<span style=display:none id=exec></span>
+<form name=data style=display:none>
+<input type=hidden name=xpmenu_type>
+<input type=hidden name=topbar_on>
+<input type=hidden name=leftbar_on>
+<input type=hidden name=rightbar_on>
+<input type=hidden name=bottombar_on>
+</form>
+<form name=f style=display:inline>
+<table cellpadding=0 cellspacing=0 width=100% height=100%>
+<!-- ROW 1: TOP PANEL -->
+<tr id=topbar height=27 style=display:none><td id=xpmenu colspan=7></td></tr>
+<!-- COMPLEX ROW OF MANY STUFF -->
+<tr>
+  <td>
+    <table cellpadding=0 cellspacing=0 width=100% height=100%>
+    <tr>
+      <!-- LEFT PANEL -->
+      <td id=leftbar class=font style=display:none><iframe
+        name=left frameborder=0 src=leftbar.htm></iframe></td>
+      <!-- LEFT PANEL TOGGLER -->  
+      <td align=left width=8>
+        <table id=lefttg cellpadding=0 cellspacing=0
+               onmouseover=panel_over('left') onmouseout=panel_out('left')
+               onclick=panel_click('left')>
+          <tr><td class=middle><img id=leftimg border=0
+          src=blank4x4.png></td></tr></table>
+      </td>
+      <td>
+      <!-- INTERNAL TABLE -->
+      <table cellpadding=0 cellspacing=0 width=100% height=100%>
+      <!-- TOP PANEL TOGGLER -->
+      <tr height=8>
+        <td valign=top>
+          <table id=toptg cellpadding=0 cellspacing=0
+                 onmouseover=panel_over('top') onmouseout=panel_out('top')
+                 onclick=panel_click('top')>
+            <tr><td class=middle><img id=topimg border=0
+            src=blank4x4.png></td></tr></table>
+        </td>
+      </tr>
+      <!-- MAIN IFRAME -->  
+      <tr>
+        <td>
+          <iframe name=main frameborder=0 src=a.htm></iframe>
+        </td>
+      </tr>
+      <!-- BOTTOM PANEL TOGGLER -->
+      <tr height=8>
+        <td>
+          <table valign=bottom id=bottomtg cellpadding=0 cellspacing=0
+                 onmouseover=panel_over('bottom') onmouseout=panel_out('bottom')
+                 onclick=panel_click('bottom')>
+            <tr><td class=middle><img id=bottomimg border=0
+            src=blank4x4.png></td></tr></table>
+        </td>
+      </tr>
+      <!-- END INTERNAL TABLE -->
+      </table>
+      </td>
+      <!-- RIGHT PANEL TOGGLER -->  
+      <td width=8>
+        <table align=right id=righttg cellpadding=0 cellspacing=0
+               onmouseover=panel_over('right') onmouseout=panel_out('right')
+               onclick=panel_click('right')>
+          <tr><td class=middle><img id=rightimg border=0
+          src=blank4x4.png></td></tr></table>
+      </td>
+      <!-- RIGHT PANEL -->
+      <td id=rightbar class=font style=display:none><iframe
+        name=right frameborder=0 src=rightbar.htm></iframe></td>
+    </tr>
+    </table>
+  </td>
+</tr>
+<!-- BOTTOM PANEL -->
+<tr id=bottombar height=27 style=display:none>
+  <td>
+    <table cellpadding=0 cellspacing=0 class=graybox width=100% height=27>
+    <tr>
+      <td style=padding-left:5px nowrap>
+        <b><a target=main class=small href=listv.htm>List Verses</a></b>
+        <input name=vr type=text style=width:250px
+               onfocus=hotkeys_disable();this.select()
+               onblur=hotkeys_enable()
+               onkeypress="
+               var k=keypresscode(event)
+               if(k==13)go_list()
+               else if(k==27)this.blur()
+               else listv(2)
+               ">
+        <input type=button value=Go onclick=go_list()>
+      </td>
+      <td width=20 nowrap></td>
+      <td align=right style=padding-right:5px nowrap>
+        <b><a target=main class=small href=a.htm>Go Verse</a></b>
+        <input name=gv type=text style=width:100px
+               onfocus=hotkeys_disable();this.select()
+               onblur=hotkeys_enable()
+               onkeypress="
+               var k=keypresscode(event)
+               if(k==13)go_verse()
+               else if(k==27)this.blur()
+               ">
+        <input type=button value=Go onclick=go_verse()>
+      </td>
+    </tr>
+    </table>
+  </td>
+</tr>
+</table>
+</form>
+</body>
+</html>
