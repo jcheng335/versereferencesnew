@@ -202,11 +202,8 @@ def test_llm():
         return jsonify({'error': 'Enhanced processing not available. Check logs for details.'}), 503
     
     try:
-        # Test with a small sample
-        references = processor.detector.detect_verses(
-            data['text'], 
-            use_llm=True
-        )
+        # Test with a small sample - use the safe calling method
+        references = processor._call_detector_safely(data['text'], use_llm=True)
         
         # Convert to JSON-serializable format
         ref_list = []
@@ -224,12 +221,12 @@ def test_llm():
             'success': True,
             'references_found': len(references),
             'references': ref_list,
-            'llm_available': bool(processor.detector.openai_api_key)
+            'llm_available': bool(getattr(processor.detector, 'openai_key', None) or getattr(processor.detector, 'openai_api_key', None))
         })
         
     except Exception as e:
         return jsonify({
             'success': False,
             'error': str(e),
-            'llm_available': bool(processor.detector.openai_api_key)
+            'llm_available': bool(getattr(processor.detector, 'openai_key', None) or getattr(processor.detector, 'openai_api_key', None))
         })

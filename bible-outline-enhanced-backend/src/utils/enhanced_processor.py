@@ -219,8 +219,8 @@ class EnhancedProcessor:
                                 }
                                 ref_dicts.append(ref_dict)
                 else:
-                    # Fallback to hybrid detector
-                    references = self.detector.detect_verses(content, use_llm=use_llm)
+                    # Fallback to detector - handle different parameter names
+                    references = self._call_detector_safely(content, use_llm)
                     ref_dicts = []
                     
                     for ref in references:
@@ -236,14 +236,8 @@ class EnhancedProcessor:
                         }
                         ref_dicts.append(ref_dict)
             else:
-                # Use the configured detector (comprehensive, master, ultimate, or hybrid)
-                # Check which detector we're using and call appropriately
-                if hasattr(self, 'llm_first') and self.detector == self.llm_first:
-                    # LLMFirstDetector doesn't take use_llm parameter
-                    references = self.detector.detect_verses(content, use_training=use_llm)
-                else:
-                    # Other detectors may take use_llm parameter
-                    references = self.detector.detect_verses(content, use_llm=use_llm)
+                # Use the configured detector - handle different parameter names
+                references = self._call_detector_safely(content, use_llm)
                 ref_dicts = []
                 
                 for ref in references:
@@ -522,6 +516,50 @@ class EnhancedProcessor:
             return text
         except Exception as e:
             raise Exception(f"Error extracting Word document text: {str(e)}")
+    
+    def _call_detector_safely(self, content: str, use_llm: bool) -> List:
+        """
+        Safely call detect_verses with the appropriate parameters for each detector type
+        """
+        try:
+            # Check detector type and call with appropriate parameters
+            if hasattr(self, 'llm_first') and self.detector == self.llm_first:
+                # LLMFirstDetector uses use_training parameter
+                return self.detector.detect_verses(content, use_training=use_llm)
+            elif hasattr(self, 'ultimate_detector') and self.detector == self.ultimate_detector:
+                # UltimateVerseDetector uses context parameter
+                return self.detector.detect_verses(content, context={'use_llm': use_llm})
+            else:
+                # Try to detect which parameter the detector expects using introspection
+                import inspect
+                try:
+                    sig = inspect.signature(self.detector.detect_verses)
+                    params = list(sig.parameters.keys())
+                    
+                    if 'use_training' in params:
+                        return self.detector.detect_verses(content, use_training=use_llm)
+                    elif 'use_llm' in params:
+                        return self.detector.detect_verses(content, use_llm=use_llm)
+                    elif 'context' in params:
+                        return self.detector.detect_verses(content, context={'use_llm': use_llm})
+                    elif len(params) == 1:  # Only takes text parameter
+                        return self.detector.detect_verses(content)
+                    else:
+                        # Default: try with use_llm
+                        return self.detector.detect_verses(content, use_llm=use_llm)
+                except:
+                    # If introspection fails, try common patterns
+                    try:
+                        return self.detector.detect_verses(content, use_llm=use_llm)
+                    except TypeError:
+                        try:
+                            return self.detector.detect_verses(content, use_training=use_llm)
+                        except TypeError:
+                            return self.detector.detect_verses(content)
+        except Exception as e:
+            print(f"Error calling detector: {e}")
+            # Try without parameters as last resort
+            return self.detector.detect_verses(content)
     
     def _fetch_verse_text(self, reference: Dict) -> Optional[str]:
         """Fetch verse text from database"""
