@@ -11,6 +11,12 @@ from docx import Document
 from .hybrid_verse_detector import HybridVerseDetector, VerseReference
 from .llm_verse_detector import LLMVerseDetector
 try:
+    from .master_verse_detector import MasterVerseDetector
+    MASTER_AVAILABLE = True
+except ImportError:
+    MASTER_AVAILABLE = False
+    print("Master detector not available")
+try:
     from .ultimate_verse_detector import UltimateVerseDetector
     ULTIMATE_AVAILABLE = True
 except ImportError:
@@ -94,8 +100,11 @@ class EnhancedProcessor:
             
         self.use_llm_first = use_llm_first
         
-        # Initialize the best available detector
-        if ULTIMATE_AVAILABLE:
+        # Initialize the best available detector - Master detector combines all
+        if MASTER_AVAILABLE:
+            self.master_detector = MasterVerseDetector(openai_key)
+            print("Using Master Verse Detector - combines all detection methods")
+        elif ULTIMATE_AVAILABLE:
             self.ultimate_detector = UltimateVerseDetector()
             print("Using Ultimate Verse Detector for 100% accuracy")
         
@@ -206,8 +215,13 @@ class EnhancedProcessor:
                         }
                         ref_dicts.append(ref_dict)
             else:
-                # Use ultimate detector for 100% accuracy
-                if ULTIMATE_AVAILABLE:
+                # Use master detector for maximum accuracy - combines all approaches
+                if MASTER_AVAILABLE:
+                    result = self.master_detector.extract_all_verses(content)
+                    ref_dicts = result['verses']  # Already in dict format
+                    print(f"Master detector found {len(ref_dicts)} verse references")
+                # Use ultimate detector for high accuracy
+                elif ULTIMATE_AVAILABLE:
                     result = self.ultimate_detector.extract_all_verses(content)
                     ref_dicts = []
                     

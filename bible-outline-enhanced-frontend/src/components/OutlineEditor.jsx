@@ -36,13 +36,26 @@ const OutlineEditor = ({ sessionData }) => {
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
   const [activeView, setActiveView] = useState('original')
-  const [formatType, setFormatType] = useState('margin')
+  // Always use margin format to match MSG12VerseReferences
+  const formatType = 'margin'
 
   useEffect(() => {
     if (sessionData) {
       setOriginalContent(sessionData.content || '')
       setContent(sessionData.content || '')
-      setDetectedReferences(sessionData.references || [])
+      // Handle references - convert objects to strings if needed
+      const refs = sessionData.references || []
+      const refStrings = refs.map(ref => {
+        if (typeof ref === 'string') return ref
+        if (ref.original_text) return ref.original_text
+        if (ref.book && ref.chapter) {
+          const verses = ref.start_verse ? `:${ref.start_verse}` : ''
+          const range = ref.end_verse && ref.end_verse !== ref.start_verse ? `-${ref.end_verse}` : ''
+          return `${ref.book} ${ref.chapter}${verses}${range}`
+        }
+        return JSON.stringify(ref)
+      })
+      setDetectedReferences(refStrings)
     }
   }, [sessionData])
 
@@ -169,18 +182,8 @@ const OutlineEditor = ({ sessionData }) => {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Select value={formatType} onValueChange={setFormatType}>
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Format" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="margin">Margin</SelectItem>
-                  <SelectItem value="inline">Inline</SelectItem>
-                  <SelectItem value="footnote">Footnote</SelectItem>
-                </SelectContent>
-              </Select>
               <Button
-                onClick={() => handlePopulateVerses(formatType)}
+                onClick={() => handlePopulateVerses('margin')}
                 disabled={isProcessing}
                 className="flex items-center gap-2"
               >
