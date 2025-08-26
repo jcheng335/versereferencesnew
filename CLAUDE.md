@@ -8,8 +8,8 @@ A comprehensive Bible verse reference application that automatically detects and
 4. **Machine Learning** for continuous improvement ⚠️ (Ready but optional)
 
 ## Key Achievement
-- **Detection Rate**: 100% for Luke 7 contextual references (previously missed)
-- **LLM-First Approach**: Successfully detects ALL verse types including:
+- **Detection Rate**: 55-96% depending on document complexity
+- **Hybrid Approach**: Successfully detects verse types including:
   - Contextual references ("according to Luke 7" → "vv. 47-48" → Luke 7:47-48)
   - Standalone references (v. 5, vv. 1-11)
   - Complex formats (Rom. 16:1, 4-5, 16, 20)
@@ -42,12 +42,13 @@ Use the Task tool with general-purpose agent to test the deployed application at
 - Backend: https://bible-outline-backend.onrender.com
 - Frontend: https://bible-outline-frontend.onrender.com
 
-## Deployment Status (VERIFIED 2025-08-25)
-✅ **PRODUCTION READY** - All issues resolved!
-- **Session Persistence**: FIXED - Using PostgreSQL with pg8000 driver
-- **PostgreSQL Integration**: Working with DATABASE_URL environment variable
-- **Database**: PostgreSQL v17 with 31,103 verses from Jubilee app
-- **Detection Rate**: 95% confidence with LLM-first approach
+## Deployment Status (UPDATED 2025-08-26)
+⚠️ **PARTIALLY WORKING** - Detection needs improvement
+- **Session Persistence**: ✅ FIXED - Using PostgreSQL with pg8000 driver
+- **PostgreSQL Integration**: ✅ Working with DATABASE_URL environment variable
+- **Database**: ✅ PostgreSQL v17 with 31,103 verses from Jubilee app
+- **Detection Rate**: ⚠️ 55% for W24ECT (should be 90%+), 96% for B25ANCC
+- **Current Issue**: Only detecting 123 of ~220+ verses in W24ECT12en.pdf
 - **Endpoints**: Must use /api/enhanced/* endpoints for PostgreSQL storage
 
 ## Architecture
