@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend-Backend Connection Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .result {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            color: #0c5460;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .file-input {
+            margin: 10px 0;
+            padding: 8px;
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+        }
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #495057;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Bible Outline App - Frontend-Backend Connection Test</h1>
+    
+    <div class="info result">
+        <strong>Instructions:</strong>
+        1. Visit https://bible-outline-frontend.onrender.com
+        2. Open Developer Tools (F12) → Console tab
+        3. Copy and paste the JavaScript code below into the console
+        4. Run each test and observe the results
+    </div>
+    
+    <div class="section">
+        <h2>🚀 Test JavaScript Code</h2>
+        <div class="container">
+            <p>Copy this entire code block into your browser console:</p>
+            <div class="result info">
+<pre>// Bible Outline App Frontend-Backend Test
+const API_BASE = 'https://bible-outline-backend.onrender.com/api';
+let testResults = [];
+
+function log(type, message, data = null) {
+    const timestamp = new Date().toLocaleTimeString();
+    const result = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+    console.log(result);
+    if (data) console.log(data);
+    testResults.push({ type, message, data, timestamp });
+}
+
+// Test 1: Backend Health
+async function test1_Health() {
+    log('info', '🏥 Testing backend health endpoint...');
+    try {
+        const response = await fetch(`${API_BASE}/health`);
+        const data = await response.json();
+        log('success', `Health check passed (${response.status})`, data);
+        return true;
+    } catch (error) {
+        log('error', 'Health check failed', error.message);
+        return false;
+    }
+}
+
+// Test 2: CORS Preflight
+async function test2_CORS() {
+    log('info', '🌐 Testing CORS preflight request...');
+    try {
+        const response = await fetch(`${API_BASE}/enhanced/upload`, {
+            method: 'OPTIONS'
+        });
+        log('success', `CORS preflight passed (${response.status})`);
+        return true;
+    } catch (error) {
+        log('error', 'CORS preflight failed', error.message);
+        return false;
+    }
+}
+
+// Test 3: Create test file and upload
+async function test3_Upload() {
+    log('info', '📤 Testing file upload with sample data...');
+    
+    const testContent = 'Test Bible Verses\\n\\nRom. 5:1-11\\n\\nI. Justification is God\\'s action\\n   A. When we believe into Christ (Acts 10:43)\\n   B. We are justified by faith (v. 5)';
+    
+    try {
+        const blob = new Blob([testContent], { type: 'text/plain' });
+        const formData = new FormData();
+        formData.append('file', blob, 'test-verses.txt');
+        
+        const response = await fetch(`${API_BASE}/enhanced/upload`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            log('success', `Upload successful! Session: ${result.session_id}`, result);
+            return result.session_id;
+        } else {
+            log('error', 'Upload failed', result);
+            return null;
+        }
+    } catch (error) {
+        log('error', 'Upload request failed', error.message);
+        return null;
+    }
+}
+
+// Test 4: Populate verses
+async function test4_Populate(sessionId) {
+    if (!sessionId) {
+        log('warning', '⏭️ Skipping populate test (no session ID)');
+        return false;
+    }
+    
+    log('info', `📖 Testing verse population for session: ${sessionId}`);
+    
+    try {
+        const response = await fetch(`${API_BASE}/enhanced/populate/${sessionId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                format: 'margin'
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            log('success', `Populate successful! Verses: ${result.verse_count}`, {
+                verse_count: result.verse_count,
+                content_preview: result.populated_content?.substring(0, 200) + '...'
+            });
+            return true;
+        } else {
+            log('error', 'Populate failed', result);
+            return false;
+        }
+    } catch (error) {
+        log('error', 'Populate request failed', error.message);
+        return false;
+    }
+}
+
+// Run all tests
+async function runAllTests() {
+    console.clear();
+    console.log('🔍 Bible Outline App - Frontend-Backend Connection Test');
+    console.log('================================================\\n');
+    
+    testResults = [];
+    
+    const health = await test1_Health();
+    const cors = await test2_CORS();
+    const sessionId = await test3_Upload();
+    const populate = await test4_Populate(sessionId);
+    
+    console.log('\\n📊 TEST RESULTS SUMMARY:');
+    console.log('========================');
+    console.log(`Health Check: ${health ? '✅ PASS' : '❌ FAIL'}`);
+    console.log(`CORS Test:    ${cors ? '✅ PASS' : '❌ FAIL'}`);
+    console.log(`File Upload:  ${sessionId ? '✅ PASS' : '❌ FAIL'}`);
+    console.log(`Populate:     ${populate ? '✅ PASS' : '❌ FAIL'}`);
+    
+    if (health && cors && sessionId && populate) {
+        console.log('\\n🎉 ALL TESTS PASSED!');
+        console.log('The frontend should be able to connect to the backend successfully.');
+    } else {
+        console.log('\\n⚠️ SOME TESTS FAILED!');
+        console.log('Check the detailed results above to identify the issue.');
+    }
+    
+    return { health, cors, sessionId: !!sessionId, populate };
+}
+
+// Expose functions to global scope for manual testing
+window.bibleTestSuite = {
+    runAllTests,
+    test1_Health,
+    test2_CORS,
+    test3_Upload,
+    test4_Populate
+};
+
+console.log('✨ Bible Outline Test Suite loaded!');
+console.log('Run: runAllTests() or use individual test functions');
+</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>📋 Manual Testing Steps</h2>
+        <ol>
+            <li><strong>Navigate to:</strong> <a href="https://bible-outline-frontend.onrender.com" target="_blank">https://bible-outline-frontend.onrender.com</a></li>
+            <li><strong>Open DevTools:</strong> Press F12 or right-click → "Inspect" → go to "Console" tab</li>
+            <li><strong>Clear console:</strong> Click the clear button or type <code>console.clear()</code></li>
+            <li><strong>Paste the code:</strong> Copy the entire JavaScript block above and paste it in the console</li>
+            <li><strong>Run tests:</strong> Type <code>runAllTests()</code> and press Enter</li>
+            <li><strong>Observe results:</strong> Look for ✅ PASS or ❌ FAIL messages</li>
+        </ol>
+    </div>
+    
+    <div class="section">
+        <h2>🔧 Expected Test Results</h2>
+        <div class="result success">✅ Health Check: Should return status "healthy" with database stats</div>
+        <div class="result success">✅ CORS Test: Should return HTTP 200 for OPTIONS request</div>
+        <div class="result success">✅ File Upload: Should return session_id and found references</div>
+        <div class="result success">✅ Populate: Should return populated content with verses</div>
+    </div>
+    
+    <div class="section">
+        <h2>🐛 Troubleshooting Common Issues</h2>
+        <div class="result error">
+            <strong>❌ Network Error / CORS Error:</strong>
+            - Check if backend is running at https://bible-outline-backend.onrender.com
+            - Verify CORS headers are present
+            - Check browser console for specific error messages
+        </div>
+        <div class="result warning">
+            <strong>⚠️ Frontend not loading:</strong>
+            - Check if https://bible-outline-frontend.onrender.com loads
+            - Verify API configuration in frontend code
+            - Check browser developer tools for JavaScript errors
+        </div>
+        <div class="result info">
+            <strong>ℹ️ Upload/Populate failures:</strong>
+            - Backend might be starting up (Render free tier sleeps)
+            - Check API endpoint paths are correct
+            - Verify request/response formats
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>📈 What the Tests Verify</h2>
+        <ul>
+            <li><strong>Backend Availability:</strong> Is the server running and responding?</li>
+            <li><strong>CORS Configuration:</strong> Can the frontend make cross-origin requests?</li>
+            <li><strong>File Upload Pipeline:</strong> Does the enhanced/upload endpoint work?</li>
+            <li><strong>Session Management:</strong> Are sessions stored and retrievable?</li>
+            <li><strong>Verse Detection:</strong> Does the LLM+regex detection work?</li>
+            <li><strong>Database Integration:</strong> Can verses be looked up and returned?</li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frontend-Backend Connection Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        #fileUpload { margin: 10px 0; }
+        button { padding: 10px 15px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Bible Outline Frontend-Backend Connection Test</h1>
+    
+    <div id="results"></div>
+    
+    <h2>Tests:</h2>
+    <button onclick="testHealth()">1. Test Backend Health</button>
+    <button onclick="testCORS()">2. Test CORS</button>
+    <br>
+    
+    <h2>File Upload Test:</h2>
+    <input type="file" id="fileUpload" accept=".txt,.pdf,.doc,.docx">
+    <button onclick="testFileUpload()">3. Test File Upload</button>
+    
+    <script>
+        const API_BASE = 'https://bible-outline-backend.onrender.com/api';
+        
+        function addResult(type, message) {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${message}`;
+            results.appendChild(div);
+        }
+        
+        async function testHealth() {
+            addResult('info', 'Testing backend health endpoint...');
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                addResult('success', `Health check successful: ${JSON.stringify(data)}`);
+            } catch (error) {
+                addResult('error', `Health check failed: ${error.message}`);
+            }
+        }
+        
+        async function testCORS() {
+            addResult('info', 'Testing CORS with enhanced upload endpoint...');
+            try {
+                const response = await fetch(`${API_BASE}/enhanced/upload`, {
+                    method: 'OPTIONS'
+                });
+                addResult('success', `CORS preflight successful. Status: ${response.status}`);
+            } catch (error) {
+                addResult('error', `CORS test failed: ${error.message}`);
+            }
+        }
+        
+        async function testFileUpload() {
+            const fileInput = document.getElementById('fileUpload');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                addResult('error', 'Please select a file first');
+                return;
+            }
+            
+            addResult('info', `Testing file upload with: ${file.name} (${file.type})`);
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const response = await fetch(`${API_BASE}/enhanced/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    addResult('success', `Upload successful: ${JSON.stringify(result)}`);
+                } else {
+                    addResult('error', `Upload failed: ${result.error || 'Unknown error'}`);
+                }
+            } catch (error) {
+                addResult('error', `Upload request failed: ${error.message}`);
+            }
+        }
+        
+        // Auto-run health check on page load
+        window.onload = function() {
+            testHealth();
+        };
+    </script>
+</body>
+</html>
