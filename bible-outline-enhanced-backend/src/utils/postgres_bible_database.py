@@ -71,7 +71,7 @@ class PostgresBibleDatabase:
             database=self.connection_params['database']
         )
     
-    def get_verse(self, book: str, chapter: int, verse: int) -> Optional[str]:
+    def get_verse(self, book_name: str, chapter: int, verse_num: int) -> Optional[str]:
         """
         Get a single verse from the database
         
@@ -87,10 +87,43 @@ class PostgresBibleDatabase:
             conn = self._get_connection()
             cursor = conn.cursor()
             
-            cursor.execute(
-                "SELECT text FROM bible_verses WHERE book = %s AND chapter = %s AND verse_number = %s",
-                (book, chapter, verse)
-            )
+            # Try exact book name match first
+            cursor.execute('''
+                SELECT v.text 
+                FROM verses v 
+                JOIN books b ON v.book_id = b.id 
+                WHERE b.name = %s AND v.chapter = %s AND v.verse = %s
+            ''', (book_name, chapter, verse_num))
+            
+            result = cursor.fetchone()
+            if result:
+                cursor.close()
+                conn.close()
+                return result[0]
+            
+            # Try abbreviation match
+            cursor.execute('''
+                SELECT v.text 
+                FROM verses v 
+                JOIN books b ON v.book_id = b.id 
+                WHERE b.abbreviation = %s AND v.chapter = %s AND v.verse = %s
+            ''', (book_name, chapter, verse_num))
+            
+            result = cursor.fetchone()
+            if result:
+                cursor.close()
+                conn.close()
+                return result[0]
+            
+            # Try book_abbreviations table
+            cursor.execute('''
+                SELECT v.text 
+                FROM verses v 
+                JOIN books b ON v.book_id = b.id 
+                JOIN book_abbreviations ba ON b.id = ba.book_id
+                WHERE ba.abbreviation = %s AND v.chapter = %s AND v.verse = %s
+                LIMIT 1
+            ''', (book_name, chapter, verse_num))
             
             result = cursor.fetchone()
             cursor.close()
@@ -99,7 +132,7 @@ class PostgresBibleDatabase:
             return result[0] if result else None
             
         except Exception as e:
-            logger.error(f"Error getting verse {book} {chapter}:{verse}: {e}")
+            logger.error(f"Error getting verse {book_name} {chapter}:{verse_num}: {e}")
             return None
             
     def lookup_verse(self, book: str, chapter: int, verse: int) -> Optional[str]:
