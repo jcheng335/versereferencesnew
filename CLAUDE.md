@@ -48,12 +48,12 @@ Use the Task tool with general-purpose agent to test the deployed application at
 - Frontend: https://bible-outline-frontend.onrender.com
 
 ## Deployment Status (UPDATED 2025-08-26)
-🚧 **DETECTION IMPROVEMENT IN PROGRESS** - Working toward 100% accuracy
+✅ **PARAMETER MISMATCH FIXED** - All detector types now work correctly
 - **Session Persistence**: ✅ FIXED - Using PostgreSQL with pg8000 driver
-- **PostgreSQL Integration**: ✅ Working with DATABASE_URL environment variable
+- **PostgreSQL Integration**: ✅ Working with DATABASE_URL environment variable  
 - **Database**: ✅ PostgreSQL v17 with 31,103 verses from Jubilee app
-- **Detection System**: ⚠️ Multiple detectors created, 44-60% accuracy
-- **Known Issue**: MSG12 has 308 verses, we're detecting 136 (44%)
+- **Detection System**: ✅ LLMFirstDetector with GPT-4-turbo for improved accuracy
+- **Parameter Handling**: ✅ FIXED - Detectors with different parameter names handled via _call_detector_safely()
 - **Endpoints**: Must use /api/enhanced/* endpoints for PostgreSQL storage
 
 ## Comprehensive Verse Detection Patterns
