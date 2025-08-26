@@ -68,11 +68,12 @@ class LLMFirstDetector:
         
         return '\n'.join(f"- {ex}" for ex in examples[:20])
     
-    def detect_verses(self, text: str, use_training: bool = True) -> List[VerseReference]:
+    def detect_verses(self, text: str, use_training: bool = True, _internal_call: bool = False) -> List[VerseReference]:
         """Detect verses using LLM with training examples"""
         
-        # Process in chunks if text is too long
-        if len(text) > 3000:
+        # Process in chunks if text is too long (but not if this is an internal call from chunking)
+        # Increased limit to 8000 chars to reduce API calls for typical documents
+        if len(text) > 8000 and not _internal_call:
             return self._detect_verses_chunked(text, use_training)
         
         prompt = self._build_prompt(text, use_training)
@@ -113,15 +114,16 @@ class LLMFirstDetector:
         all_verses = []
         seen_refs = set()
         
-        # Split text into chunks of ~2500 chars with overlap
-        chunk_size = 2500
-        overlap = 200
+        # Split text into larger chunks to reduce API calls
+        # GPT-4 can handle up to 8000 chars comfortably
+        chunk_size = 7500
+        overlap = 500
         
         for i in range(0, len(text), chunk_size - overlap):
             chunk = text[i:i + chunk_size]
             
-            # Detect verses in this chunk
-            chunk_verses = self.detect_verses(chunk, use_training=False)  # Avoid recursion
+            # Detect verses in this chunk - use _internal_call flag to prevent recursion
+            chunk_verses = self.detect_verses(chunk, use_training=False, _internal_call=True)
             
             # Add unique verses
             for v in chunk_verses:

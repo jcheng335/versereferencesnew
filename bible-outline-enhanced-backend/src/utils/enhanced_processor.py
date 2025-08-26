@@ -524,8 +524,8 @@ class EnhancedProcessor:
         try:
             # Check detector type and call with appropriate parameters
             if hasattr(self, 'llm_first') and self.detector == self.llm_first:
-                # LLMFirstDetector uses use_training parameter
-                return self.detector.detect_verses(content, use_training=use_llm)
+                # LLMFirstDetector uses use_training parameter (and optional _internal_call)
+                return self.detector.detect_verses(content, use_training=use_llm, _internal_call=False)
             elif hasattr(self, 'ultimate_detector') and self.detector == self.ultimate_detector:
                 # UltimateVerseDetector uses context parameter
                 return self.detector.detect_verses(content, context={'use_llm': use_llm})
