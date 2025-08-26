@@ -489,26 +489,9 @@ class EnhancedProcessor:
     def _extract_text(self, file_path: str, filename: str) -> str:
         """Extract text from various file formats"""
         if filename.lower().endswith('.pdf'):
-            # Try HTML conversion first for better structure
-            try:
-                from .pdf_to_html_converter import PDFToHTMLConverter
-                converter = PDFToHTMLConverter()
-                
-                # Convert to structured data
-                structured_data = converter.convert_and_structure(file_path)
-                
-                # Build a text representation that preserves structure
-                content = f"Scripture Reading: {structured_data['scripture_reading']}\n\n"
-                
-                for point in structured_data['outline_points']:
-                    indent = '  ' * (point['level'] - 1)
-                    content += f"{indent}{point['text']}\n"
-                
-                print(f"Successfully converted PDF to structured format with {len(structured_data['outline_points'])} outline points")
-                return content
-            except Exception as e:
-                print(f"HTML conversion failed, using standard PDF extraction: {e}")
-                return self._extract_pdf_text(file_path)
+            # Use standard PDF extraction to get ALL text
+            # HTML conversion was losing content between outline points
+            return self._extract_pdf_text(file_path)
         elif filename.lower().endswith(('.docx', '.doc')):
             return self._extract_docx_text(file_path)
         else:

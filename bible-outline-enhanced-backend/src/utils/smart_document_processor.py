@@ -57,7 +57,7 @@ class SmartDocumentProcessor:
                 'session_id': session_id,
                 'content': content,
                 'references_found': len(resolved_references),
-                'total_verses': sum(ref['end_verse'] - ref['start_verse'] + 1 
+                'total_verses': sum((ref.get('end_verse') or ref.get('start_verse', 0)) - ref.get('start_verse', 0) + 1 
                                   for ref in resolved_references 
                                   if 'book' in ref and 'chapter' in ref),
                 'filename': filename
@@ -194,7 +194,7 @@ class SmartDocumentProcessor:
             session_data['populated_content'] = populated_content
             
             # Calculate statistics
-            total_verses = sum(ref['end_verse'] - ref['start_verse'] + 1 
+            total_verses = sum((ref.get('end_verse') or ref.get('start_verse', 0)) - ref.get('start_verse', 0) + 1 
                              for ref in references 
                              if 'book' in ref and 'chapter' in ref)
             
@@ -261,7 +261,7 @@ class SmartDocumentProcessor:
                 book = ref['book']
                 if book not in stats['references_by_book']:
                     stats['references_by_book'][book] = 0
-                stats['references_by_book'][book] += ref['end_verse'] - ref['start_verse'] + 1
+                stats['references_by_book'][book] += (ref.get('end_verse') or ref.get('start_verse', 0)) - ref.get('start_verse', 0) + 1
         
         return stats
     

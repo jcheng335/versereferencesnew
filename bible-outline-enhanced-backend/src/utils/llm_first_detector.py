@@ -108,8 +108,8 @@ class LLMFirstDetector:
             
             content = response.choices[0].message.content
             print(f"[DEBUG] LLM raw response length: {len(content) if content else 0} chars")
-            if content and len(content) < 500:
-                print(f"[DEBUG] LLM response: {content[:500]}")
+            if content:
+                print(f"[DEBUG] LLM response preview: {content[:1000]}")
             verses = self._parse_llm_response(content)
             
             print(f"LLM detected {len(verses)} verses")
@@ -350,8 +350,11 @@ TASK: Extract ALL verse references and format them as JSON.
 
 CRITICAL RULES:
 1. For "v." or "vv." references, use the book and chapter from Scripture Reading
-2. Every parenthetical reference must be captured
+2. Every parenthetical reference must be captured  
 3. Every reference in every outline level must be found
+4. IMPORTANT: Scan EVERY line for verses - many verses appear in continuation text after outline markers
+5. Look for patterns like: "cf.", "see", "according to", verse numbers in parentheses
+6. Include ALL verses mentioned, even if they appear multiple times
 
 HTML-Structured Text:
 {html_text}
