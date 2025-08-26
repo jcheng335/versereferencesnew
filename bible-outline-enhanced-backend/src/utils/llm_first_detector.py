@@ -71,32 +71,52 @@ class LLMFirstDetector:
     def detect_verses(self, text: str, use_training: bool = True, _internal_call: bool = False) -> List[VerseReference]:
         """Detect verses using LLM with training examples"""
         
-        # For large documents, use smart extraction to reduce text size
-        if len(text) > 8000 and not _internal_call:
-            # Extract only the lines that likely contain verse references
-            text = self._extract_relevant_lines(text)
-            print(f"[DEBUG] Reduced text from original to {len(text)} chars for LLM processing")
+        # For large documents, process in chunks
+        if len(text) > 10000 and not _internal_call:
+            # Process the full document in chunks
+            return self._detect_verses_chunked(text, use_training)
         
         # Use simplified prompt for better results
         prompt = self._build_simple_prompt(text)
         
         try:
-            response = self.client.chat.completions.create(
-                model="gpt-5",  # Use GPT-5
-                messages=[
-                    {
-                        "role": "system", 
-                        "content": "You are a Bible verse reference extractor. Return ONLY a JSON array with verse references. No explanations, no markdown, just JSON."
-                    },
-                    {
-                        "role": "user", 
-                        "content": prompt
-                    }
-                ],
-                temperature=0.1,  # Low temperature for consistency
-                max_tokens=4000,  # Increased for GPT-5
-                timeout=120  # 2 minute timeout for GPT-5 API call
-            )
+            # Try GPT-5 first, fallback to GPT-4
+            try:
+                response = self.client.chat.completions.create(
+                    model="gpt-5",  # Use GPT-5
+                    messages=[
+                        {
+                            "role": "system", 
+                            "content": "You are a Bible verse reference extractor. Return ONLY a JSON array with verse references. No explanations, no markdown, just JSON."
+                        },
+                        {
+                            "role": "user", 
+                            "content": prompt
+                        }
+                    ],
+                    temperature=0.1,  # Low temperature for consistency
+                    max_completion_tokens=4000,  # GPT-5 uses max_completion_tokens
+                    timeout=120  # 2 minute timeout for GPT-5 API call
+                )
+            except Exception as gpt5_error:
+                # Fallback to GPT-4 if GPT-5 fails
+                print(f"GPT-5 failed ({str(gpt5_error)[:100]}), falling back to GPT-4o...")
+                response = self.client.chat.completions.create(
+                    model="gpt-4o",  # Fallback to GPT-4
+                    messages=[
+                        {
+                            "role": "system", 
+                            "content": "You are a Bible verse reference extractor. Return ONLY a JSON array with verse references. No explanations, no markdown, just JSON."
+                        },
+                        {
+                            "role": "user", 
+                            "content": prompt
+                        }
+                    ],
+                    temperature=0.1,
+                    max_tokens=4000,  # GPT-4 uses max_tokens
+                    timeout=60
+                )
             
             content = response.choices[0].message.content
             print(f"[DEBUG] LLM raw response length: {len(content) if content else 0} chars")
@@ -119,23 +139,29 @@ class LLMFirstDetector:
         seen_refs = set()
         
         # Split text into larger chunks to reduce API calls
-        # GPT-4 can handle up to 8000 chars comfortably
-        chunk_size = 7500
+        # Process in 9000 char chunks with overlap
+        chunk_size = 9000
         overlap = 500
         
+        chunks_processed = 0
         for i in range(0, len(text), chunk_size - overlap):
             chunk = text[i:i + chunk_size]
+            chunks_processed += 1
+            
+            print(f"[DEBUG] Processing chunk {chunks_processed} ({len(chunk)} chars)")
             
             # Detect verses in this chunk - use _internal_call flag to prevent recursion
             chunk_verses = self.detect_verses(chunk, use_training=False, _internal_call=True)
             
             # Add unique verses
             for v in chunk_verses:
-                if v.original_text not in seen_refs:
-                    seen_refs.add(v.original_text)
+                ref_key = f"{v.book}_{v.chapter}_{v.start_verse}_{v.end_verse}"
+                if ref_key not in seen_refs:
+                    seen_refs.add(ref_key)
                     all_verses.append(v)
         
-        print(f"Total verses from chunked processing: {len(all_verses)}")
+        print(f"[DEBUG] Processed {chunks_processed} chunks")
+        print(f"Total unique verses from chunked processing: {len(all_verses)}")
         return all_verses
     
     def _extract_relevant_lines(self, text: str) -> str:
@@ -337,6 +363,41 @@ Text to analyze:
 
 IMPORTANT: Be exhaustive. It's better to over-detect than miss verses. Find EVERY single verse reference."""
     
+    def _parse_llm_response_simple(self, refs: List[str]) -> List[VerseReference]:
+        """Parse a simple list of verse references"""
+        import re
+        verses = []
+        
+        for ref in refs:
+            if not ref or not isinstance(ref, str):
+                continue
+                
+            ref = ref.strip()
+            
+            # Parse the reference
+            # Handle ranges like "Rom. 8:31-39"
+            match = re.match(r'([1-3]?\s*[A-Za-z]+)\.?\s+(\d+):(\d+)(?:-(\d+))?', ref)
+            if match:
+                book = match.group(1).strip()
+                chapter = int(match.group(2))
+                start_verse = int(match.group(3))
+                end_verse = int(match.group(4)) if match.group(4) else None
+                
+                # Normalize book name
+                book = book.replace('.', '').strip()
+                
+                verses.append(VerseReference(
+                    book=book,
+                    chapter=chapter,
+                    start_verse=start_verse,
+                    end_verse=end_verse,
+                    original_text=ref,
+                    confidence=0.95,
+                    pattern="llm"
+                ))
+        
+        return verses
+    
     def _parse_llm_response(self, content: str) -> List[VerseReference]:
         """Parse the LLM response into VerseReference objects"""
         verses = []
@@ -376,25 +437,32 @@ IMPORTANT: Be exhaustive. It's better to over-detect than miss verses. Find EVER
             if json_str:
                 verse_data = json.loads(json_str)
                 
+                # Check if it's a simple array of strings or structured data
+                if verse_data and isinstance(verse_data[0], str):
+                    # Simple string array format
+                    return self._parse_llm_response_simple(verse_data)
+                
+                # Otherwise parse as structured objects
                 for v in verse_data:
-                    # Handle both formats (with periods and without)
-                    book = v.get('book', '').replace('.', '')
-                    
-                    # Skip invalid entries
-                    if not book or v.get('chapter', 0) == 0:
-                        continue
-                    
-                    verse = VerseReference(
-                        book=book,
-                        chapter=v.get('chapter', 0),
-                        start_verse=v.get('start_verse', 0),
-                        end_verse=v.get('end_verse'),
-                        original_text=v.get('reference', ''),
-                        confidence=0.98,  # High confidence for GPT-4
-                        pattern='llm_gpt4',
-                        context=v.get('context', '')
-                    )
-                    verses.append(verse)
+                    if isinstance(v, dict):
+                        # Handle both formats (with periods and without)
+                        book = v.get('book', '').replace('.', '')
+                        
+                        # Skip invalid entries
+                        if not book or v.get('chapter', 0) == 0:
+                            continue
+                        
+                        verse = VerseReference(
+                            book=book,
+                            chapter=v.get('chapter', 0),
+                            start_verse=v.get('start_verse', 0),
+                            end_verse=v.get('end_verse'),
+                            original_text=v.get('reference', ''),
+                            confidence=0.98,  # High confidence for GPT-4
+                            pattern='llm_gpt4',
+                            context=v.get('context', '')
+                        )
+                        verses.append(verse)
             else:
                 print("No valid JSON found in LLM response")
                 verses = self._fallback_parse(content)
