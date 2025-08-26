@@ -82,7 +82,7 @@ class LLMFirstDetector:
         
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4o",  # Use GPT-4o (latest and most capable model)
+                model="gpt-5",  # Use GPT-5
                 messages=[
                     {
                         "role": "system", 
@@ -94,8 +94,8 @@ class LLMFirstDetector:
                     }
                 ],
                 temperature=0.1,  # Low temperature for consistency
-                max_tokens=3000,  # Increased for more verses
-                timeout=20  # 20 second timeout for API call
+                max_tokens=4000,  # Increased for GPT-5
+                timeout=120  # 2 minute timeout for GPT-5 API call
             )
             
             content = response.choices[0].message.content
