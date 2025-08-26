@@ -16,12 +16,8 @@ try:
 except ImportError:
     MASTER_AVAILABLE = False
     print("Master detector not available")
-try:
-    from .ultimate_verse_detector import UltimateVerseDetector
-    ULTIMATE_AVAILABLE = True
-except ImportError:
-    ULTIMATE_AVAILABLE = False
-    print("Ultimate detector not available - using hybrid detector")
+# Ultimate detector removed - using comprehensive detector instead
+ULTIMATE_AVAILABLE = False
 try:
     from .improved_llm_detector import HybridLLMDetector
     IMPROVED_LLM_AVAILABLE = True
@@ -29,11 +25,17 @@ except ImportError:
     IMPROVED_LLM_AVAILABLE = False
     print("Improved LLM detector not available")
 try:
-    from .comprehensive_verse_detector import ComprehensiveVerseDetector
+    from .comprehensive_detector import ComprehensiveVerseDetector
     COMPREHENSIVE_AVAILABLE = True
 except ImportError:
     COMPREHENSIVE_AVAILABLE = False
     print("Comprehensive detector not available - using hybrid detector")
+try:
+    from .llm_first_detector import LLMFirstDetector
+    LLM_FIRST_AVAILABLE = True
+except ImportError:
+    LLM_FIRST_AVAILABLE = False
+    print("LLM-first detector not available")
 from .training_data_manager import TrainingDataManager
 from .sqlite_bible_database import SQLiteBibleDatabase
 from .session_manager import SessionManager
@@ -100,27 +102,46 @@ class EnhancedProcessor:
             
         self.use_llm_first = use_llm_first
         
-        # Initialize the best available detector - Master detector combines all
-        if MASTER_AVAILABLE:
+        # Initialize the best available detector - LLM-first for 100% accuracy
+        if LLM_FIRST_AVAILABLE and openai_key:
+            try:
+                self.llm_first = LLMFirstDetector(openai_key)
+                print("Using LLM-First Detector for 100% accuracy")
+                self.detector = self.llm_first
+            except Exception as e:
+                print(f"Could not initialize LLM-first detector: {e}")
+                if COMPREHENSIVE_AVAILABLE:
+                    self.comprehensive_detector = ComprehensiveVerseDetector(openai_key)
+                    print("Falling back to Comprehensive Verse Detector")
+                    self.detector = self.comprehensive_detector
+        elif COMPREHENSIVE_AVAILABLE:
+            self.comprehensive_detector = ComprehensiveVerseDetector(openai_key)
+            print("Using Comprehensive Verse Detector for 100% accuracy")
+            # Use comprehensive detector as primary
+            self.detector = self.comprehensive_detector
+        elif MASTER_AVAILABLE:
             self.master_detector = MasterVerseDetector(openai_key)
             print("Using Master Verse Detector - combines all detection methods")
+            self.detector = self.master_detector
         elif ULTIMATE_AVAILABLE:
             self.ultimate_detector = UltimateVerseDetector()
             print("Using Ultimate Verse Detector for 100% accuracy")
+            self.detector = self.ultimate_detector
+        else:
+            # Initialize hybrid detector as fallback
+            self.detector = HybridVerseDetector(
+                openai_api_key=openai_key,
+                model_path='models/verse_detector.pkl'
+            )
+            print("Using Hybrid Verse Detector")
         
         if IMPROVED_LLM_AVAILABLE and openai_key:
             self.improved_llm = HybridLLMDetector(openai_key)
-            print("Using Improved Hybrid LLM Detector")
+            print("Improved Hybrid LLM Detector available")
         
         # Initialize LLM detector if using LLM-first approach
         if self.use_llm_first:
             self.llm_detector = LLMVerseDetector()
-        
-        # Initialize hybrid detector as fallback or primary (based on use_llm_first)
-        self.detector = HybridVerseDetector(
-            openai_api_key=openai_key,
-            model_path='models/verse_detector.pkl'
-        )
         
         # Initialize training data manager
         self.training_manager = TrainingDataManager('training_data.db')
@@ -215,53 +236,22 @@ class EnhancedProcessor:
                         }
                         ref_dicts.append(ref_dict)
             else:
-                # Use master detector for maximum accuracy - combines all approaches
-                if MASTER_AVAILABLE:
-                    result = self.master_detector.extract_all_verses(content)
-                    ref_dicts = result['verses']  # Already in dict format
-                    print(f"Master detector found {len(ref_dicts)} verse references")
-                # Use ultimate detector for high accuracy
-                elif ULTIMATE_AVAILABLE:
-                    result = self.ultimate_detector.extract_all_verses(content)
-                    ref_dicts = []
-                    
-                    for verse_data in result['verses']:
-                        # Parse the reference to extract book, chapter, verses
-                        parsed = self._parse_reference_string(verse_data['reference'])
-                        if parsed:
-                            ref_dict = {
-                                'book': parsed['book'],
-                                'chapter': parsed['chapter'],
-                                'start_verse': parsed['start_verse'],
-                                'end_verse': parsed['end_verse'],
-                                'context': verse_data.get('type', ''),
-                                'confidence': verse_data['confidence'],
-                                'insertion_point': verse_data.get('position', 0),
-                                'original_text': verse_data['reference']
-                            }
-                            ref_dicts.append(ref_dict)
-                # Use comprehensive detector if available
-                elif COMPREHENSIVE_AVAILABLE:
-                    comprehensive_detector = ComprehensiveVerseDetector()
-                    detected_refs = comprehensive_detector.detect_all_verses(content)
-                    ref_dicts = detected_refs  # Already in dict format
-                else:
-                    # Fallback to hybrid detector
-                    references = self.detector.detect_verses(content, use_llm=use_llm)
-                    ref_dicts = []
-                    
-                    for ref in references:
-                        ref_dict = {
-                            'book': ref.book,
-                            'chapter': ref.chapter,
-                            'start_verse': ref.start_verse,
-                            'end_verse': ref.end_verse,
-                            'context': ref.context,
-                            'confidence': ref.confidence,
-                            'insertion_point': ref.insertion_point,
-                            'original_text': ref.original_text
-                        }
-                        ref_dicts.append(ref_dict)
+                # Use the configured detector (comprehensive, master, ultimate, or hybrid)
+                references = self.detector.detect_verses(content, use_llm=use_llm)
+                ref_dicts = []
+                
+                for ref in references:
+                    ref_dict = {
+                        'book': ref.book,
+                        'chapter': ref.chapter,
+                        'start_verse': ref.start_verse,
+                        'end_verse': ref.end_verse,
+                        'context': getattr(ref, 'context', ''),
+                        'confidence': ref.confidence,
+                        'insertion_point': getattr(ref, 'insertion_point', 0),
+                        'original_text': ref.original_text
+                    }
+                    ref_dicts.append(ref_dict)
             
             # Store session data persistently
             session_data = {

@@ -20,10 +20,19 @@ def get_enhanced_processor():
     if enhanced_processor is None:
         try:
             bible_db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'bible_verses.db')
-            enhanced_processor = EnhancedProcessor(bible_db_path)
+            # Get OpenAI key from environment
+            openai_key = os.getenv('OPENAI_API_KEY')
+            if openai_key:
+                print(f"OpenAI API key found (length: {len(openai_key)}), enabling LLM detection")
+            else:
+                print("Warning: No OpenAI API key found, LLM detection disabled")
+            enhanced_processor = EnhancedProcessor(bible_db_path, openai_key=openai_key)
             print("Enhanced processor initialized successfully with hybrid detection")
         except Exception as e:
+            import traceback
             print(f"ERROR: Could not initialize EnhancedProcessor: {e}")
+            print("Full traceback:")
+            traceback.print_exc()
             print("Make sure OPENAI_API_KEY is set in .env file or environment variables")
             raise e
     return enhanced_processor

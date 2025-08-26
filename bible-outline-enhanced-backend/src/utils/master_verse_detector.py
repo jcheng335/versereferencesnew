@@ -129,7 +129,15 @@ class MasterVerseDetector:
         # Initialize sub-detectors
         self.detectors = []
         
-        # Try to load each detector
+        # Priority 1: Trained detector (uses training data)
+        try:
+            from .trained_verse_detector import TrainedVerseDetector
+            self.detectors.append(('trained', TrainedVerseDetector()))
+            logger.info("TrainedVerseDetector loaded successfully")
+        except ImportError as e:
+            logger.warning(f"TrainedVerseDetector not available: {e}")
+        
+        # Priority 2: Ultimate detector
         try:
             from .ultimate_verse_detector import UltimateVerseDetector
             self.detectors.append(('ultimate', UltimateVerseDetector()))

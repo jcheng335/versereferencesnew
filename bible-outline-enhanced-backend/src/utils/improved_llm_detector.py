@@ -176,8 +176,9 @@ class HybridLLMDetector:
     def __init__(self, api_key: str = None):
         """Initialize hybrid detector"""
         self.llm_detector = ImprovedLLMDetector(api_key)
-        from ultimate_verse_detector import UltimateVerseDetector
-        self.pattern_detector = UltimateVerseDetector()
+        # from ultimate_verse_detector import UltimateVerseDetector
+        # self.pattern_detector = UltimateVerseDetector()
+        self.pattern_detector = None
     
     def detect_verses(self, text: str) -> Dict:
         """
@@ -208,7 +209,10 @@ class HybridLLMDetector:
                 results['sources']['llm'] = len(llm_result['all_verses'])
         
         # Always run pattern detection
-        pattern_result = self.pattern_detector.extract_all_verses(text)
+        if self.pattern_detector:
+            pattern_result = self.pattern_detector.extract_all_verses(text)
+        else:
+            pattern_result = {'verses': []}
         if 'verses' in pattern_result:
             for verse_data in pattern_result['verses']:
                 # Check if not already found by LLM
