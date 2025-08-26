@@ -71,12 +71,21 @@ class LLMFirstDetector:
     def detect_verses(self, text: str, use_training: bool = True, _internal_call: bool = False) -> List[VerseReference]:
         """Detect verses using LLM with training examples"""
         
-        # Process in chunks if text is too long (but not if this is an internal call from chunking)
-        # Increased limit to 8000 chars to reduce API calls for typical documents
+        # Convert to HTML if it's a long document to avoid chunking
+        # HTML structure makes it easier for LLM to understand the outline
         if len(text) > 8000 and not _internal_call:
-            return self._detect_verses_chunked(text, use_training)
-        
-        prompt = self._build_prompt(text, use_training)
+            # Try to convert to HTML structure first
+            try:
+                from .pdf_to_html_converter import PDFToHTMLConverter
+                converter = PDFToHTMLConverter()
+                # Convert text to structured format
+                structured = self._structure_text_as_html(text)
+                prompt = self._build_html_prompt(structured, use_training)
+            except:
+                # Fallback to chunking if HTML conversion fails
+                return self._detect_verses_chunked(text, use_training)
+        else:
+            prompt = self._build_prompt(text, use_training)
         
         try:
             response = self.client.chat.completions.create(
@@ -290,6 +299,61 @@ IMPORTANT: Be exhaustive. It's better to over-detect than miss verses. Find EVER
             verses = self._fallback_parse(content)
         
         return verses
+    
+    def _structure_text_as_html(self, text: str) -> str:
+        """Convert plain text to structured HTML-like format"""
+        lines = text.split('\n')
+        structured = []
+        
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+                
+            # Mark Scripture Reading
+            if line.startswith('Scripture Reading:'):
+                structured.append(f'<scripture-reading>{line}</scripture-reading>')
+            # Mark outline points
+            elif re.match(r'^[IVX]+\.', line):
+                structured.append(f'<outline-1>{line}</outline-1>')
+            elif re.match(r'^[A-Z]\.', line):
+                structured.append(f'<outline-2>{line}</outline-2>')
+            elif re.match(r'^[1-9]\d?\.', line):
+                structured.append(f'<outline-3>{line}</outline-3>')
+            elif re.match(r'^[a-z]\.', line):
+                structured.append(f'<outline-4>{line}</outline-4>')
+            else:
+                structured.append(f'<text>{line}</text>')
+        
+        return '\n'.join(structured)
+    
+    def _build_html_prompt(self, html_text: str, use_training: bool) -> str:
+        """Build prompt for HTML-structured text"""
+        examples = self._get_few_shot_examples() if use_training else ""
+        
+        return f"""You are an expert at extracting Bible verse references from HTML-structured theological outlines.
+
+The text is already structured with HTML-like tags:
+- <scripture-reading> contains the main Scripture Reading
+- <outline-1> contains Roman numeral points (I, II, III)
+- <outline-2> contains letter points (A, B, C)
+- <outline-3> contains number points (1, 2, 3)
+- <outline-4> contains lowercase letter points (a, b, c)
+- <text> contains regular text
+
+TASK: Extract ALL verse references and format them as JSON.
+
+{examples}
+
+CRITICAL RULES:
+1. For "v." or "vv." references, use the book and chapter from Scripture Reading
+2. Every parenthetical reference must be captured
+3. Every reference in every outline level must be found
+
+HTML-Structured Text:
+{html_text}
+
+Return ONLY a JSON array of verse objects. Be exhaustive - find EVERY verse reference."""
     
     def _fallback_parse(self, text: str) -> List[VerseReference]:
         """Fallback regex parsing if JSON fails"""

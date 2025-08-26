@@ -64,22 +64,28 @@ def enhanced_upload():
     except Exception as e:
         return jsonify({'error': 'Enhanced processing not available. Check logs for details.'}), 503
     
+    # Save uploaded file
+    filename = secure_filename(file.filename)
+    file_path = os.path.join(UPLOAD_FOLDER, filename)
+    file.save(file_path)
+    
     try:
-        # Save uploaded file
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(UPLOAD_FOLDER, filename)
-        file.save(file_path)
-        
         # Process with enhanced detector
         result = processor.process_document(file_path, filename, use_llm=use_llm)
-        
-        # Clean up uploaded file
-        os.remove(file_path)
         
         return jsonify(result)
         
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
+    finally:
+        # Clean up uploaded file
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except:
+                pass  # Ignore cleanup errors
 
 @enhanced_bp.route('/populate/<session_id>', methods=['POST'])
 def enhanced_populate(session_id):
