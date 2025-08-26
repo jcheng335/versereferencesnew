@@ -39,7 +39,7 @@ except ImportError:
     print("Model scheduler not available - ML features disabled")
 
 class EnhancedProcessor:
-    def __init__(self, db_path: str, openai_key: str = None, use_llm_first: bool = True):
+    def __init__(self, db_path: str, openai_key: str = None, use_llm_first: bool = False):
         """
         Initialize enhanced processor with hybrid detection
         
