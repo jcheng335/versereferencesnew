@@ -1,0 +1,5080 @@
+[
+  {
+    "outline": 1,
+    "detected": 33,
+    "expected": 59,
+    "accuracy": 55.932203389830505,
+    "details": {
+      "verses": [
+        {
+          "reference": "Acts 13:23",
+          "type": "scripture_reading",
+          "confidence": 1.0,
+          "position": 1046
+        },
+        {
+          "reference": "Acts 13:4",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 1089
+        },
+        {
+          "reference": "Acts 13",
+          "type": "chapter_context",
+          "confidence": 0.85,
+          "position": 1101
+        },
+        {
+          "reference": "Acts 13:33",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 1377
+        },
+        {
+          "reference": "Rom 8:29",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1675
+        },
+        {
+          "reference": "John 1:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1739
+        },
+        {
+          "reference": "Heb 1:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1868
+        },
+        {
+          "reference": "Psa 2:7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1928
+        },
+        {
+          "reference": "John 1:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2432
+        },
+        {
+          "reference": "Luke 1:35",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2446
+        },
+        {
+          "reference": "1Pet 1:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2907
+        },
+        {
+          "reference": "Heb 2:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2918
+        },
+        {
+          "reference": "1John 4:9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3014
+        },
+        {
+          "reference": "2Pet 1:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3284
+        },
+        {
+          "reference": "Rom 1:3-4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3403
+        },
+        {
+          "reference": "Acts 13:1",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 3757
+        },
+        {
+          "reference": "Rom 8:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3767
+        },
+        {
+          "reference": "Luke 1:31-32",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4015
+        },
+        {
+          "reference": "Heb 1:5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4292
+        },
+        {
+          "reference": "Rom 1:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4430
+        },
+        {
+          "reference": "Phil 3:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4439
+        },
+        {
+          "reference": "Eph 1:19-20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4451
+        },
+        {
+          "reference": "Heb 2:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5111
+        },
+        {
+          "reference": "Matt 1:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5695
+        },
+        {
+          "reference": "Acts 13:6",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 6097
+        },
+        {
+          "reference": "Luke 24:26",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6102
+        },
+        {
+          "reference": "John 17:5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6114
+        },
+        {
+          "reference": "Acts 3:13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6125
+        },
+        {
+          "reference": "Heb 2:10-11",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6375
+        },
+        {
+          "reference": "John 1:1-13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7020
+        },
+        {
+          "reference": "1John 3:1",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7034
+        },
+        {
+          "reference": "Rev 21:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7045
+        },
+        {
+          "reference": "Acts 13:11",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 7059
+        }
+      ],
+      "total_count": 33,
+      "unique_references": [
+        "Heb 1:5",
+        "John 1:18",
+        "Heb 1:6",
+        "Acts 13:1",
+        "Acts 13:4",
+        "Eph 1:19-20",
+        "John 1:14",
+        "1John 4:9",
+        "Acts 13:23",
+        "Rom 8:29",
+        "Acts 13",
+        "Acts 13:6",
+        "Heb 2:14",
+        "Acts 13:33",
+        "Rom 1:4",
+        "Luke 24:26",
+        "Acts 13:11",
+        "John 17:5",
+        "2Pet 1:4",
+        "Luke 1:35",
+        "John 1:1-13",
+        "1John 3:1",
+        "1Pet 1:3",
+        "Acts 3:13",
+        "Rom 8:3",
+        "Rom 1:3-4",
+        "Heb 2:10",
+        "Heb 2:10-11",
+        "Rev 21:2",
+        "Matt 1:18",
+        "Phil 3:10",
+        "Psa 2:7",
+        "Luke 1:31-32"
+      ],
+      "unique_count": 33,
+      "type_distribution": {
+        "scripture_reading": 1,
+        "dash_context": 4,
+        "chapter_context": 1,
+        "standalone_single": 1,
+        "full_reference": 26
+      },
+      "average_confidence": 0.9196969696969697,
+      "high_confidence_count": 27,
+      "detection_summary": {
+        "scripture_reading": 1,
+        "parenthetical": 0,
+        "full_references": 26,
+        "standalone": 1,
+        "contextual": 5
+      }
+    }
+  },
+  {
+    "outline": 2,
+    "detected": 101,
+    "expected": 170,
+    "accuracy": 59.411764705882355,
+    "details": {
+      "verses": [
+        {
+          "reference": "Rom 8:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 105
+        },
+        {
+          "reference": "Rom 8:39",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 118
+        },
+        {
+          "reference": "Rom 8",
+          "type": "chapter_context",
+          "confidence": 0.85,
+          "position": 282
+        },
+        {
+          "reference": "Rom 12",
+          "type": "chapter_context",
+          "confidence": 0.85,
+          "position": 343
+        },
+        {
+          "reference": "Rom 8:8",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 424
+        },
+        {
+          "reference": "Rom 8:29",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 432
+        },
+        {
+          "reference": "Phil 1:19",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 448
+        },
+        {
+          "reference": "John 1:4-5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 583
+        },
+        {
+          "reference": "1Cor 15:45b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 618
+        },
+        {
+          "reference": "Rom 8:2-3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 917
+        },
+        {
+          "reference": "Phil 2:13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1111
+        },
+        {
+          "reference": "Ezek 36:26-27",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1123
+        },
+        {
+          "reference": "Prov 30:18-19",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1139
+        },
+        {
+          "reference": "Isa 40:28-31",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1155
+        },
+        {
+          "reference": "Heb 12:2a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1170
+        },
+        {
+          "reference": "Phil 4:13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1182
+        },
+        {
+          "reference": "Col 1:28-29",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1194
+        },
+        {
+          "reference": "Gal 2:20a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1431
+        },
+        {
+          "reference": "Rom 7:15-20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1442
+        },
+        {
+          "reference": "Rom 7",
+          "type": "chapter_context",
+          "confidence": 0.85,
+          "position": 1560
+        },
+        {
+          "reference": "Rom 8:7",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 1730
+        },
+        {
+          "reference": "Rom 8:21",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 1964
+        },
+        {
+          "reference": "None 5:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2300
+        },
+        {
+          "reference": "Eph 6:17-18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2313
+        },
+        {
+          "reference": "Rom 8:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2503
+        },
+        {
+          "reference": "1John 1:2-3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2517
+        },
+        {
+          "reference": "Eph 4:11-12",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2988
+        },
+        {
+          "reference": "Rom 8:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3207
+        },
+        {
+          "reference": "Psa 23:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3220
+        },
+        {
+          "reference": "Phil 4:12-13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3377
+        },
+        {
+          "reference": "2Cor 3:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3872
+        },
+        {
+          "reference": "Psa 27:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3888
+        },
+        {
+          "reference": "Matt 6:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3903
+        },
+        {
+          "reference": "Exo 33:11a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3921
+        },
+        {
+          "reference": "John 20:22",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4038
+        },
+        {
+          "reference": "Lam 3:55-56",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4050
+        },
+        {
+          "reference": "Rom 10:12-13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4064
+        },
+        {
+          "reference": "Rom 8:5-6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4289
+        },
+        {
+          "reference": "Mal 2:15-16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4445
+        },
+        {
+          "reference": "Eph 4:30",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4458
+        },
+        {
+          "reference": "None 5:19",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4470
+        },
+        {
+          "reference": "John 6:63",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4583
+        },
+        {
+          "reference": "Isa 55:8-11",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4593
+        },
+        {
+          "reference": "Phil 2:21",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4787
+        },
+        {
+          "reference": "Rom 8:13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4867
+        },
+        {
+          "reference": "Zech 4:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4877
+        },
+        {
+          "reference": "Gal 5:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4888
+        },
+        {
+          "reference": "Rom 8:9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4970
+        },
+        {
+          "reference": "Rom 8:16",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 5076
+        },
+        {
+          "reference": "1John 2:20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5276
+        },
+        {
+          "reference": "2Cor 2:12-14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5415
+        },
+        {
+          "reference": "Rom 8:15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5491
+        },
+        {
+          "reference": "Gal 4:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5501
+        },
+        {
+          "reference": "Matt 18:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5735
+        },
+        {
+          "reference": "Rom 8:23",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5848
+        },
+        {
+          "reference": "Rom 8:27",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 5861
+        },
+        {
+          "reference": "Rom 8:28-29",
+          "type": "standalone_range",
+          "confidence": 0.8,
+          "position": 6047
+        },
+        {
+          "reference": "Rom 8:37",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 6152
+        },
+        {
+          "reference": "Rom 8:31-39",
+          "type": "standalone_range",
+          "confidence": 0.8,
+          "position": 6313
+        },
+        {
+          "reference": "1Cor 2:9-10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6392
+        },
+        {
+          "reference": "2Tim 3:2-4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6411
+        },
+        {
+          "reference": "2Cor 5:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6527
+        },
+        {
+          "reference": "Rom 8:31",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6586
+        },
+        {
+          "reference": "Jer 31:31-34",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6596
+        },
+        {
+          "reference": "Heb 8:8-10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6611
+        },
+        {
+          "reference": "Jer 32:40-41",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6945
+        },
+        {
+          "reference": "Rom 8:40-44",
+          "type": "standalone_range",
+          "confidence": 0.8,
+          "position": 7267
+        },
+        {
+          "reference": "Phil 3:8-14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7277
+        },
+        {
+          "reference": "Rom 8:28",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7440
+        },
+        {
+          "reference": "1Cor 3:21-22",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7455
+        },
+        {
+          "reference": "Rom 8:34",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7572
+        },
+        {
+          "reference": "2Tim 4:22",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7685
+        },
+        {
+          "reference": "John 1:51",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7701
+        },
+        {
+          "reference": "Gen 28:11-22",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7712
+        },
+        {
+          "reference": "2Cor 3:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7897
+        },
+        {
+          "reference": "Rom 8:35",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8370
+        },
+        {
+          "reference": "Rom 8:38-39",
+          "type": "standalone_range",
+          "confidence": 0.8,
+          "position": 8892
+        },
+        {
+          "reference": "Jer 31:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8907
+        },
+        {
+          "reference": "Hos 11:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 9119
+        },
+        {
+          "reference": "Rom 8:35-37",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 9391
+        },
+        {
+          "reference": "1Tim 1:3-5",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 9790
+        },
+        {
+          "reference": "Zech 12:1",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 10115
+        },
+        {
+          "reference": "Isa 66:1-2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 10587
+        },
+        {
+          "reference": "John 14:23",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 10599
+        },
+        {
+          "reference": "Eph 3:14-17",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 10766
+        },
+        {
+          "reference": "Rom 7:24-25a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 10817
+        },
+        {
+          "reference": "Rom 8:2-4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 10943
+        },
+        {
+          "reference": "Rom 8:10",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 11476
+        },
+        {
+          "reference": "Rev 21:23",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 11495
+        },
+        {
+          "reference": "Isa 40:31",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 11553
+        },
+        {
+          "reference": "Rom 8:11",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 11869
+        },
+        {
+          "reference": "Eph 3:21a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 12872
+        },
+        {
+          "reference": "Rev 21:11a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 12883
+        },
+        {
+          "reference": "Isa 43:7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 12896
+        },
+        {
+          "reference": "Phil 2:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 12911
+        },
+        {
+          "reference": "Rom 8:1",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 13504
+        },
+        {
+          "reference": "Rom 8:18",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 13522
+        },
+        {
+          "reference": "Rom 8:3",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 14768
+        },
+        {
+          "reference": "Matt 25:21",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 14774
+        },
+        {
+          "reference": "Phil 3:12-13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 14791
+        },
+        {
+          "reference": "1Cor 9:24",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 14807
+        }
+      ],
+      "total_count": 101,
+      "unique_references": [
+        "Rom 8:9",
+        "Rom 8:7",
+        "Psa 27:4",
+        "1Cor 2:9-10",
+        "Rom 8:5-6",
+        "Matt 25:21",
+        "Jer 32:40-41",
+        "Phil 4:13",
+        "Rom 8:2-3",
+        "Phil 4:12-13",
+        "2Tim 3:2-4",
+        "Prov 30:18-19",
+        "2Cor 3:18",
+        "Zech 12:1",
+        "Phil 1:19",
+        "Gal 5:16",
+        "John 20:22",
+        "Rom 7:24-25a",
+        "Rom 7:15-20",
+        "Rom 8:2-4",
+        "Exo 33:11a",
+        "Phil 2:2",
+        "Rom 8:13",
+        "Rom 8:10",
+        "Phil 3:8-14",
+        "Rom 8:8",
+        "Jer 31:3",
+        "None 5:17",
+        "Rom 8:31-39",
+        "Rom 8:18",
+        "Rom 8:37",
+        "Rom 8:29",
+        "John 6:63",
+        "Lam 3:55-56",
+        "Rom 8:34",
+        "Phil 3:12-13",
+        "2Cor 3:16",
+        "Rom 12",
+        "Rom 8:27",
+        "Rom 8:39",
+        "Rom 8:38-39",
+        "Psa 23:3",
+        "Isa 43:7",
+        "Matt 6:6",
+        "Rom 8:28",
+        "Rom 8:1",
+        "1John 2:20",
+        "Jer 31:31-34",
+        "None 5:19",
+        "Isa 40:31",
+        "1John 1:2-3",
+        "Rom 8:15",
+        "Phil 2:13",
+        "Rom 8:31",
+        "Rom 8:2",
+        "Isa 66:1-2",
+        "1Cor 9:24",
+        "Ezek 36:26-27",
+        "Eph 4:11-12",
+        "Phil 2:21",
+        "Rom 8:40-44",
+        "1Tim 1:3-5",
+        "Rom 8",
+        "Matt 18:3",
+        "John 1:4-5",
+        "Rom 7",
+        "Rev 21:23",
+        "Gal 2:20a",
+        "Rom 8:35-37",
+        "Rom 8:11",
+        "1Cor 15:45b",
+        "Gal 4:6",
+        "Heb 12:2a",
+        "Isa 40:28-31",
+        "Rom 8:23",
+        "Gen 28:11-22",
+        "Eph 3:21a",
+        "2Cor 5:14",
+        "Heb 8:8-10",
+        "Eph 6:17-18",
+        "Rom 8:4",
+        "Col 1:28-29",
+        "John 1:51",
+        "Mal 2:15-16",
+        "Eph 4:30",
+        "Rom 8:35",
+        "Rom 8:6",
+        "Rom 8:28-29",
+        "Rev 21:11a",
+        "2Cor 2:12-14",
+        "Hos 11:4",
+        "Rom 8:16",
+        "Zech 4:6",
+        "Rom 8:3",
+        "Rom 10:12-13",
+        "2Tim 4:22",
+        "Rom 8:21",
+        "John 14:23",
+        "Eph 3:14-17",
+        "Isa 55:8-11",
+        "1Cor 3:21-22"
+      ],
+      "unique_count": 101,
+      "type_distribution": {
+        "full_reference": 79,
+        "dash_context": 11,
+        "chapter_context": 3,
+        "standalone_single": 2,
+        "standalone_range": 4,
+        "parenthetical": 2
+      },
+      "average_confidence": 0.9163366336633663,
+      "high_confidence_count": 81,
+      "detection_summary": {
+        "scripture_reading": 0,
+        "parenthetical": 2,
+        "full_references": 79,
+        "standalone": 6,
+        "contextual": 14
+      }
+    }
+  },
+  {
+    "outline": 3,
+    "detected": 21,
+    "expected": 30,
+    "accuracy": 70.0,
+    "details": {
+      "verses": [
+        {
+          "reference": "1Cor 1:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 62
+        },
+        {
+          "reference": "Eph 3:24",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 76
+        },
+        {
+          "reference": "Rom 6:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 84
+        },
+        {
+          "reference": "Eph 1:9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 102
+        },
+        {
+          "reference": "None 1:24",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 195
+        },
+        {
+          "reference": "Gal 2:20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 877
+        },
+        {
+          "reference": "1Cor 1:24",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 932
+        },
+        {
+          "reference": "Eph 3:2",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 1250
+        },
+        {
+          "reference": "Eph 3:1",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 1331
+        },
+        {
+          "reference": "Col 1:9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2043
+        },
+        {
+          "reference": "None 1:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2762
+        },
+        {
+          "reference": "Rom 10:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3051
+        },
+        {
+          "reference": "Acts 9:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3114
+        },
+        {
+          "reference": "Eph 1:4",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 3391
+        },
+        {
+          "reference": "Acts 13:48",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 3437
+        },
+        {
+          "reference": "Phil 4:13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4311
+        },
+        {
+          "reference": "Eph 3:30",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 4681
+        },
+        {
+          "reference": "Rom 5:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5379
+        },
+        {
+          "reference": "Eph 3:6",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 5556
+        },
+        {
+          "reference": "Phil 3:21",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 5749
+        },
+        {
+          "reference": "Eph 3:20-21",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6057
+        }
+      ],
+      "total_count": 21,
+      "unique_references": [
+        "1Cor 1:2",
+        "Col 1:9",
+        "Eph 3:1",
+        "Rom 5:18",
+        "Phil 4:13",
+        "Gal 2:20",
+        "Rom 6:6",
+        "Acts 13:48",
+        "Eph 1:9",
+        "None 1:2",
+        "Eph 3:2",
+        "Eph 3:20-21",
+        "1Cor 1:24",
+        "Eph 1:4",
+        "Eph 3:6",
+        "None 1:24",
+        "Eph 3:30",
+        "Acts 9:14",
+        "Phil 3:21",
+        "Rom 10:14",
+        "Eph 3:24"
+      ],
+      "unique_count": 21,
+      "type_distribution": {
+        "full_reference": 13,
+        "dash_context": 4,
+        "parenthetical": 3,
+        "standalone_single": 1
+      },
+      "average_confidence": 0.9047619047619048,
+      "high_confidence_count": 16,
+      "detection_summary": {
+        "scripture_reading": 0,
+        "parenthetical": 3,
+        "full_references": 13,
+        "standalone": 1,
+        "contextual": 4
+      }
+    }
+  },
+  {
+    "outline": 4,
+    "detected": 101,
+    "expected": 164,
+    "accuracy": 61.58536585365854,
+    "details": {
+      "verses": [
+        {
+          "reference": "1Cor 10:3-4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 109
+        },
+        {
+          "reference": "Exo 16:17",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 126
+        },
+        {
+          "reference": "Exo 16:26",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 140
+        },
+        {
+          "reference": "Exo 16",
+          "type": "chapter_context",
+          "confidence": 0.85,
+          "position": 162
+        },
+        {
+          "reference": "1Cor 10:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 335
+        },
+        {
+          "reference": "John 6:31-35",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 347
+        },
+        {
+          "reference": "Exo 16:51",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 364
+        },
+        {
+          "reference": "Exo 16:58",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 371
+        },
+        {
+          "reference": "Exo 16:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 530
+        },
+        {
+          "reference": "Heb 9:3-4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 708
+        },
+        {
+          "reference": "Eph 4:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 719
+        },
+        {
+          "reference": "Col 2:19",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 730
+        },
+        {
+          "reference": "Num 11:5-6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 937
+        },
+        {
+          "reference": "Acts 1:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 953
+        },
+        {
+          "reference": "2Cor 4:1",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 969
+        },
+        {
+          "reference": "1Tim 1:12",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 981
+        },
+        {
+          "reference": "2Cor 3:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 994
+        },
+        {
+          "reference": "John 6:57",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1192
+        },
+        {
+          "reference": "Phil 1:20-21",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1202
+        },
+        {
+          "reference": "Gal 6:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1221
+        },
+        {
+          "reference": "Exo 16:15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1255
+        },
+        {
+          "reference": "Col 2:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1266
+        },
+        {
+          "reference": "Isa 9:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1276
+        },
+        {
+          "reference": "Eph 3:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1286
+        },
+        {
+          "reference": "John 3:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1296
+        },
+        {
+          "reference": "Exo 16:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1339
+        },
+        {
+          "reference": "Matt 6:34",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1353
+        },
+        {
+          "reference": "John 6:41",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1400
+        },
+        {
+          "reference": "Exo 16:13-14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1440
+        },
+        {
+          "reference": "Num 11:9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1454
+        },
+        {
+          "reference": "Psa 133:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1465
+        },
+        {
+          "reference": "Lam 3:22-23",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1477
+        },
+        {
+          "reference": "Heb 4:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1491
+        },
+        {
+          "reference": "Psa 110:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1502
+        },
+        {
+          "reference": "Exo 16:21",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1545
+        },
+        {
+          "reference": "John 5:39-40",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1578
+        },
+        {
+          "reference": "Rom 6:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1592
+        },
+        {
+          "reference": "Exo 16:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1626
+        },
+        {
+          "reference": "Luke 2:12",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1637
+        },
+        {
+          "reference": "John 6:35",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1648
+        },
+        {
+          "reference": "Judg 9:9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1663
+        },
+        {
+          "reference": "Matt 13:31-32",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1682
+        },
+        {
+          "reference": "John 6:12",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1727
+        },
+        {
+          "reference": "John 8:58",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1768
+        },
+        {
+          "reference": "Exo 16:31",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1798
+        },
+        {
+          "reference": "Psa 12:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1809
+        },
+        {
+          "reference": "2Cor 11:3b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1830
+        },
+        {
+          "reference": "Prov 17:27",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1879
+        },
+        {
+          "reference": "Num 11:7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1937
+        },
+        {
+          "reference": "Luke 8:11",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1948
+        },
+        {
+          "reference": "Num 11:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1979
+        },
+        {
+          "reference": "2Cor 1:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1990
+        },
+        {
+          "reference": "Eph 6:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2001
+        },
+        {
+          "reference": "Rev 4:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2071
+        },
+        {
+          "reference": "Ezek 1:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2084
+        },
+        {
+          "reference": "Psa 92:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2151
+        },
+        {
+          "reference": "Psa 119:103",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2232
+        },
+        {
+          "reference": "1Tim 4:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2293
+        },
+        {
+          "reference": "1Cor 10:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2537
+        },
+        {
+          "reference": "Exo 17:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2549
+        },
+        {
+          "reference": "Num 20:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2560
+        },
+        {
+          "reference": "John 19:34",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2571
+        },
+        {
+          "reference": "Num 20:2-13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2876
+        },
+        {
+          "reference": "John 7:37-39",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2889
+        },
+        {
+          "reference": "Rom 8:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2903
+        },
+        {
+          "reference": "Heb 7:27",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3171
+        },
+        {
+          "reference": "John 4:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3620
+        },
+        {
+          "reference": "Luke 11:13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3631
+        },
+        {
+          "reference": "Num 20:9-11",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3940
+        },
+        {
+          "reference": "Exo 16:24",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 4049
+        },
+        {
+          "reference": "Exo 16:20",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 4153
+        },
+        {
+          "reference": "Exo 33:11",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 4655
+        },
+        {
+          "reference": "1Cor 10:16-17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5078
+        },
+        {
+          "reference": "Exo 16:10",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 5272
+        },
+        {
+          "reference": "Deut 8:7-10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5513
+        },
+        {
+          "reference": "Heb 2:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5670
+        },
+        {
+          "reference": "John 6:53-55",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5824
+        },
+        {
+          "reference": "1Cor 15:45b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6129
+        },
+        {
+          "reference": "2Cor 3:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6144
+        },
+        {
+          "reference": "Matt 26:26",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6288
+        },
+        {
+          "reference": "Luke 22:19",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6493
+        },
+        {
+          "reference": "Eph 1:22-23",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6670
+        },
+        {
+          "reference": "Rev 5:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6689
+        },
+        {
+          "reference": "1Cor 10:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6838
+        },
+        {
+          "reference": "Matt 26:27-28",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7061
+        },
+        {
+          "reference": "Psa 16:5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7142
+        },
+        {
+          "reference": "Exo 16:116",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 7295
+        },
+        {
+          "reference": "Ezek 36:26-27",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7635
+        },
+        {
+          "reference": "Luke 22:20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7650
+        },
+        {
+          "reference": "Heb 8:10-12",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7662
+        },
+        {
+          "reference": "Psa 103:1-3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7676
+        },
+        {
+          "reference": "Exo 16:27",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 7945
+        },
+        {
+          "reference": "Exo 24:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7951
+        },
+        {
+          "reference": "Lev 16:11-16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7966
+        },
+        {
+          "reference": "Heb 13:20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8164
+        },
+        {
+          "reference": "Rev 7:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8175
+        },
+        {
+          "reference": "Exo 16:2",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 8195
+        },
+        {
+          "reference": "1Cor 11:26",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8306
+        },
+        {
+          "reference": "Rom 5:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8323
+        },
+        {
+          "reference": "John 12:24",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8528
+        },
+        {
+          "reference": "Matt 26:29",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8811
+        }
+      ],
+      "total_count": 101,
+      "unique_references": [
+        "Gal 6:17",
+        "John 7:37-39",
+        "Matt 26:26",
+        "Exo 16:31",
+        "Heb 4:16",
+        "1Cor 10:17",
+        "Psa 110:3",
+        "Psa 16:5",
+        "John 6:53-55",
+        "Num 11:5-6",
+        "Num 11:7",
+        "1Cor 11:26",
+        "Psa 103:1-3",
+        "John 4:10",
+        "Isa 9:6",
+        "Matt 26:27-28",
+        "Heb 9:3-4",
+        "Exo 16:116",
+        "2Cor 3:6",
+        "Eph 3:4",
+        "Exo 16:24",
+        "Exo 16:15",
+        "Exo 16:20",
+        "Psa 12:6",
+        "Luke 22:20",
+        "Matt 13:31-32",
+        "1Cor 10:3",
+        "Luke 8:11",
+        "Exo 16:10",
+        "Deut 8:7-10",
+        "Eph 4:16",
+        "Exo 16:13-14",
+        "Psa 119:103",
+        "Num 20:9-11",
+        "2Cor 3:17",
+        "John 8:58",
+        "Psa 92:10",
+        "Matt 26:29",
+        "John 6:31-35",
+        "John 12:24",
+        "1Tim 1:12",
+        "Lam 3:22-23",
+        "Num 11:9",
+        "Rom 8:2",
+        "Ezek 36:26-27",
+        "John 6:57",
+        "Rev 5:6",
+        "John 6:41",
+        "Exo 24:8",
+        "Col 2:19",
+        "Exo 33:11",
+        "1Tim 4:6",
+        "Acts 1:17",
+        "John 3:8",
+        "Rev 7:14",
+        "Luke 11:13",
+        "Exo 16:21",
+        "John 6:35",
+        "1Cor 15:45b",
+        "Exo 16:51",
+        "Exo 16:58",
+        "1Cor 10:4",
+        "Luke 22:19",
+        "Matt 6:34",
+        "Exo 16:2",
+        "Exo 16:14",
+        "Judg 9:9",
+        "Eph 6:18",
+        "Col 2:2",
+        "Lev 16:11-16",
+        "Rom 5:10",
+        "Exo 16:4",
+        "1Cor 10:16-17",
+        "Exo 17:6",
+        "John 5:39-40",
+        "Heb 2:14",
+        "Heb 8:10-12",
+        "Exo 16:26",
+        "Num 20:8",
+        "Luke 2:12",
+        "Heb 13:20",
+        "Num 11:8",
+        "John 6:12",
+        "1Cor 10:3-4",
+        "Num 20:2-13",
+        "Exo 16:16",
+        "Ezek 1:18",
+        "Exo 16:17",
+        "2Cor 1:4",
+        "Eph 1:22-23",
+        "2Cor 11:3b",
+        "Prov 17:27",
+        "John 19:34",
+        "Rev 4:6",
+        "2Cor 4:1",
+        "Phil 1:20-21",
+        "Rom 6:4",
+        "Heb 7:27",
+        "Exo 16:27",
+        "Psa 133:3",
+        "Exo 16"
+      ],
+      "unique_count": 101,
+      "type_distribution": {
+        "full_reference": 89,
+        "dash_context": 9,
+        "chapter_context": 1,
+        "standalone_single": 1,
+        "parenthetical": 1
+      },
+      "average_confidence": 0.9297029702970296,
+      "high_confidence_count": 90,
+      "detection_summary": {
+        "scripture_reading": 0,
+        "parenthetical": 1,
+        "full_references": 89,
+        "standalone": 1,
+        "contextual": 10
+      }
+    }
+  },
+  {
+    "outline": 5,
+    "detected": 27,
+    "expected": 53,
+    "accuracy": 50.943396226415096,
+    "details": {
+      "verses": [
+        {
+          "reference": "2Cor 4:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 76
+        },
+        {
+          "reference": "Col 1:15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 90
+        },
+        {
+          "reference": "Heb 1:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 101
+        },
+        {
+          "reference": "John 1:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 111
+        },
+        {
+          "reference": "None 4:4-7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 131
+        },
+        {
+          "reference": "Rom 12:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1059
+        },
+        {
+          "reference": "None 4:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1077
+        },
+        {
+          "reference": "John 12:31",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1281
+        },
+        {
+          "reference": "Eph 2:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1306
+        },
+        {
+          "reference": "2Cor 4:15",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 2514
+        },
+        {
+          "reference": "2Cor 4:3",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 2818
+        },
+        {
+          "reference": "2Cor 4:7a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2873
+        },
+        {
+          "reference": "2Cor 4:7",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 3382
+        },
+        {
+          "reference": "None 4:7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3423
+        },
+        {
+          "reference": "2Cor 4:6",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 3767
+        },
+        {
+          "reference": "None 4:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3814
+        },
+        {
+          "reference": "2Cor 4:10",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 4526
+        },
+        {
+          "reference": "Gen 2:7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4662
+        },
+        {
+          "reference": "Rom 9:21",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4750
+        },
+        {
+          "reference": "2Cor 13:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4766
+        },
+        {
+          "reference": "2Cor 3:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4907
+        },
+        {
+          "reference": "1Cor 2:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5050
+        },
+        {
+          "reference": "Eph 3:19",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5249
+        },
+        {
+          "reference": "2Cor 4:17",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 5505
+        },
+        {
+          "reference": "Gal 2:20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5511
+        },
+        {
+          "reference": "2Cor 4:7b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5594
+        },
+        {
+          "reference": "1Cor 15:45b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6402
+        }
+      ],
+      "total_count": 27,
+      "unique_references": [
+        "John 1:18",
+        "None 4:7",
+        "2Cor 4:10",
+        "2Cor 13:14",
+        "2Cor 4:17",
+        "None 4:4",
+        "Gal 2:20",
+        "Rom 12:2",
+        "2Cor 4:3",
+        "John 12:31",
+        "1Cor 2:10",
+        "2Cor 4:6",
+        "2Cor 3:16",
+        "2Cor 4:7b",
+        "None 4:4-7",
+        "2Cor 4:4",
+        "1Cor 15:45b",
+        "2Cor 4:7",
+        "Heb 1:3",
+        "2Cor 4:7a",
+        "Eph 2:2",
+        "None 4:6",
+        "Col 1:15",
+        "Rom 9:21",
+        "2Cor 4:15",
+        "Eph 3:19",
+        "Gen 2:7"
+      ],
+      "unique_count": 27,
+      "type_distribution": {
+        "full_reference": 21,
+        "standalone_single": 5,
+        "dash_context": 1
+      },
+      "average_confidence": 0.9148148148148147,
+      "high_confidence_count": 21,
+      "detection_summary": {
+        "scripture_reading": 0,
+        "parenthetical": 0,
+        "full_references": 21,
+        "standalone": 5,
+        "contextual": 1
+      }
+    }
+  },
+  {
+    "outline": 6,
+    "detected": 87,
+    "expected": 158,
+    "accuracy": 55.06329113924051,
+    "details": {
+      "verses": [
+        {
+          "reference": "1Cor 15:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 77
+        },
+        {
+          "reference": "2Cor 1:12",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 91
+        },
+        {
+          "reference": "2Cor 3:22",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 110
+        },
+        {
+          "reference": "2Cor 3:18",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 128
+        },
+        {
+          "reference": "John 1:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 274
+        },
+        {
+          "reference": "Gal 2:20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 302
+        },
+        {
+          "reference": "1Cor 5:7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 314
+        },
+        {
+          "reference": "2Cor 13:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 334
+        },
+        {
+          "reference": "None 13:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 354
+        },
+        {
+          "reference": "2Cor 3:1",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 458
+        },
+        {
+          "reference": "Num 6:22-27",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 887
+        },
+        {
+          "reference": "2Cor 3:24",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 1145
+        },
+        {
+          "reference": "Psa 36:9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1151
+        },
+        {
+          "reference": "Num 6:25",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1281
+        },
+        {
+          "reference": "Psa 36:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1291
+        },
+        {
+          "reference": "Num 6:26",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1437
+        },
+        {
+          "reference": "Eph 2:7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1530
+        },
+        {
+          "reference": "1Pet 1:2b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1540
+        },
+        {
+          "reference": "2Pet 1:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1553
+        },
+        {
+          "reference": "Eph 1:7b-8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1564
+        },
+        {
+          "reference": "2Cor 3:6",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 1614
+        },
+        {
+          "reference": "Rom 5:2a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1690
+        },
+        {
+          "reference": "John 1:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1823
+        },
+        {
+          "reference": "Heb 12:28",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1920
+        },
+        {
+          "reference": "Heb 10:29b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2124
+        },
+        {
+          "reference": "Gal 6:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2136
+        },
+        {
+          "reference": "Phil 4:23",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2147
+        },
+        {
+          "reference": "2Tim 4:22",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2172
+        },
+        {
+          "reference": "2Cor 3:7",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 2192
+        },
+        {
+          "reference": "Heb 4:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2345
+        },
+        {
+          "reference": "Gen 28:12-17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2355
+        },
+        {
+          "reference": "John 1:51",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2370
+        },
+        {
+          "reference": "Eph 2:22",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2381
+        },
+        {
+          "reference": "1Pet 5:5-6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2552
+        },
+        {
+          "reference": "James 4:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2565
+        },
+        {
+          "reference": "Acts 20:32",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2619
+        },
+        {
+          "reference": "Jer 15:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2630
+        },
+        {
+          "reference": "Zech 12:10a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2758
+        },
+        {
+          "reference": "2Cor 12:7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2944
+        },
+        {
+          "reference": "2Cor 3:10",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 2965
+        },
+        {
+          "reference": "2Cor 3:12",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 3172
+        },
+        {
+          "reference": "Ezek 1:6b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3290
+        },
+        {
+          "reference": "Exo 19:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3305
+        },
+        {
+          "reference": "Isa 40:31",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3316
+        },
+        {
+          "reference": "2Cor 4:7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3329
+        },
+        {
+          "reference": "Psa 17:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3366
+        },
+        {
+          "reference": "Rom 5:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3452
+        },
+        {
+          "reference": "1Pet 4:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3522
+        },
+        {
+          "reference": "Eph 3:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3534
+        },
+        {
+          "reference": "Luke 4:22",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3593
+        },
+        {
+          "reference": "Eph 4:29",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3603
+        },
+        {
+          "reference": "Isa 50:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3614
+        },
+        {
+          "reference": "Acts 4:33",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3862
+        },
+        {
+          "reference": "Eph 2:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4019
+        },
+        {
+          "reference": "2Cor 5:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4033
+        },
+        {
+          "reference": "Rev 22:21",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4282
+        },
+        {
+          "reference": "2Cor 3:2",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 4309
+        },
+        {
+          "reference": "Phil 1:19",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4678
+        },
+        {
+          "reference": "Exo 30:23-25",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4690
+        },
+        {
+          "reference": "Rom 10:12-13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4705
+        },
+        {
+          "reference": "1Cor 15:45b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4906
+        },
+        {
+          "reference": "1John 2:20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4921
+        },
+        {
+          "reference": "2Cor 3:27",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 5161
+        },
+        {
+          "reference": "Acts 16:6-7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5167
+        },
+        {
+          "reference": "2Cor 1:22",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5272
+        },
+        {
+          "reference": "Eph 1:13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5284
+        },
+        {
+          "reference": "2Cor 3:4",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 5388
+        },
+        {
+          "reference": "2Cor 3:18b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5599
+        },
+        {
+          "reference": "Eph 1:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5801
+        },
+        {
+          "reference": "Psa 34:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5978
+        },
+        {
+          "reference": "1Pet 2:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5989
+        },
+        {
+          "reference": "Col 1:12",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6000
+        },
+        {
+          "reference": "2Cor 3:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6100
+        },
+        {
+          "reference": "Psa 45:1",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6115
+        },
+        {
+          "reference": "John 7:38",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6687
+        },
+        {
+          "reference": "John 6:63",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6807
+        },
+        {
+          "reference": "1John 5:16a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6953
+        },
+        {
+          "reference": "2Cor 3:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7076
+        },
+        {
+          "reference": "John 16:13-15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7087
+        },
+        {
+          "reference": "Gal 3:5a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7212
+        },
+        {
+          "reference": "Col 4:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7222
+        },
+        {
+          "reference": "Phil 1:25",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7356
+        },
+        {
+          "reference": "2Cor 3:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7508
+        },
+        {
+          "reference": "Gal 2:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7525
+        },
+        {
+          "reference": "John 4:14b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7649
+        },
+        {
+          "reference": "Matt 11:28-30",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7767
+        },
+        {
+          "reference": "2Cor 3:13",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 8414
+        }
+      ],
+      "total_count": 87,
+      "unique_references": [
+        "2Cor 3:7",
+        "2Cor 13:14",
+        "Heb 4:16",
+        "2Cor 3:18",
+        "Gal 2:20",
+        "Eph 1:14",
+        "None 13:14",
+        "Eph 4:29",
+        "Phil 1:19",
+        "2Cor 3:13",
+        "Psa 36:9",
+        "2Cor 12:7",
+        "1Pet 4:10",
+        "Acts 16:6-7",
+        "2Cor 3:2",
+        "Gen 28:12-17",
+        "Eph 1:7b-8",
+        "2Cor 3:6",
+        "Acts 4:33",
+        "Phil 1:25",
+        "1Pet 1:2b",
+        "Exo 30:23-25",
+        "2Pet 1:2",
+        "Col 1:12",
+        "2Cor 3:3",
+        "Matt 11:28-30",
+        "John 7:38",
+        "2Cor 5:17",
+        "John 6:63",
+        "Phil 4:23",
+        "2Cor 3:1",
+        "Eph 2:10",
+        "1Cor 15:10",
+        "Rev 22:21",
+        "2Cor 3:12",
+        "Isa 50:4",
+        "2Cor 3:4",
+        "Jer 15:16",
+        "2Cor 3:17",
+        "Psa 34:8",
+        "Psa 36:8",
+        "Rom 5:2a",
+        "John 1:16",
+        "John 16:13-15",
+        "1John 2:20",
+        "Isa 40:31",
+        "Gal 6:18",
+        "Exo 19:4",
+        "Num 6:26",
+        "1Cor 5:7",
+        "James 4:6",
+        "Eph 2:7",
+        "2Cor 3:24",
+        "1John 5:16a",
+        "Heb 10:29b",
+        "1Cor 15:45b",
+        "1Pet 2:3",
+        "Ezek 1:6b",
+        "Psa 45:1",
+        "2Cor 1:12",
+        "John 1:51",
+        "Gal 2:4",
+        "Psa 17:8",
+        "Col 4:2",
+        "Acts 20:32",
+        "Rom 5:17",
+        "1Pet 5:5-6",
+        "2Cor 3:10",
+        "John 4:14b",
+        "2Cor 3:18b",
+        "Heb 12:28",
+        "Eph 3:2",
+        "2Cor 1:22",
+        "2Cor 4:7",
+        "John 1:17",
+        "Eph 1:13",
+        "Num 6:22-27",
+        "2Cor 3:27",
+        "Gal 3:5a",
+        "Num 6:25",
+        "Luke 4:22",
+        "Rom 10:12-13",
+        "Zech 12:10a",
+        "2Tim 4:22",
+        "2Cor 3:8",
+        "Eph 2:22",
+        "2Cor 3:22"
+      ],
+      "unique_count": 87,
+      "type_distribution": {
+        "full_reference": 75,
+        "dash_context": 9,
+        "standalone_single": 3
+      },
+      "average_confidence": 0.9241379310344826,
+      "high_confidence_count": 75,
+      "detection_summary": {
+        "scripture_reading": 0,
+        "parenthetical": 0,
+        "full_references": 75,
+        "standalone": 3,
+        "contextual": 9
+      }
+    }
+  },
+  {
+    "outline": 7,
+    "detected": 46,
+    "expected": 74,
+    "accuracy": 62.16216216216216,
+    "details": {
+      "verses": [
+        {
+          "reference": "Gal 1:15-16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 71
+        },
+        {
+          "reference": "Eph 3:17a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 106
+        },
+        {
+          "reference": "2Cor 3:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 119
+        },
+        {
+          "reference": "Rom 8:29",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 131
+        },
+        {
+          "reference": "Gal 3:1",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 342
+        },
+        {
+          "reference": "Gal 3:16",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 347
+        },
+        {
+          "reference": "Gal 1:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 373
+        },
+        {
+          "reference": "Rom 1:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 616
+        },
+        {
+          "reference": "1Cor 2:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 633
+        },
+        {
+          "reference": "1Pet 1:5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 646
+        },
+        {
+          "reference": "John 17:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 884
+        },
+        {
+          "reference": "Gal 4:5-6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 931
+        },
+        {
+          "reference": "Gal 2:20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 950
+        },
+        {
+          "reference": "Rom 6:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1159
+        },
+        {
+          "reference": "John 15:4-5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1267
+        },
+        {
+          "reference": "1Cor 6:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1280
+        },
+        {
+          "reference": "Rom 12:4-5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1292
+        },
+        {
+          "reference": "None 1:1",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1306
+        },
+        {
+          "reference": "Gal 3:20a",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 1471
+        },
+        {
+          "reference": "Gal 3:20b",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 1545
+        },
+        {
+          "reference": "Gal 3:20c",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 1642
+        },
+        {
+          "reference": "Gal 3:20d",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 1711
+        },
+        {
+          "reference": "Gal 3:13",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 2078
+        },
+        {
+          "reference": "Gal 4:19",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2275
+        },
+        {
+          "reference": "Rom 1:1",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2419
+        },
+        {
+          "reference": "Gal 3:4",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 2431
+        },
+        {
+          "reference": "Gal 3:19",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 2611
+        },
+        {
+          "reference": "Gal 3:5",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 2711
+        },
+        {
+          "reference": "Phil 2:6",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 2841
+        },
+        {
+          "reference": "Eph 4:13-16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3021
+        },
+        {
+          "reference": "Col 3:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3348
+        },
+        {
+          "reference": "Gal 3:11",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 3361
+        },
+        {
+          "reference": "Psa 51:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3438
+        },
+        {
+          "reference": "Phil 2:5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3578
+        },
+        {
+          "reference": "1Cor 2:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4178
+        },
+        {
+          "reference": "Gal 3:6",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 4413
+        },
+        {
+          "reference": "Eph 4:23",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4485
+        },
+        {
+          "reference": "Gal 3:3",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 4607
+        },
+        {
+          "reference": "Col 1:27",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4734
+        },
+        {
+          "reference": "Gal 3:12",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 5786
+        },
+        {
+          "reference": "Rom 12:2a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5973
+        },
+        {
+          "reference": "Gal 3:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6267
+        },
+        {
+          "reference": "Gal 3:26",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6295
+        },
+        {
+          "reference": "Eph 1:13b-14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6812
+        },
+        {
+          "reference": "1Pet 1:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6828
+        },
+        {
+          "reference": "Gal 3:29",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7144
+        }
+      ],
+      "total_count": 46,
+      "unique_references": [
+        "Gal 3:20c",
+        "Gal 3:29",
+        "None 1:1",
+        "Gal 4:19",
+        "1Pet 1:4",
+        "Eph 3:17a",
+        "Gal 3:5",
+        "Rom 8:29",
+        "1Cor 2:16",
+        "John 15:4-5",
+        "Gal 3:6",
+        "2Cor 3:18",
+        "Gal 3:20a",
+        "Gal 2:20",
+        "Gal 3:4",
+        "Rom 6:6",
+        "Phil 2:5",
+        "Gal 3:26",
+        "1Pet 1:5",
+        "Rom 1:1",
+        "Gal 3:13",
+        "Gal 3:19",
+        "Col 3:4",
+        "Gal 3:1",
+        "Gal 4:5-6",
+        "1Cor 2:10",
+        "Gal 3:3",
+        "Gal 3:20d",
+        "Gal 3:11",
+        "Gal 3:20b",
+        "Eph 4:23",
+        "Rom 12:2a",
+        "Gal 3:14",
+        "John 17:3",
+        "Col 1:27",
+        "1Cor 6:17",
+        "Gal 3:12",
+        "Gal 1:15-16",
+        "Phil 2:6",
+        "Psa 51:6",
+        "Eph 1:13b-14",
+        "Rom 12:4-5",
+        "Eph 4:13-16",
+        "Rom 1:17",
+        "Gal 1:16",
+        "Gal 3:16"
+      ],
+      "unique_count": 46,
+      "type_distribution": {
+        "full_reference": 31,
+        "dash_context": 8,
+        "standalone_single": 6,
+        "parenthetical": 1
+      },
+      "average_confidence": 0.8956521739130434,
+      "high_confidence_count": 32,
+      "detection_summary": {
+        "scripture_reading": 0,
+        "parenthetical": 1,
+        "full_references": 31,
+        "standalone": 6,
+        "contextual": 8
+      }
+    }
+  },
+  {
+    "outline": 8,
+    "detected": 60,
+    "expected": 96,
+    "accuracy": 62.5,
+    "details": {
+      "verses": [
+        {
+          "reference": "Gal 1:15a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 210
+        },
+        {
+          "reference": "Eph 1:5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 427
+        },
+        {
+          "reference": "Gal 1:4-17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 436
+        },
+        {
+          "reference": "Gal 5:3",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 642
+        },
+        {
+          "reference": "Gen 3:15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 648
+        },
+        {
+          "reference": "Gal 4:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 659
+        },
+        {
+          "reference": "Luke 8:5a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 669
+        },
+        {
+          "reference": "John 12:24",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 684
+        },
+        {
+          "reference": "Isa 7:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 945
+        },
+        {
+          "reference": "Matt 1:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 956
+        },
+        {
+          "reference": "Gal 5:21",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 971
+        },
+        {
+          "reference": "John 1:1",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 989
+        },
+        {
+          "reference": "Heb 2:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1003
+        },
+        {
+          "reference": "1Cor 15:53-57",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1015
+        },
+        {
+          "reference": "Gen 12:2-3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1361
+        },
+        {
+          "reference": "Gal 5:8",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 1381
+        },
+        {
+          "reference": "Gal 3:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1384
+        },
+        {
+          "reference": "John 14:17-20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1403
+        },
+        {
+          "reference": "1Cor 15:45b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1419
+        },
+        {
+          "reference": "Isa 53:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1445
+        },
+        {
+          "reference": "2Sam 7:12-14a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1724
+        },
+        {
+          "reference": "Matt 22:42-45",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1740
+        },
+        {
+          "reference": "Rom 1:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1756
+        },
+        {
+          "reference": "Rev 22:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1766
+        },
+        {
+          "reference": "Acts 2:30-31",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1778
+        },
+        {
+          "reference": "Matt 16:16-18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1792
+        },
+        {
+          "reference": "Rev 20:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1808
+        },
+        {
+          "reference": "Dan 2:34-35",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1894
+        },
+        {
+          "reference": "Mark 4:26",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2002
+        },
+        {
+          "reference": "Gal 5:1",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 2607
+        },
+        {
+          "reference": "Eph 1:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2614
+        },
+        {
+          "reference": "Gen 13:14-18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2625
+        },
+        {
+          "reference": "Eph 3:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2640
+        },
+        {
+          "reference": "2Cor 3:14-17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2788
+        },
+        {
+          "reference": "Gal 2:20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3086
+        },
+        {
+          "reference": "2Cor 3:14-15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3494
+        },
+        {
+          "reference": "Eph 1:17-18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3514
+        },
+        {
+          "reference": "Luke 24:45",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3528
+        },
+        {
+          "reference": "2Cor 3:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3806
+        },
+        {
+          "reference": "Rev 1:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4005
+        },
+        {
+          "reference": "Eph 6:17-18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4052
+        },
+        {
+          "reference": "Gal 6:14-15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4268
+        },
+        {
+          "reference": "Heb 12:2a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4572
+        },
+        {
+          "reference": "Gal 2:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4583
+        },
+        {
+          "reference": "Rom 3:22",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4594
+        },
+        {
+          "reference": "2Cor 4:13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4606
+        },
+        {
+          "reference": "Rom 10:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4665
+        },
+        {
+          "reference": "Heb 11:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4776
+        },
+        {
+          "reference": "Gen 5:24",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4786
+        },
+        {
+          "reference": "John 8:58",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4797
+        },
+        {
+          "reference": "Gal 5:6",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 4958
+        },
+        {
+          "reference": "Gal 5:4",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 5175
+        },
+        {
+          "reference": "Gal 5:2",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 5666
+        },
+        {
+          "reference": "Phil 1:20-21a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5792
+        },
+        {
+          "reference": "Rom 6:3-4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5928
+        },
+        {
+          "reference": "Gal 5:20b",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 6112
+        },
+        {
+          "reference": "2Cor 5:14-15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6120
+        },
+        {
+          "reference": "Gal 5:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6298
+        },
+        {
+          "reference": "Gal 5:14-15",
+          "type": "standalone_range",
+          "confidence": 0.8,
+          "position": 6887
+        },
+        {
+          "reference": "Gal 5:17-18",
+          "type": "standalone_range",
+          "confidence": 0.8,
+          "position": 7066
+        }
+      ],
+      "total_count": 60,
+      "unique_references": [
+        "Gal 5:8",
+        "Rev 1:10",
+        "Eph 6:17-18",
+        "Gal 6:14-15",
+        "Dan 2:34-35",
+        "Gal 5:3",
+        "Rom 3:22",
+        "2Cor 5:14-15",
+        "Gal 2:16",
+        "John 14:17-20",
+        "Eph 1:17-18",
+        "Acts 2:30-31",
+        "Isa 7:14",
+        "Matt 1:16",
+        "Gal 5:6",
+        "Gal 5:4",
+        "Matt 22:42-45",
+        "Heb 2:14",
+        "Eph 1:17",
+        "Gal 2:20",
+        "Gen 5:24",
+        "Rom 6:3-4",
+        "Gal 5:16",
+        "Matt 16:16-18",
+        "Luke 8:5a",
+        "Gal 4:4",
+        "Heb 11:6",
+        "Rom 10:17",
+        "Isa 53:10",
+        "Gal 5:1",
+        "Phil 1:20-21a",
+        "2Cor 3:16",
+        "1Cor 15:45b",
+        "Eph 3:8",
+        "Gen 3:15",
+        "John 1:1",
+        "1Cor 15:53-57",
+        "John 8:58",
+        "Gal 5:14-15",
+        "Luke 24:45",
+        "Heb 12:2a",
+        "Gal 3:14",
+        "Gal 5:21",
+        "2Cor 4:13",
+        "Mark 4:26",
+        "Gal 5:20b",
+        "Gal 1:15a",
+        "Rev 22:16",
+        "Eph 1:5",
+        "Gen 13:14-18",
+        "Rev 20:4",
+        "2Cor 3:14-15",
+        "Gen 12:2-3",
+        "Gal 5:17-18",
+        "John 12:24",
+        "Gal 5:2",
+        "Rom 1:3",
+        "Gal 1:4-17",
+        "2Sam 7:12-14a",
+        "2Cor 3:14-17"
+      ],
+      "unique_count": 60,
+      "type_distribution": {
+        "full_reference": 50,
+        "dash_context": 7,
+        "standalone_single": 1,
+        "standalone_range": 2
+      },
+      "average_confidence": 0.9191666666666667,
+      "high_confidence_count": 50,
+      "detection_summary": {
+        "scripture_reading": 0,
+        "parenthetical": 0,
+        "full_references": 50,
+        "standalone": 3,
+        "contextual": 7
+      }
+    }
+  },
+  {
+    "outline": 9,
+    "detected": 38,
+    "expected": 59,
+    "accuracy": 64.40677966101694,
+    "details": {
+      "verses": [
+        {
+          "reference": "Rev 10:7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 57
+        },
+        {
+          "reference": "Rom 16:25",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 68
+        },
+        {
+          "reference": "Eph 1:5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 80
+        },
+        {
+          "reference": "1Tim 3:23",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 100
+        },
+        {
+          "reference": "1Tim 3:11",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 108
+        },
+        {
+          "reference": "1Cor 6:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 113
+        },
+        {
+          "reference": "Eph 3:3-11",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 127
+        },
+        {
+          "reference": "Eph 3:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 374
+        },
+        {
+          "reference": "1Tim 3:5",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 505
+        },
+        {
+          "reference": "1Tim 3:9",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 649
+        },
+        {
+          "reference": "Eph 1:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1051
+        },
+        {
+          "reference": "1Tim 3:14-17a",
+          "type": "standalone_range",
+          "confidence": 0.8,
+          "position": 1245
+        },
+        {
+          "reference": "Dan 9:24c",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 1725
+        },
+        {
+          "reference": "Col 2:2",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 2154
+        },
+        {
+          "reference": "Eph 3:4-6",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 2177
+        },
+        {
+          "reference": "Matt 13:11",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 2218
+        },
+        {
+          "reference": "Eph 6:19",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 2244
+        },
+        {
+          "reference": "Col 1:26-27",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 2282
+        },
+        {
+          "reference": "1Cor 15:51-52",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 2403
+        },
+        {
+          "reference": "Eph 3:5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2489
+        },
+        {
+          "reference": "Col 1:26",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2499
+        },
+        {
+          "reference": "1Tim 3:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2984
+        },
+        {
+          "reference": "Matt 16:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3369
+        },
+        {
+          "reference": "Eph 4:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3381
+        },
+        {
+          "reference": "Rev 19:7-9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3392
+        },
+        {
+          "reference": "1Cor 15:51-53",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3563
+        },
+        {
+          "reference": "Eph 3:9-11",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3712
+        },
+        {
+          "reference": "Gen 1:1",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3834
+        },
+        {
+          "reference": "Rev 4:11",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3843
+        },
+        {
+          "reference": "Eph 3:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3864
+        },
+        {
+          "reference": "Eph 5:32",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4498
+        },
+        {
+          "reference": "1Tim 3:1",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 4621
+        },
+        {
+          "reference": "Zech 12:1",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4943
+        },
+        {
+          "reference": "Eph 3:9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4954
+        },
+        {
+          "reference": "1Tim 3:3",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 5302
+        },
+        {
+          "reference": "1Tim 3:10",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 5306
+        },
+        {
+          "reference": "1Tim 3:4",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 5494
+        },
+        {
+          "reference": "1Tim 3:15-16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5500
+        }
+      ],
+      "total_count": 38,
+      "unique_references": [
+        "Eph 3:9-11",
+        "1Tim 3:1",
+        "Col 2:2",
+        "Rev 10:7",
+        "1Tim 3:4",
+        "1Tim 3:5",
+        "Eph 3:3",
+        "Eph 1:17",
+        "Zech 12:1",
+        "Col 1:26",
+        "Matt 16:18",
+        "Eph 5:32",
+        "Col 1:26-27",
+        "Eph 4:16",
+        "1Tim 3:10",
+        "1Cor 15:51-52",
+        "1Tim 3:23",
+        "1Tim 3:9",
+        "Eph 3:4-6",
+        "1Tim 3:3",
+        "Eph 3:9",
+        "1Tim 3:15-16",
+        "Rom 16:25",
+        "Dan 9:24c",
+        "1Tim 3:14-17a",
+        "Rev 19:7-9",
+        "1Cor 6:17",
+        "Eph 3:5",
+        "1Cor 15:51-53",
+        "Eph 1:5",
+        "1Tim 3:11",
+        "Eph 3:3-11",
+        "Eph 3:4",
+        "Gen 1:1",
+        "Eph 6:19",
+        "1Tim 3:16",
+        "Rev 4:11",
+        "Matt 13:11"
+      ],
+      "unique_count": 38,
+      "type_distribution": {
+        "full_reference": 22,
+        "dash_context": 5,
+        "standalone_single": 3,
+        "standalone_range": 1,
+        "parenthetical": 7
+      },
+      "average_confidence": 0.9078947368421053,
+      "high_confidence_count": 29,
+      "detection_summary": {
+        "scripture_reading": 0,
+        "parenthetical": 7,
+        "full_references": 22,
+        "standalone": 4,
+        "contextual": 5
+      }
+    }
+  },
+  {
+    "outline": 10,
+    "detected": 42,
+    "expected": 73,
+    "accuracy": 57.534246575342465,
+    "details": {
+      "verses": [
+        {
+          "reference": "Gen 1:26",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 87
+        },
+        {
+          "reference": "Eph 2:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 98
+        },
+        {
+          "reference": "1Cor 1:16",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 112
+        },
+        {
+          "reference": "1Cor 1:24",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 121
+        },
+        {
+          "reference": "Eph 2:15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 241
+        },
+        {
+          "reference": "Col 3:10-11",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 537
+        },
+        {
+          "reference": "Gen 11:5-9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 654
+        },
+        {
+          "reference": "Acts 2:5-12",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 666
+        },
+        {
+          "reference": "Heb 2:14",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 1029
+        },
+        {
+          "reference": "Rom 8:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1047
+        },
+        {
+          "reference": "John 1:29",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1056
+        },
+        {
+          "reference": "Gal 5:24",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 1093
+        },
+        {
+          "reference": "John 12:31",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 1154
+        },
+        {
+          "reference": "Rom 6:6",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 1212
+        },
+        {
+          "reference": "2Cor 5:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1984
+        },
+        {
+          "reference": "Eph 3:10-11",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2406
+        },
+        {
+          "reference": "1Cor 1:30",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2502
+        },
+        {
+          "reference": "Rom 5:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2663
+        },
+        {
+          "reference": "1Cor 1:6",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 2837
+        },
+        {
+          "reference": "1Cor 1:8",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 3022
+        },
+        {
+          "reference": "Phil 3:21",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3028
+        },
+        {
+          "reference": "Eph 2:14b-15a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3441
+        },
+        {
+          "reference": "1Cor 1:15",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 3878
+        },
+        {
+          "reference": "Col 2:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3884
+        },
+        {
+          "reference": "Gen 11:1-9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4065
+        },
+        {
+          "reference": "Eph 4:22-24",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4520
+        },
+        {
+          "reference": "1Cor 1:2",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 4629
+        },
+        {
+          "reference": "Col 3:12-15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4641
+        },
+        {
+          "reference": "Rom 5:1",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4664
+        },
+        {
+          "reference": "Matt 18:21-35",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4674
+        },
+        {
+          "reference": "Col 3:13-15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4902
+        },
+        {
+          "reference": "Isa 9:6-7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6027
+        },
+        {
+          "reference": "Eph 4:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6311
+        },
+        {
+          "reference": "1Cor 1:1",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 6478
+        },
+        {
+          "reference": "1Cor 1:10-11",
+          "type": "standalone_range",
+          "confidence": 0.8,
+          "position": 6671
+        },
+        {
+          "reference": "Gal 2:20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7154
+        },
+        {
+          "reference": "Eph 3:17a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7164
+        },
+        {
+          "reference": "1Cor 12:12",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7733
+        },
+        {
+          "reference": "Rom 12:4-5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7746
+        },
+        {
+          "reference": "Rom 15:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7839
+        },
+        {
+          "reference": "None 1:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7880
+        },
+        {
+          "reference": "1Cor 1:10",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 8115
+        }
+      ],
+      "total_count": 42,
+      "unique_references": [
+        "Eph 3:10-11",
+        "Gen 11:1-9",
+        "None 1:10",
+        "1Cor 1:30",
+        "Eph 4:3",
+        "1Cor 12:12",
+        "Eph 3:17a",
+        "Rom 15:6",
+        "1Cor 1:2",
+        "2Cor 5:17",
+        "Gen 11:5-9",
+        "Rom 5:18",
+        "Gal 5:24",
+        "1Cor 1:1",
+        "Matt 18:21-35",
+        "1Cor 1:10",
+        "Col 2:14",
+        "Heb 2:14",
+        "Col 3:13-15",
+        "Eph 2:10",
+        "Gal 2:20",
+        "Rom 6:6",
+        "1Cor 1:10-11",
+        "Eph 4:22-24",
+        "Gen 1:26",
+        "John 12:31",
+        "Rom 5:1",
+        "1Cor 1:15",
+        "1Cor 1:24",
+        "Isa 9:6-7",
+        "Eph 2:15",
+        "Col 3:12-15",
+        "Eph 2:14b-15a",
+        "Col 3:10-11",
+        "1Cor 1:16",
+        "1Cor 1:6",
+        "Rom 8:3",
+        "1Cor 1:8",
+        "Acts 2:5-12",
+        "John 1:29",
+        "Rom 12:4-5",
+        "Phil 3:21"
+      ],
+      "unique_count": 42,
+      "type_distribution": {
+        "full_reference": 29,
+        "dash_context": 6,
+        "parenthetical": 5,
+        "standalone_single": 1,
+        "standalone_range": 1
+      },
+      "average_confidence": 0.9142857142857143,
+      "high_confidence_count": 34,
+      "detection_summary": {
+        "scripture_reading": 0,
+        "parenthetical": 5,
+        "full_references": 29,
+        "standalone": 2,
+        "contextual": 6
+      }
+    }
+  },
+  {
+    "outline": 11,
+    "detected": 30,
+    "expected": 47,
+    "accuracy": 63.829787234042556,
+    "details": {
+      "verses": [
+        {
+          "reference": "Eph 1:5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 79
+        },
+        {
+          "reference": "John 14:14",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 96
+        },
+        {
+          "reference": "1John 4:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 101
+        },
+        {
+          "reference": "John 14:5",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 389
+        },
+        {
+          "reference": "1John 3:1",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 395
+        },
+        {
+          "reference": "John 1:12-13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 406
+        },
+        {
+          "reference": "Eph 5:1",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 508
+        },
+        {
+          "reference": "1John 1:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 830
+        },
+        {
+          "reference": "John 14:13",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 970
+        },
+        {
+          "reference": "2Pet 1:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1083
+        },
+        {
+          "reference": "Matt 5:48",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1312
+        },
+        {
+          "reference": "John 14:4",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 1480
+        },
+        {
+          "reference": "Eph 5:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1881
+        },
+        {
+          "reference": "John 14:32",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 1946
+        },
+        {
+          "reference": "John 14:33",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 2020
+        },
+        {
+          "reference": "John 14:1",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 3360
+        },
+        {
+          "reference": "John 14:3",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 3506
+        },
+        {
+          "reference": "John 14:19",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 3642
+        },
+        {
+          "reference": "John 14:16",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 3901
+        },
+        {
+          "reference": "1Cor 12:31",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3908
+        },
+        {
+          "reference": "John 14:6",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 4081
+        },
+        {
+          "reference": "Eph 5:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4383
+        },
+        {
+          "reference": "1John 1:5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4464
+        },
+        {
+          "reference": "John 12:36",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4485
+        },
+        {
+          "reference": "Matt 5:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4609
+        },
+        {
+          "reference": "John 14:7",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 4706
+        },
+        {
+          "reference": "Eph 5:9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4783
+        },
+        {
+          "reference": "Matt 19:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5181
+        },
+        {
+          "reference": "Rom 5:17-18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5318
+        },
+        {
+          "reference": "John 14:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5447
+        }
+      ],
+      "total_count": 30,
+      "unique_references": [
+        "John 14:1",
+        "John 14:4",
+        "John 12:36",
+        "Rom 5:17-18",
+        "John 14:33",
+        "John 14:17",
+        "John 1:12-13",
+        "Matt 5:14",
+        "1Cor 12:31",
+        "1John 1:5",
+        "John 14:5",
+        "Eph 5:2",
+        "Matt 19:17",
+        "1John 4:8",
+        "2Pet 1:4",
+        "John 14:16",
+        "John 14:7",
+        "Eph 5:8",
+        "1John 3:1",
+        "Eph 5:1",
+        "John 14:3",
+        "John 14:14",
+        "Eph 5:9",
+        "Eph 1:5",
+        "Matt 5:48",
+        "John 14:6",
+        "John 14:13",
+        "John 14:19",
+        "John 14:32",
+        "1John 1:2"
+      ],
+      "unique_count": 30,
+      "type_distribution": {
+        "full_reference": 18,
+        "dash_context": 9,
+        "standalone_single": 3
+      },
+      "average_confidence": 0.875,
+      "high_confidence_count": 18,
+      "detection_summary": {
+        "scripture_reading": 0,
+        "parenthetical": 0,
+        "full_references": 18,
+        "standalone": 3,
+        "contextual": 9
+      }
+    }
+  },
+  {
+    "outline": 12,
+    "detected": 89,
+    "expected": 138,
+    "accuracy": 64.4927536231884,
+    "details": {
+      "verses": [
+        {
+          "reference": "Eph 4:7-16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 88
+        },
+        {
+          "reference": "Eph 2:7",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 429
+        },
+        {
+          "reference": "1Cor 12:14-22",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 435
+        },
+        {
+          "reference": "Rom 12:4-5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 451
+        },
+        {
+          "reference": "2Cor 1:15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 587
+        },
+        {
+          "reference": "Eph 4:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 714
+        },
+        {
+          "reference": "Rom 12:3",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 728
+        },
+        {
+          "reference": "Eph 4:8-12",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1062
+        },
+        {
+          "reference": "Eph 4:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1077
+        },
+        {
+          "reference": "Psa 68:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1222
+        },
+        {
+          "reference": "Eph 2:15-16",
+          "type": "standalone_range",
+          "confidence": 0.8,
+          "position": 1257
+        },
+        {
+          "reference": "1Kings 8:30",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 1318
+        },
+        {
+          "reference": "Num 10:35",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 1443
+        },
+        {
+          "reference": "Eph 4:8-11",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1696
+        },
+        {
+          "reference": "Luke 4:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 1826
+        },
+        {
+          "reference": "2Cor 2:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2288
+        },
+        {
+          "reference": "Eph 4:9-10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2457
+        },
+        {
+          "reference": "Eph 2:11-12",
+          "type": "standalone_range",
+          "confidence": 0.8,
+          "position": 2729
+        },
+        {
+          "reference": "Gen 2:9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2876
+        },
+        {
+          "reference": "1Cor 3:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 2886
+        },
+        {
+          "reference": "Matt 16:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3007
+        },
+        {
+          "reference": "Eph 4:11-12",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3019
+        },
+        {
+          "reference": "1Tim 1:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3038
+        },
+        {
+          "reference": "Eph 4:13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3271
+        },
+        {
+          "reference": "John 17:23",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3285
+        },
+        {
+          "reference": "Eph 4:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3503
+        },
+        {
+          "reference": "Eph 6:10-20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3686
+        },
+        {
+          "reference": "Eph 2:10-13",
+          "type": "standalone_range",
+          "confidence": 0.8,
+          "position": 3957
+        },
+        {
+          "reference": "James 4:7",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3967
+        },
+        {
+          "reference": "Rom 13:12-14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3982
+        },
+        {
+          "reference": "Deut 32:30",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 3997
+        },
+        {
+          "reference": "Eph 2",
+          "type": "chapter_context",
+          "confidence": 0.85,
+          "position": 4014
+        },
+        {
+          "reference": "Eph 2:6",
+          "type": "standalone_single",
+          "confidence": 0.8,
+          "position": 4111
+        },
+        {
+          "reference": "Eph 2:14",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 4325
+        },
+        {
+          "reference": "1John 5:4",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4334
+        },
+        {
+          "reference": "John 3:6b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4349
+        },
+        {
+          "reference": "Eph 6:14a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4420
+        },
+        {
+          "reference": "Eph 2:4",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 4606
+        },
+        {
+          "reference": "Eph 2:25",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 4620
+        },
+        {
+          "reference": "John 14:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4624
+        },
+        {
+          "reference": "Eph 4:20-21",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4861
+        },
+        {
+          "reference": "Phil 1:19-21a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4874
+        },
+        {
+          "reference": "Eph 6:14b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4943
+        },
+        {
+          "reference": "1Cor 1:30",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4955
+        },
+        {
+          "reference": "Jer 23:6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 4967
+        },
+        {
+          "reference": "Heb 9:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5179
+        },
+        {
+          "reference": "Acts 24:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5196
+        },
+        {
+          "reference": "Rev 12:11",
+          "type": "parenthetical",
+          "confidence": 0.95,
+          "position": 5265
+        },
+        {
+          "reference": "Eph 6:15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 5605
+        },
+        {
+          "reference": "Eph 2:2",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 5837
+        },
+        {
+          "reference": "Eph 2:17",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 5842
+        },
+        {
+          "reference": "Col 3:15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6008
+        },
+        {
+          "reference": "Eph 6:16",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6156
+        },
+        {
+          "reference": "2Cor 4:13",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6167
+        },
+        {
+          "reference": "Heb 12:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6179
+        },
+        {
+          "reference": "1John 3:8",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6515
+        },
+        {
+          "reference": "Matt 16:22-23",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6526
+        },
+        {
+          "reference": "Luke 4:39-41",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6542
+        },
+        {
+          "reference": "Matt 12:28",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6556
+        },
+        {
+          "reference": "Luke 10:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6569
+        },
+        {
+          "reference": "Heb 2:14",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6682
+        },
+        {
+          "reference": "Gen 2:17",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6692
+        },
+        {
+          "reference": "Gal 2:20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6709
+        },
+        {
+          "reference": "Rom 6:3-6",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6720
+        },
+        {
+          "reference": "1Cor 15:54-58",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6733
+        },
+        {
+          "reference": "Col 2:12-15",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6856
+        },
+        {
+          "reference": "John 14:30",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6878
+        },
+        {
+          "reference": "Phil 3:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6890
+        },
+        {
+          "reference": "Isa 61:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6902
+        },
+        {
+          "reference": "Zech 3:4-5",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 6914
+        },
+        {
+          "reference": "Eph 1:19-23",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7040
+        },
+        {
+          "reference": "Mark 11:22",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7143
+        },
+        {
+          "reference": "Rev 1:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7154
+        },
+        {
+          "reference": "Rom 8:28-39",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7320
+        },
+        {
+          "reference": "1Cor 1:9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7429
+        },
+        {
+          "reference": "1John 1:9",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7441
+        },
+        {
+          "reference": "Titus 1:2",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7452
+        },
+        {
+          "reference": "Eph 3:20",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7503
+        },
+        {
+          "reference": "None 5:24",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7604
+        },
+        {
+          "reference": "Eph 6:17-18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7617
+        },
+        {
+          "reference": "Eph 2:1",
+          "type": "dash_context",
+          "confidence": 0.75,
+          "position": 7668
+        },
+        {
+          "reference": "Rom 9:19-29",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7780
+        },
+        {
+          "reference": "Eph 6:17a",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 7831
+        },
+        {
+          "reference": "John 16:33",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8262
+        },
+        {
+          "reference": "Phil 1:19",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8273
+        },
+        {
+          "reference": "Rom 5:10",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8285
+        },
+        {
+          "reference": "Eph 6:17b",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8377
+        },
+        {
+          "reference": "John 6:63",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 8843
+        },
+        {
+          "reference": "Eph 6:18",
+          "type": "full_reference",
+          "confidence": 0.95,
+          "position": 9011
+        }
+      ],
+      "total_count": 89,
+      "unique_references": [
+        "Eph 4:8-11",
+        "Eph 2",
+        "Eph 4:14",
+        "1Cor 1:30",
+        "Rom 6:3-6",
+        "1John 3:8",
+        "Luke 4:18",
+        "Gal 2:20",
+        "Phil 1:19",
+        "1Cor 15:54-58",
+        "Zech 3:4-5",
+        "Rom 12:3",
+        "James 4:7",
+        "Eph 4:9-10",
+        "None 5:24",
+        "Luke 10:17",
+        "1Cor 3:2",
+        "Eph 4:8-12",
+        "Eph 2:1",
+        "Phil 3:10",
+        "Col 3:15",
+        "John 14:30",
+        "Eph 2:15-16",
+        "Eph 2:6",
+        "John 6:63",
+        "Gen 2:17",
+        "Eph 6:15",
+        "Eph 6:17b",
+        "Eph 1:19-23",
+        "Eph 6:17a",
+        "Eph 4:13",
+        "Mark 11:22",
+        "Eph 4:16",
+        "John 3:6b",
+        "Eph 6:16",
+        "Luke 4:39-41",
+        "1John 5:4",
+        "Jer 23:6",
+        "Eph 6:10-20",
+        "Eph 6:14b",
+        "Rom 12:4-5",
+        "Matt 16:22-23",
+        "Heb 12:2",
+        "Matt 12:28",
+        "Eph 2:17",
+        "John 17:23",
+        "Eph 2:11-12",
+        "1Cor 1:9",
+        "Eph 4:20-21",
+        "Psa 68:18",
+        "Eph 4:11-12",
+        "Eph 2:7",
+        "Eph 2:4",
+        "Deut 32:30",
+        "Acts 24:16",
+        "Col 2:12-15",
+        "1Kings 8:30",
+        "Phil 1:19-21a",
+        "Rev 12:11",
+        "Titus 1:2",
+        "Isa 61:10",
+        "Heb 9:14",
+        "Eph 2:2",
+        "John 16:33",
+        "2Cor 1:15",
+        "Rom 9:19-29",
+        "Eph 2:25",
+        "Rev 1:18",
+        "Eph 6:18",
+        "Rom 13:12-14",
+        "Eph 6:17-18",
+        "Rom 5:10",
+        "Gen 2:9",
+        "2Cor 2:14",
+        "Rom 8:28-39",
+        "Heb 2:14",
+        "1John 1:9",
+        "Matt 16:18",
+        "Eph 4:8",
+        "Eph 4:7-16",
+        "1Cor 12:14-22",
+        "Eph 2:14",
+        "2Cor 4:13",
+        "Eph 3:20",
+        "1Tim 1:16",
+        "Eph 6:14a",
+        "John 14:6",
+        "Eph 2:10-13",
+        "Num 10:35"
+      ],
+      "unique_count": 89,
+      "type_distribution": {
+        "full_reference": 74,
+        "standalone_single": 2,
+        "standalone_range": 3,
+        "parenthetical": 3,
+        "chapter_context": 1,
+        "dash_context": 6
+      },
+      "average_confidence": 0.9269662921348315,
+      "high_confidence_count": 77,
+      "detection_summary": {
+        "scripture_reading": 0,
+        "parenthetical": 3,
+        "full_references": 74,
+        "standalone": 5,
+        "contextual": 7
+      }
+    }
+  }
+]

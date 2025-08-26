@@ -7,14 +7,14 @@ A comprehensive Bible verse reference application that automatically detects and
 3. **Regex patterns** as fallback for comprehensive verse detection ✅
 4. **Machine Learning** for continuous improvement ⚠️ (Ready but optional)
 
-## Key Achievement
-- **Detection Rate**: 55-96% depending on document complexity
-- **Hybrid Approach**: Successfully detects verse types including:
-  - Contextual references ("according to Luke 7" → "vv. 47-48" → Luke 7:47-48)
-  - Standalone references (v. 5, vv. 1-11)
-  - Complex formats (Rom. 16:1, 4-5, 16, 20)
-- **Format**: Matches MSG12VerseReferences.pdf style (verses in left margin)
-- **Confidence**: 95% with LLM extraction
+## Current Status (2025-08-26)
+- **Current Detection Rate**: 44% (136/308 verses for W24ECT12)
+- **Target**: 100% detection matching MSG12VerseReferences (308 verses)
+- **Progress**: Created multiple detection approaches:
+  - UltimateVerseDetector: 60% detection rate
+  - PerfectVerseDetector: 44% detection rate  
+  - ImprovedLLMDetector: Ready but needs testing
+- **Next Steps**: Need to combine all approaches for 100% accuracy
 
 ## Core Requirements
 - **OpenAI API Key**: REQUIRED for hybrid detection
@@ -43,13 +43,29 @@ Use the Task tool with general-purpose agent to test the deployed application at
 - Frontend: https://bible-outline-frontend.onrender.com
 
 ## Deployment Status (UPDATED 2025-08-26)
-⚠️ **PARTIALLY WORKING** - Detection needs improvement
+🚧 **DETECTION IMPROVEMENT IN PROGRESS** - Working toward 100% accuracy
 - **Session Persistence**: ✅ FIXED - Using PostgreSQL with pg8000 driver
 - **PostgreSQL Integration**: ✅ Working with DATABASE_URL environment variable
 - **Database**: ✅ PostgreSQL v17 with 31,103 verses from Jubilee app
-- **Detection Rate**: ⚠️ 55% for W24ECT (should be 90%+), 96% for B25ANCC
-- **Current Issue**: Only detecting 123 of ~220+ verses in W24ECT12en.pdf
+- **Detection System**: ⚠️ Multiple detectors created, 44-60% accuracy
+- **Known Issue**: MSG12 has 308 verses, we're detecting 136 (44%)
 - **Endpoints**: Must use /api/enhanced/* endpoints for PostgreSQL storage
+
+## Comprehensive Verse Detection Patterns
+Based on analysis of 12 original outlines and MSG12VerseReferences output:
+
+### Pattern Types Detected:
+1. **Scripture Reading**: `Eph. 4:7-16; 6:10-20`
+2. **Parenthetical**: `(Acts 10:43)`, `(Num. 10:35)`
+3. **Verse Lists**: `Rom. 16:1, 4-5, 16, 20`
+4. **Standalone**: `v. 7`, `vv. 1-11`, `vv. 47-48`
+5. **Chapter Only**: `Luke 7`, `Psalm 68`
+6. **Verse Ranges**: `Eph. 4:7-16`, `Matt. 24:45-51`
+7. **With Letters**: `John 14:6a`, `Phil. 1:21a`
+8. **Semicolon Separated**: `Isa. 61:10; Luke 15:22`
+9. **Cf References**: `cf. Rom. 12:3`, `cf. Luke 4:18`
+10. **Numbered Books**: `1 Cor. 12:14`, `2 Tim. 4:12`
+11. **Complex Context**: Resolving `vv. 47-48` to `Luke 7:47-48`
 
 ## Architecture
 
@@ -328,7 +344,23 @@ The database should have a `bible_verses` table with columns:
 
 ---
 
-**Last Updated**: 2025-08-25
-**Version**: 3.0 (Production Ready)
-**Detection Rate**: 96.5% (56/58 references)
-**Status**: ✅ Deployed and Working
+**Last Updated**: 2025-08-26
+**Version**: 3.5 (Detection Improvements Needed)
+**Detection Rate**: 44% (136/308 verses for W24ECT12)
+**Status**: 🚧 Partially Working - Needs 100% Detection
+
+## Work Completed Today (2025-08-26)
+1. Created comprehensive training data from 12 outlines (1121 verses extracted)
+2. Built multiple detection systems:
+   - UltimateVerseDetector: Advanced pattern matching (60% accuracy)
+   - PerfectVerseDetector: MSG12-specific patterns (44% accuracy)
+   - ImprovedLLMDetector: GPT-4 with training examples (ready to test)
+3. Analyzed MSG12VerseReferences.pdf - found 308 total verses expected
+4. Identified detection gap: Currently detecting 136/308 verses (44%)
+
+## Next Steps for 100% Detection
+1. Combine all detection approaches into single system
+2. Add manual verse extraction from MSG output files as training
+3. Use ML/fine-tuning on the 12 outline pairs
+4. Create specialized agent for verse reference extraction
+5. Test thoroughly with all 12 outlines before deployment

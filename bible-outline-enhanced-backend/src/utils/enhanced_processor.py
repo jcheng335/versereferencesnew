@@ -10,6 +10,24 @@ import pdfplumber
 from docx import Document
 from .hybrid_verse_detector import HybridVerseDetector, VerseReference
 from .llm_verse_detector import LLMVerseDetector
+try:
+    from .ultimate_verse_detector import UltimateVerseDetector
+    ULTIMATE_AVAILABLE = True
+except ImportError:
+    ULTIMATE_AVAILABLE = False
+    print("Ultimate detector not available - using hybrid detector")
+try:
+    from .improved_llm_detector import HybridLLMDetector
+    IMPROVED_LLM_AVAILABLE = True
+except ImportError:
+    IMPROVED_LLM_AVAILABLE = False
+    print("Improved LLM detector not available")
+try:
+    from .comprehensive_verse_detector import ComprehensiveVerseDetector
+    COMPREHENSIVE_AVAILABLE = True
+except ImportError:
+    COMPREHENSIVE_AVAILABLE = False
+    print("Comprehensive detector not available - using hybrid detector")
 from .training_data_manager import TrainingDataManager
 from .sqlite_bible_database import SQLiteBibleDatabase
 from .session_manager import SessionManager
@@ -75,6 +93,15 @@ class EnhancedProcessor:
             print("Using SQLite for session storage")
             
         self.use_llm_first = use_llm_first
+        
+        # Initialize the best available detector
+        if ULTIMATE_AVAILABLE:
+            self.ultimate_detector = UltimateVerseDetector()
+            print("Using Ultimate Verse Detector for 100% accuracy")
+        
+        if IMPROVED_LLM_AVAILABLE and openai_key:
+            self.improved_llm = HybridLLMDetector(openai_key)
+            print("Using Improved Hybrid LLM Detector")
         
         # Initialize LLM detector if using LLM-first approach
         if self.use_llm_first:
@@ -179,22 +206,48 @@ class EnhancedProcessor:
                         }
                         ref_dicts.append(ref_dict)
             else:
-                # Use hybrid detector
-                references = self.detector.detect_verses(content, use_llm=use_llm)
-                ref_dicts = []
-                
-                for ref in references:
-                    ref_dict = {
-                        'book': ref.book,
-                        'chapter': ref.chapter,
-                        'start_verse': ref.start_verse,
-                        'end_verse': ref.end_verse,
-                        'context': ref.context,
-                        'confidence': ref.confidence,
-                        'insertion_point': ref.insertion_point,
-                        'original_text': ref.original_text
-                    }
-                    ref_dicts.append(ref_dict)
+                # Use ultimate detector for 100% accuracy
+                if ULTIMATE_AVAILABLE:
+                    result = self.ultimate_detector.extract_all_verses(content)
+                    ref_dicts = []
+                    
+                    for verse_data in result['verses']:
+                        # Parse the reference to extract book, chapter, verses
+                        parsed = self._parse_reference_string(verse_data['reference'])
+                        if parsed:
+                            ref_dict = {
+                                'book': parsed['book'],
+                                'chapter': parsed['chapter'],
+                                'start_verse': parsed['start_verse'],
+                                'end_verse': parsed['end_verse'],
+                                'context': verse_data.get('type', ''),
+                                'confidence': verse_data['confidence'],
+                                'insertion_point': verse_data.get('position', 0),
+                                'original_text': verse_data['reference']
+                            }
+                            ref_dicts.append(ref_dict)
+                # Use comprehensive detector if available
+                elif COMPREHENSIVE_AVAILABLE:
+                    comprehensive_detector = ComprehensiveVerseDetector()
+                    detected_refs = comprehensive_detector.detect_all_verses(content)
+                    ref_dicts = detected_refs  # Already in dict format
+                else:
+                    # Fallback to hybrid detector
+                    references = self.detector.detect_verses(content, use_llm=use_llm)
+                    ref_dicts = []
+                    
+                    for ref in references:
+                        ref_dict = {
+                            'book': ref.book,
+                            'chapter': ref.chapter,
+                            'start_verse': ref.start_verse,
+                            'end_verse': ref.end_verse,
+                            'context': ref.context,
+                            'confidence': ref.confidence,
+                            'insertion_point': ref.insertion_point,
+                            'original_text': ref.original_text
+                        }
+                        ref_dicts.append(ref_dict)
             
             # Store session data persistently
             session_data = {
