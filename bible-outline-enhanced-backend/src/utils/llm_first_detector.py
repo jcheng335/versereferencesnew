@@ -71,25 +71,17 @@ class LLMFirstDetector:
     def detect_verses(self, text: str, use_training: bool = True, _internal_call: bool = False) -> List[VerseReference]:
         """Detect verses using LLM with training examples"""
         
-        # Convert to HTML if it's a long document to avoid chunking
-        # HTML structure makes it easier for LLM to understand the outline
+        # For large documents, use smart extraction to reduce text size
         if len(text) > 8000 and not _internal_call:
-            # Try to convert to HTML structure first
-            try:
-                from .pdf_to_html_converter import PDFToHTMLConverter
-                converter = PDFToHTMLConverter()
-                # Convert text to structured format
-                structured = self._structure_text_as_html(text)
-                prompt = self._build_html_prompt(structured, use_training)
-            except:
-                # Fallback to chunking if HTML conversion fails
-                return self._detect_verses_chunked(text, use_training)
-        else:
-            prompt = self._build_prompt(text, use_training)
+            # Extract only the lines that likely contain verse references
+            text = self._extract_relevant_lines(text)
+            print(f"[DEBUG] Reduced text from original to {len(text)} chars for LLM processing")
+        
+        prompt = self._build_prompt(text, use_training)
         
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4-turbo-preview",  # Use GPT-4 for best accuracy
+                model="gpt-3.5-turbo",  # Use GPT-3.5 for faster processing
                 messages=[
                     {
                         "role": "system", 
@@ -145,6 +137,45 @@ class LLMFirstDetector:
         
         print(f"Total verses from chunked processing: {len(all_verses)}")
         return all_verses
+    
+    def _extract_relevant_lines(self, text: str) -> str:
+        """Extract only lines that likely contain verse references to reduce text size"""
+        import re
+        
+        relevant_lines = []
+        lines = text.split('\n')
+        
+        # Patterns that indicate a line might contain verse references
+        verse_patterns = [
+            r'Scripture Reading',
+            r'\b(?:Rom|Cor|Gal|Eph|Phil|Col|Thess|Tim|Titus|Philem|Heb|James|Pet|John|Jude|Rev|Matt|Mark|Luke|Acts)',
+            r'\b(?:Genesis|Exodus|Leviticus|Numbers|Deuteronomy|Joshua|Judges|Ruth|Samuel|Kings|Chronicles)',
+            r'\b(?:Ezra|Nehemiah|Esther|Job|Psalm|Proverbs|Ecclesiastes|Song|Isaiah|Jeremiah|Lamentations)',
+            r'\b(?:Ezekiel|Daniel|Hosea|Joel|Amos|Obadiah|Jonah|Micah|Nahum|Habakkuk|Zephaniah|Haggai|Zechariah|Malachi)',
+            r'\b(?:cf\.|v\.|vv\.|verse|verses|chapter)',
+            r'\(\s*[A-Z]',  # Parenthetical references often start with capital letter
+            r'\d+:\d+',  # Chapter:verse pattern
+            r'according to',
+        ]
+        
+        combined_pattern = '|'.join(verse_patterns)
+        pattern = re.compile(combined_pattern, re.IGNORECASE)
+        
+        # Always include first 10 lines (often contains Scripture Reading)
+        for i, line in enumerate(lines[:10]):
+            relevant_lines.append(line)
+        
+        # Then check remaining lines
+        for i, line in enumerate(lines[10:], 10):
+            if pattern.search(line):
+                # Include this line and context (one line before and after)
+                if i > 0 and lines[i-1] not in relevant_lines:
+                    relevant_lines.append(lines[i-1])
+                relevant_lines.append(line)
+                if i < len(lines) - 1:
+                    relevant_lines.append(lines[i+1])
+        
+        return '\n'.join(relevant_lines)
     
     def _get_few_shot_examples(self) -> str:
         """Provide specific examples from actual training data"""
