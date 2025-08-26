@@ -101,6 +101,20 @@ class PostgresBibleDatabase:
         except Exception as e:
             logger.error(f"Error getting verse {book} {chapter}:{verse}: {e}")
             return None
+            
+    def lookup_verse(self, book: str, chapter: int, verse: int) -> Optional[str]:
+        """
+        Alias for get_verse to maintain compatibility with SQLiteBibleDatabase
+        
+        Args:
+            book: Book abbreviation (e.g., 'Rom', 'John')
+            chapter: Chapter number
+            verse: Verse number
+            
+        Returns:
+            Verse text or None if not found
+        """
+        return self.get_verse(book, chapter, verse)
     
     def get_verses_range(self, book: str, chapter: int, start_verse: int, end_verse: int) -> List[Tuple[int, str]]:
         """
