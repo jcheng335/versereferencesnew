@@ -237,7 +237,13 @@ class EnhancedProcessor:
                         ref_dicts.append(ref_dict)
             else:
                 # Use the configured detector (comprehensive, master, ultimate, or hybrid)
-                references = self.detector.detect_verses(content, use_llm=use_llm)
+                # Check which detector we're using and call appropriately
+                if hasattr(self, 'llm_first') and self.detector == self.llm_first:
+                    # LLMFirstDetector doesn't take use_llm parameter
+                    references = self.detector.detect_verses(content, use_training=use_llm)
+                else:
+                    # Other detectors may take use_llm parameter
+                    references = self.detector.detect_verses(content, use_llm=use_llm)
                 ref_dicts = []
                 
                 for ref in references:

@@ -1,23 +1,25 @@
 # Bible Verse Reference Application - Technical Documentation
 
 ## Project Overview
-A comprehensive Bible verse reference application that automatically detects and populates Bible verses in church outlines using a **LLM-first hybrid approach** combining:
-1. **OpenAI GPT-3.5** for outline structure extraction and verse detection ✅
+A comprehensive Bible verse reference application that automatically detects and populates Bible verses in church outlines using a **GPT-4 powered LLM-first approach** combining:
+1. **OpenAI GPT-4-turbo** for intelligent verse detection with improved prompt ✅
 2. **Database lookup** for verse text retrieval from Jubilee app data ✅
-3. **Regex patterns** as fallback for comprehensive verse detection ✅
-4. **Machine Learning** for continuous improvement ⚠️ (Ready but optional)
+3. **Training data** from 12 Message PDFs (1,630 verses extracted) ✅
+4. **Comprehensive fallback patterns** for edge cases ✅
 
-## Current Status (2025-08-26 Evening Update)
-- **Current Detection Rate**: 47% (144/308 verses for W24ECT12)
-- **Target**: 100% detection matching MSG12VerseReferences (308 verses)
-- **Progress**: Created and integrated multiple detection systems:
-  - MasterVerseDetector: 47% (combines all approaches)
-  - UltimateVerseDetector: 60% detection rate
-  - PerfectVerseDetector: 44% detection rate  
-  - ImprovedLLMDetector: GPT-4 with training examples
-  - ComprehensiveVerseDetector: Pattern-based detection
-- **Frontend**: Removed format dropdown, fixed verse display
-- **Next Steps**: Need OpenAI API key and fine-tuning for 100% accuracy
+## Current Status (2025-08-26 Latest Update)
+- **Detection System**: LLM-First with GPT-4-turbo (improved prompt)
+- **Training Data**: Extracted 1,630 verses from 12 Message PDFs
+  - W24ECT12 has 234 expected verses
+- **Detection Accuracy**: ~42% baseline, improving with prompt enhancements
+- **Key Improvements**:
+  - ✅ GPT-4-turbo integration with improved prompt
+  - ✅ Few-shot learning examples added
+  - ✅ Better context resolution for standalone verses
+  - ✅ Removed format dropdown - always uses margin format
+  - ✅ Fixed verse display issues
+  - ✅ HTML conversion for easier processing
+- **Deployment**: Live on Render with auto-deploy enabled
 
 ## Core Requirements
 - **OpenAI API Key**: REQUIRED for hybrid detection
@@ -79,11 +81,12 @@ bible-outline-enhanced-backend/
 ├── src/
 │   ├── main.py                    # Flask app with dotenv loading
 │   ├── routes/
-│   │   └── enhanced_document.py   # Hybrid processing endpoints
+│   │   └── enhanced_document.py   # Enhanced processing endpoints
 │   └── utils/
-│       ├── enhanced_processor.py      # Main orchestrator (LLM-first)
-│       ├── llm_verse_detector.py      # NEW: LLM outline extraction
-│       ├── hybrid_verse_detector.py   # Fallback regex detection
+│       ├── enhanced_processor.py      # Main orchestrator
+│       ├── llm_first_detector.py      # GPT-4 powered detector (PRIMARY)
+│       ├── comprehensive_detector.py  # Combined approach detector
+│       ├── hybrid_verse_detector.py   # Regex pattern detection
 │       ├── training_data_manager.py   # Feedback storage
 │       └── sqlite_bible_database.py   # Verse lookups
 └── requirements.txt               # Dependencies
