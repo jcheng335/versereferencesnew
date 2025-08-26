@@ -284,7 +284,7 @@ class EnhancedProcessor:
                 'session_id': session_id,
                 'content': content,
                 'references_found': len(ref_dicts),
-                'total_verses': sum(r['end_verse'] - r['start_verse'] + 1 for r in ref_dicts),
+                'total_verses': sum((r['end_verse'] or r['start_verse']) - r['start_verse'] + 1 for r in ref_dicts),
                 'filename': filename,
                 'average_confidence': sum(r['confidence'] for r in ref_dicts) / len(ref_dicts) if ref_dicts else 0,
                 'sample_id': sample_id  # For feedback tracking

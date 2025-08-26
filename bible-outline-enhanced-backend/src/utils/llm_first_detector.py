@@ -107,6 +107,9 @@ class LLMFirstDetector:
             )
             
             content = response.choices[0].message.content
+            print(f"[DEBUG] LLM raw response length: {len(content) if content else 0} chars")
+            if content and len(content) < 500:
+                print(f"[DEBUG] LLM response: {content[:500]}")
             verses = self._parse_llm_response(content)
             
             print(f"LLM detected {len(verses)} verses")
