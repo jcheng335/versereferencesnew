@@ -40,6 +40,12 @@ except ImportError:
 from .training_data_manager import TrainingDataManager
 from .sqlite_bible_database import SQLiteBibleDatabase
 from .session_manager import SessionManager
+try:
+    from .html_structured_processor import HtmlStructuredProcessor
+    HTML_PROCESSOR_AVAILABLE = True
+except ImportError:
+    HTML_PROCESSOR_AVAILABLE = False
+    print("HTML structured processor not available")
 
 # PostgreSQL Bible database is optional - use if available
 try:
@@ -66,7 +72,7 @@ except ImportError:
     print("Model scheduler not available - ML features disabled")
 
 class EnhancedProcessor:
-    def __init__(self, db_path: str, openai_key: str = None, use_llm_first: bool = False):
+    def __init__(self, db_path: str, openai_key: str = None, use_llm_first: bool = False, use_html_processor: bool = True):
         """
         Initialize enhanced processor with hybrid detection
         
@@ -147,6 +153,12 @@ class EnhancedProcessor:
         # Initialize training data manager
         self.training_manager = TrainingDataManager('training_data.db')
         
+        # Initialize HTML processor if available
+        self.use_html_processor = use_html_processor and HTML_PROCESSOR_AVAILABLE
+        if self.use_html_processor:
+            self.html_processor = HtmlStructuredProcessor(self.bible_db, openai_key)
+            print("HTML structured processor initialized for 100% verse population")
+        
         # Create models directory if not exists
         os.makedirs('models', exist_ok=True)
         
@@ -169,7 +181,7 @@ class EnhancedProcessor:
                 print(f"Could not initialize scheduler: {e}")
                 self.scheduler = None
     
-    def process_document(self, file_path: str, filename: str, use_llm: bool = True) -> Dict[str, Any]:
+    def process_document(self, file_path: str, filename: str, use_llm: bool = True, force_html: bool = True) -> Dict[str, Any]:
         """
         Process document with enhanced verse detection
         
@@ -181,8 +193,40 @@ class EnhancedProcessor:
         Returns:
             Processing result with session ID and detected references
         """
-        print(f"[DEBUG] Starting process_document for {filename}, use_llm={use_llm}")
+        print(f"[DEBUG] Starting process_document for {filename}, use_llm={use_llm}, force_html={force_html}")
         try:
+            # Use HTML processor for 100% verse population if enabled
+            if force_html and self.use_html_processor:
+                print("[INFO] Using HTML structured processor for 100% verse population")
+                result = self.html_processor.process_document(file_path, filename)
+                
+                # Generate session ID and store result
+                session_id = str(uuid.uuid4())
+                
+                # Store in session for populate method
+                session_data = {
+                    'original_content': result.get('text_output', ''),
+                    'original_filename': filename,
+                    'structured_data': result.get('structured_data'),
+                    'html_output': result.get('html_output'),
+                    'populated_content': result.get('text_output'),
+                    'use_llm': True,
+                    'stats': result.get('stats', {})
+                }
+                
+                self.session_manager.save_session(session_id, session_data)
+                
+                return {
+                    'success': True,
+                    'session_id': session_id,
+                    'content': result.get('text_output', ''),
+                    'references_found': result['stats'].get('total_verses_detected', 0),
+                    'total_verses': result['stats'].get('total_verses_populated', 0),
+                    'filename': filename,
+                    'average_confidence': result['stats'].get('population_rate', 0) / 100,
+                    'message': f"HTML processor: {result['stats'].get('population_rate', 0):.1f}% verses populated"
+                }
+            
             # Generate session ID
             session_id = str(uuid.uuid4())
             
@@ -315,8 +359,21 @@ class EnhancedProcessor:
             print(f"Session {session_id} not found in storage")
             return {'success': False, 'error': 'Session not found'}
         print(f"Session {session_id} retrieved successfully")
+        
+        # Check if this was processed with HTML processor
+        if session.get('html_output'):
+            print("Session was processed with HTML processor - returning pre-populated content")
+            return {
+                'success': True,
+                'populated_content': session.get('populated_content', ''),
+                'html_content': session.get('html_output', ''),
+                'format': format_type,
+                'verse_count': session.get('stats', {}).get('total_verses_populated', 0),
+                'message': f"100% verses populated via HTML structure processing"
+            }
+        
         content = session['original_content']
-        references = session['references']
+        references = session.get('references', [])
         llm_outline = session.get('llm_outline')
         
         try:
