@@ -95,7 +95,8 @@ class LLMFirstDetector:
                     }
                 ],
                 temperature=0.1,  # Low temperature for consistency
-                max_tokens=4000
+                max_tokens=2000,  # Reduced to speed up response
+                timeout=20  # 20 second timeout for API call
             )
             
             content = response.choices[0].message.content
@@ -165,17 +166,21 @@ class LLMFirstDetector:
         for i, line in enumerate(lines[:10]):
             relevant_lines.append(line)
         
-        # Then check remaining lines
+        # Then check remaining lines  
+        seen_lines = set(relevant_lines)
         for i, line in enumerate(lines[10:], 10):
-            if pattern.search(line):
-                # Include this line and context (one line before and after)
-                if i > 0 and lines[i-1] not in relevant_lines:
-                    relevant_lines.append(lines[i-1])
+            if pattern.search(line) and line not in seen_lines:
                 relevant_lines.append(line)
-                if i < len(lines) - 1:
-                    relevant_lines.append(lines[i+1])
+                seen_lines.add(line)
+                # Limit to 5000 chars max to prevent timeout
+                if len('\n'.join(relevant_lines)) > 5000:
+                    break
         
-        return '\n'.join(relevant_lines)
+        result = '\n'.join(relevant_lines)
+        # Hard limit at 5000 chars
+        if len(result) > 5000:
+            result = result[:5000]
+        return result
     
     def _get_few_shot_examples(self) -> str:
         """Provide specific examples from actual training data"""
