@@ -4,6 +4,7 @@ Integrates regex, OpenAI LLM, and ML for optimal verse placement
 """
 
 import os
+import re
 import uuid
 from typing import Dict, List, Any, Optional
 import pdfplumber
@@ -388,83 +389,61 @@ class EnhancedProcessor:
                     'message': f'Successfully populated {sum(len(p.get("verses", [])) for p in llm_outline)} verses using LLM-first approach'
                 }
             
-            # Fallback to original approach if no LLM outline
-            # Sort references by insertion point
-            references.sort(key=lambda x: x['insertion_point'])
-            
-            # Split content into lines
+            # Enhanced approach: Process content with better verse placement
             lines = content.split('\n')
             result_lines = []
-            verse_footnotes = []  # Collect all verse texts for the end
-            inserted_at = set()
             
-            # Process each line
+            # First, detect outline structure and associate verses
+            outline_verses = {}  # Map outline points to their verses
+            
             for i, line in enumerate(lines):
-                # Check if this line contains a verse reference
-                has_reference = False
-                verses_for_this_line = []
+                stripped_line = line.strip()
                 
+                # Detect outline points
+                is_outline_point = (
+                    re.match(r'^[IVX]+\.\s', stripped_line) or  # Roman numerals
+                    re.match(r'^[A-Z]\.\s', stripped_line) or    # Capital letters
+                    re.match(r'^\d+\.\s', stripped_line)         # Numbers
+                )
+                
+                if is_outline_point:
+                    outline_verses[i] = []
+                
+                # Find verses mentioned in this line
+                verses_in_line = []
                 for ref in references:
-                    if ref['insertion_point'] == i and i not in inserted_at:
-                        # Just store the reference, we'll fetch text later if needed
-                        verses_for_this_line.append(ref)
-                        has_reference = True
+                    # Check if reference appears in this line (based on text content)
+                    if ref.get('original_text') and ref['original_text'] in line:
+                        verses_in_line.append(ref)
                 
-                # Format based on type
-                if has_reference and verses_for_this_line:
-                    if format_type == 'margin':
-                        # Create margin format like MSG12VerseReferences.pdf
-                        # Left column for references, right column for outline text
-                        refs_str = ', '.join([ref['original_text'] for ref in verses_for_this_line])
-                        # Use tab or spaces to create margin effect
-                        # Format: "RefList    OutlineText"
-                        result_lines.append(f"{refs_str:<15} {line}")
-                        
-                        # Collect verse texts for footnotes
-                        for ref in verses_for_this_line:
-                            verse_text = self._fetch_verse_text(ref)
-                            if verse_text:
-                                verse_footnotes.append(f"{ref['original_text']} {verse_text}")
-                    
-                    elif format_type == 'inline':
-                        # Old inline format (for backward compatibility)
-                        modified_line = line
-                        for ref in verses_for_this_line:
-                            verse_text = self._fetch_verse_text(ref)
-                            if verse_text:
-                                modified_line += f" {ref['original_text']} - {verse_text}"
-                        result_lines.append(modified_line)
-                    
-                    else:  # footnote
-                        # Footnote style
-                        modified_line = line
-                        for ref in verses_for_this_line:
-                            modified_line += f" [{ref['original_text']}]"
-                        result_lines.append(modified_line)
-                        
-                        # Add verse texts below
-                        for ref in verses_for_this_line:
-                            verse_text = self._fetch_verse_text(ref)
-                            if verse_text:
-                                result_lines.append(f"    {ref['original_text']}: {verse_text}")
-                    
-                    inserted_at.add(i)
-                else:
-                    # No references for this line
-                    if format_type == 'margin':
-                        # Add empty margin space for consistency
-                        result_lines.append(f"{'':15} {line}")
+                # Associate verses with outline points
+                if verses_in_line:
+                    if i in outline_verses:
+                        # This line is an outline point, add verses to it
+                        outline_verses[i].extend(verses_in_line)
                     else:
-                        result_lines.append(line)
+                        # Find nearest outline point above
+                        for j in range(i - 1, -1, -1):
+                            if j in outline_verses:
+                                outline_verses[j].extend(verses_in_line)
+                                break
             
-            # For margin format, add all verse texts at the end
-            if format_type == 'margin' and verse_footnotes:
-                result_lines.append('')
-                result_lines.append('=' * 80)
-                result_lines.append('VERSE REFERENCES:')
-                result_lines.append('=' * 80)
-                for footnote in verse_footnotes:
-                    result_lines.append(footnote)
+            # Now format the output with verses under outline points
+            for i, line in enumerate(lines):
+                # Add the original line
+                result_lines.append(line)
+                
+                # If this is an outline point with associated verses, add them below
+                if i in outline_verses and outline_verses[i]:
+                    # Add verse texts indented below the outline point
+                    for ref in outline_verses[i]:
+                        verse_text = self._fetch_verse_text(ref)
+                        if verse_text:
+                            # Format: indented verse reference and text
+                            result_lines.append(f"    {ref['original_text']}: {verse_text}")
+                    # Add blank line after verses for readability
+                    if outline_verses[i]:
+                        result_lines.append("")
             
             populated_content = '\n'.join(result_lines)
             

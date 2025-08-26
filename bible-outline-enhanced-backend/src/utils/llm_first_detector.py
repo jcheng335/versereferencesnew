@@ -77,7 +77,8 @@ class LLMFirstDetector:
             text = self._extract_relevant_lines(text)
             print(f"[DEBUG] Reduced text from original to {len(text)} chars for LLM processing")
         
-        prompt = self._build_prompt(text, use_training)
+        # Use simplified prompt for better results
+        prompt = self._build_simple_prompt(text)
         
         try:
             response = self.client.chat.completions.create(
@@ -85,9 +86,7 @@ class LLMFirstDetector:
                 messages=[
                     {
                         "role": "system", 
-                        "content": """You are an expert Bible verse reference extractor. 
-                        Your task is to find ALL verse references in Bible study outlines.
-                        Be extremely thorough - missing verses is unacceptable."""
+                        "content": "You are a Bible verse reference extractor. Return ONLY a JSON array with verse references. No explanations, no markdown, just JSON."
                     },
                     {
                         "role": "user", 
@@ -95,7 +94,7 @@ class LLMFirstDetector:
                     }
                 ],
                 temperature=0.1,  # Low temperature for consistency
-                max_tokens=2000,  # Reduced to speed up response
+                max_tokens=3000,  # Increased for more verses
                 timeout=20  # 20 second timeout for API call
             )
             
@@ -181,6 +180,31 @@ class LLMFirstDetector:
         if len(result) > 5000:
             result = result[:5000]
         return result
+    
+    def _build_simple_prompt(self, text: str) -> str:
+        """Build a simple, effective prompt for verse extraction"""
+        return f"""Extract ALL Bible verse references from this text and return as JSON array.
+
+CRITICAL: You MUST find ALL of these patterns:
+1. Scripture Reading: "Eph. 4:7-16; 6:10-20" (split into separate entries)
+2. Full references: "Rom. 12:4-5", "1 Cor. 12:14-22"
+3. Parenthetical: "(Psalm 68:18)", "(Num. 10:35)"
+4. With cf.: "cf. Rom. 12:3", "cf. Luke 4:18"
+5. STANDALONE VERSES: "v. 7", "verse 11", "vv. 47-48"
+   - For these, find the book/chapter from Scripture Reading or nearest full reference
+   - Example: If Scripture Reading is "Eph. 4:7-16", then "v. 7" = "Eph. 4:7"
+   - Example: If context mentions "Luke 7", then "vv. 47-48" = "Luke 7:47-48"
+
+RULES:
+- Include EVERY verse reference, even duplicates
+- For "v." or "verse" references, ALWAYS resolve to full book/chapter
+- Split semicolon-separated references into individual entries
+
+Return JSON array only. Format:
+{{"reference": "original text", "book": "Eph", "chapter": 4, "start_verse": 7, "end_verse": 16}}
+
+Text to analyze:
+{text[:5000]}"""
     
     def _get_few_shot_examples(self) -> str:
         """Provide specific examples from actual training data"""
@@ -308,17 +332,47 @@ IMPORTANT: Be exhaustive. It's better to over-detect than miss verses. Find EVER
         verses = []
         
         try:
-            # Extract JSON from response
-            start_idx = content.find('[')
-            end_idx = content.rfind(']') + 1
+            # Handle markdown code blocks
+            if '```json' in content:
+                # Extract JSON from markdown code block
+                start_idx = content.find('```json') + 7
+                end_idx = content.find('```', start_idx)
+                if end_idx > start_idx:
+                    json_str = content[start_idx:end_idx].strip()
+                else:
+                    # Fallback to finding JSON array
+                    start_idx = content.find('[')
+                    end_idx = content.rfind(']') + 1
+                    json_str = content[start_idx:end_idx] if start_idx >= 0 and end_idx > start_idx else ""
+            elif '```' in content:
+                # Extract from generic code block
+                start_idx = content.find('```') + 3
+                end_idx = content.find('```', start_idx)
+                if end_idx > start_idx:
+                    json_str = content[start_idx:end_idx].strip()
+                    # Remove language identifier if present
+                    if json_str.startswith(('json', 'JSON')):
+                        json_str = json_str[4:].strip()
+                else:
+                    start_idx = content.find('[')
+                    end_idx = content.rfind(']') + 1
+                    json_str = content[start_idx:end_idx] if start_idx >= 0 and end_idx > start_idx else ""
+            else:
+                # Extract JSON array directly
+                start_idx = content.find('[')
+                end_idx = content.rfind(']') + 1
+                json_str = content[start_idx:end_idx] if start_idx >= 0 and end_idx > start_idx else ""
             
-            if start_idx >= 0 and end_idx > start_idx:
-                json_str = content[start_idx:end_idx]
+            if json_str:
                 verse_data = json.loads(json_str)
                 
                 for v in verse_data:
                     # Handle both formats (with periods and without)
                     book = v.get('book', '').replace('.', '')
+                    
+                    # Skip invalid entries
+                    if not book or v.get('chapter', 0) == 0:
+                        continue
                     
                     verse = VerseReference(
                         book=book,
@@ -331,9 +385,14 @@ IMPORTANT: Be exhaustive. It's better to over-detect than miss verses. Find EVER
                         context=v.get('context', '')
                     )
                     verses.append(verse)
+            else:
+                print("No valid JSON found in LLM response")
+                verses = self._fallback_parse(content)
         
         except Exception as e:
             print(f"Error parsing LLM response: {e}")
+            import traceback
+            traceback.print_exc()
             # Try fallback regex parsing
             verses = self._fallback_parse(content)
         
@@ -398,28 +457,43 @@ HTML-Structured Text:
 Return ONLY a JSON array of verse objects. Be exhaustive - find EVERY verse reference."""
     
     def _fallback_parse(self, text: str) -> List[VerseReference]:
-        """Fallback regex parsing if JSON fails"""
+        """Comprehensive fallback regex parsing if JSON fails"""
         verses = []
+        seen_refs = set()
         
-        # Simple pattern to find references
-        pattern = r'([1-3]?\s*[A-Z][a-z]+)\.?\s+(\d+):(\d+)(?:-(\d+))?'
+        # Multiple patterns to catch different formats
+        patterns = [
+            # Standard format: Book Chapter:Verse[-EndVerse]
+            (r'([1-3]?\s*[A-Z][a-z]+(?:\s+[A-Z]?[a-z]*)?)\s*\.?\s*(\d+):(\d+)(?:-(\d+))?', 'standard'),
+            # Parenthetical: (Book Chapter:Verse)
+            (r'\(([1-3]?\s*[A-Z][a-z]+)\s*\.?\s*(\d+):(\d+)(?:-(\d+))?\)', 'parenthetical'),
+            # With cf.: cf. Book Chapter:Verse
+            (r'cf\.\s+([1-3]?\s*[A-Z][a-z]+)\s*\.?\s*(\d+):(\d+)(?:-(\d+))?', 'cross_ref'),
+            # Scripture Reading format
+            (r'Scripture Reading:\s*([1-3]?\s*[A-Z][a-z]+)\s*\.?\s*(\d+):(\d+)(?:-(\d+))?', 'scripture_reading'),
+        ]
         
-        for match in re.finditer(pattern, text):
-            book = match.group(1).strip()
-            chapter = int(match.group(2))
-            start = int(match.group(3))
-            end = int(match.group(4)) if match.group(4) else None
-            
-            verses.append(VerseReference(
-                book=book,
-                chapter=chapter,
-                start_verse=start,
-                end_verse=end,
-                original_text=match.group(0),
-                confidence=0.85,
-                pattern='llm_fallback'
-            ))
+        for pattern, pattern_type in patterns:
+            for match in re.finditer(pattern, text):
+                book = match.group(1).strip().replace('.', '')
+                chapter = int(match.group(2))
+                start = int(match.group(3))
+                end = int(match.group(4)) if match.group(4) else None
+                
+                ref_key = f"{book}_{chapter}_{start}_{end}"
+                if ref_key not in seen_refs:
+                    seen_refs.add(ref_key)
+                    verses.append(VerseReference(
+                        book=book,
+                        chapter=chapter,
+                        start_verse=start,
+                        end_verse=end,
+                        original_text=match.group(0),
+                        confidence=0.85,
+                        pattern=f'llm_fallback_{pattern_type}'
+                    ))
         
+        print(f"Fallback parser found {len(verses)} verses")
         return verses
     
     def process_with_html(self, html_content: str) -> Dict:
