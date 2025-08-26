@@ -568,7 +568,8 @@ class EnhancedProcessor:
         """Fetch verse text from database"""
         try:
             verses = []
-            for verse_num in range(reference['start_verse'], reference['end_verse'] + 1):
+            end_verse = reference.get('end_verse') or reference.get('start_verse')
+            for verse_num in range(reference['start_verse'], end_verse + 1):
                 verse_data = self.bible_db.lookup_verse(
                     reference['book'],
                     reference['chapter'],
