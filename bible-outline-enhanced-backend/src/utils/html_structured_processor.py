@@ -406,12 +406,49 @@ Return JSON array of verses found:
             if end is None:
                 end = start
             
+            # Map common abbreviations to full book names
+            book_mapping = {
+                'Gen': 'Genesis', 'Ex': 'Exodus', 'Lev': 'Leviticus', 'Num': 'Numbers',
+                'Deut': 'Deuteronomy', 'Josh': 'Joshua', 'Judg': 'Judges', 'Ruth': 'Ruth',
+                '1 Sam': '1 Samuel', '2 Sam': '2 Samuel', '1 Kings': '1 Kings', '2 Kings': '2 Kings',
+                '1 Chron': '1 Chronicles', '2 Chron': '2 Chronicles', 'Ezra': 'Ezra', 'Neh': 'Nehemiah',
+                'Esth': 'Esther', 'Job': 'Job', 'Ps': 'Psalms', 'Psalm': 'Psalms', 'Prov': 'Proverbs',
+                'Eccl': 'Ecclesiastes', 'Song': 'Song of Solomon', 'Isa': 'Isaiah', 'Jer': 'Jeremiah',
+                'Lam': 'Lamentations', 'Ezek': 'Ezekiel', 'Dan': 'Daniel', 'Hos': 'Hosea',
+                'Joel': 'Joel', 'Amos': 'Amos', 'Obad': 'Obadiah', 'Jonah': 'Jonah',
+                'Mic': 'Micah', 'Nah': 'Nahum', 'Hab': 'Habakkuk', 'Zeph': 'Zephaniah',
+                'Hag': 'Haggai', 'Zech': 'Zechariah', 'Mal': 'Malachi',
+                'Matt': 'Matthew', 'Mark': 'Mark', 'Luke': 'Luke', 'John': 'John',
+                'Acts': 'Acts', 'Rom': 'Romans', '1 Cor': '1 Corinthians', '2 Cor': '2 Corinthians',
+                'Gal': 'Galatians', 'Eph': 'Ephesians', 'Phil': 'Philippians', 'Col': 'Colossians',
+                '1 Thess': '1 Thessalonians', '2 Thess': '2 Thessalonians', '1 Tim': '1 Timothy',
+                '2 Tim': '2 Timothy', 'Titus': 'Titus', 'Philem': 'Philemon', 'Heb': 'Hebrews',
+                'James': 'James', '1 Pet': '1 Peter', '2 Pet': '2 Peter', '1 John': '1 John',
+                '2 John': '2 John', '3 John': '3 John', 'Jude': 'Jude', 'Rev': 'Revelation',
+                # Handle variations
+                'Psa': 'Psalms', 'Mt': 'Matthew', 'Mk': 'Mark', 'Lk': 'Luke', 'Jn': 'John',
+                'Ro': 'Romans', '1Co': '1 Corinthians', '2Co': '2 Corinthians',
+                'Ga': 'Galatians', 'Eph': 'Ephesians', 'Php': 'Philippians', 'Col': 'Colossians',
+                '1Th': '1 Thessalonians', '2Th': '2 Thessalonians', '1Ti': '1 Timothy',
+                '2Ti': '2 Timothy', 'Tit': 'Titus', 'Phm': 'Philemon', 'Heb': 'Hebrews',
+                'Jas': 'James', '1Pe': '1 Peter', '2Pe': '2 Peter', '1Jn': '1 John',
+                '2Jn': '2 John', '3Jn': '3 John', 'Jud': 'Jude', 'Re': 'Revelation'
+            }
+            
+            # Map book name if needed
+            full_book = book_mapping.get(book, book)
+            
             # Fetch from database
             verses = []
             for verse_num in range(start, end + 1):
-                text = self.bible_db.get_verse(book, chapter, verse_num)
+                text = self.bible_db.get_verse(full_book, chapter, verse_num)
                 if text:
                     verses.append(f"{verse_num}. {text}")
+                else:
+                    # Try with original book name if mapping didn't work
+                    text = self.bible_db.get_verse(book, chapter, verse_num)
+                    if text:
+                        verses.append(f"{verse_num}. {text}")
             
             return ' '.join(verses) if verses else None
             
