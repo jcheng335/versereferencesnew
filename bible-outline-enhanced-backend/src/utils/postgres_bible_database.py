@@ -71,6 +71,67 @@ class PostgresBibleDatabase:
             database=self.connection_params['database']
         )
     
+    def _normalize_book_name(self, book: str) -> str:
+        """Normalize book name variations to standard form"""
+        # Handle written-out numbers
+        book = book.strip()
+        
+        # Convert written forms to number forms
+        replacements = {
+            'First ': '1 ',
+            'Second ': '2 ',
+            'Third ': '3 ',
+            'first ': '1 ',
+            'second ': '2 ',
+            'third ': '3 ',
+        }
+        
+        for old, new in replacements.items():
+            if book.startswith(old):
+                book = book.replace(old, new)
+        
+        # Common book name mappings
+        book_mappings = {
+            '1 Cor': '1 Corinthians',
+            '2 Cor': '2 Corinthians',
+            '1 Tim': '1 Timothy',
+            '2 Tim': '2 Timothy',
+            '1 Pet': '1 Peter',
+            '2 Pet': '2 Peter',
+            '1 Jn': '1 John',
+            '2 Jn': '2 John',
+            '3 Jn': '3 John',
+            'Eph': 'Ephesians',
+            'Phil': 'Philippians',
+            'Col': 'Colossians',
+            'Rom': 'Romans',
+            'Gal': 'Galatians',
+            '1 Thess': '1 Thessalonians',
+            '2 Thess': '2 Thessalonians',
+            'Rev': 'Revelation',
+            'Matt': 'Matthew',
+            'Mk': 'Mark',
+            'Lk': 'Luke',
+            'Jn': 'John',
+            'Act': 'Acts',
+            'Jam': 'James',
+            'Jude': 'Jude',
+            'Heb': 'Hebrews',
+            'Tit': 'Titus',
+            'Phlm': 'Philemon',
+        }
+        
+        # Check if book matches any mapping
+        if book in book_mappings:
+            return book_mappings[book]
+        
+        # Remove periods and check again
+        book_no_period = book.replace('.', '').strip()
+        if book_no_period in book_mappings:
+            return book_mappings[book_no_period]
+        
+        return book
+    
     def get_verse(self, book_name: str, chapter: int, verse_num: int) -> Optional[str]:
         """
         Get a single verse from the database
@@ -84,16 +145,19 @@ class PostgresBibleDatabase:
             Verse text or None if not found
         """
         try:
+            # Normalize book name first
+            normalized_book = self._normalize_book_name(book_name)
+            
             conn = self._get_connection()
             cursor = conn.cursor()
             
-            # Try exact book name match first
+            # Try normalized book name first
             cursor.execute('''
                 SELECT v.text 
                 FROM verses v 
                 JOIN books b ON v.book_id = b.id 
                 WHERE b.name = %s AND v.chapter = %s AND v.verse = %s
-            ''', (book_name, chapter, verse_num))
+            ''', (normalized_book, chapter, verse_num))
             
             result = cursor.fetchone()
             if result:

@@ -8,24 +8,25 @@ A comprehensive Bible verse reference application that automatically detects and
 4. **Comprehensive fallback patterns** for edge cases ✅
 
 ## Current Status (2025-08-26 Latest Update)
-- **Detection System**: LLM-First with GPT-4-turbo (improved prompt)
-- **Training Data**: Extracted 1,630 verses from 12 Message PDFs
-  - W24ECT12 has 234 expected verses
-- **Detection Accuracy**: ~42% baseline, improving with prompt enhancements
+- **Detection System**: LLM-First with GPT-5 (when available, GPT-4o fallback)
+- **Database**: PostgreSQL with 31,103 verses - FULL BIBLE TEXT ✅
+- **Detection Accuracy**: Improving with enhanced prompts
 - **Key Improvements**:
-  - ✅ GPT-4-turbo integration with improved prompt
-  - ✅ Few-shot learning examples added
-  - ✅ Better context resolution for standalone verses
-  - ✅ Removed format dropdown - always uses margin format
-  - ✅ Fixed verse display issues
-  - ✅ HTML conversion for easier processing
+  - ✅ PostgreSQL migration complete - 31,103 verses with full text
+  - ✅ GPT-5/GPT-4o integration with improved prompt
+  - ✅ HTML-based structured processing pipeline
+  - ✅ Hierarchical outline detection (Roman → Letters → Numbers)
+  - ✅ Book name/abbreviation mapping (66 books)
+  - ✅ Margin format output matching MSG12 style
+  - ✅ Session persistence via PostgreSQL
 - **Deployment**: Live on Render with auto-deploy enabled
 
 ## Core Requirements
-- **OpenAI API Key**: REQUIRED for hybrid detection
-- **Bible Database**: PostgreSQL v17 on Render with 31,103 verses
-- **Python 3.11+**: Backend server
+- **OpenAI API Key**: REQUIRED for LLM detection (GPT-5/GPT-4o)
+- **Bible Database**: PostgreSQL v17 on Render with 31,103 verses (FULL TEXT)
+- **Python 3.11+**: Backend server with pg8000 driver
 - **Node.js 18+**: Frontend application
+- **pg8000**: PostgreSQL driver for Python 3.13 compatibility
 
 ## CRITICAL TESTING REQUIREMENT
 **IMPORTANT**: After ANY code changes, MUST test the application using an agent with these EXACT files:
@@ -47,13 +48,14 @@ Use the Task tool with general-purpose agent to test the deployed application at
 - Backend: https://bible-outline-backend.onrender.com
 - Frontend: https://bible-outline-frontend.onrender.com
 
-## Deployment Status (UPDATED 2025-08-26)
-✅ **PARAMETER MISMATCH FIXED** - All detector types now work correctly
-- **Session Persistence**: ✅ FIXED - Using PostgreSQL with pg8000 driver
+## Deployment Status (UPDATED 2025-08-27)
+✅ **FULL VERSE TEXT NOW AVAILABLE** - Complete Bible text in PostgreSQL
+- **Database Migration**: ✅ COMPLETE - 31,103 verses with full text imported
+- **Session Persistence**: ✅ Using PostgreSQL with pg8000 driver
 - **PostgreSQL Integration**: ✅ Working with DATABASE_URL environment variable  
-- **Database**: ✅ PostgreSQL v17 with 31,103 verses from Jubilee app
-- **Detection System**: ✅ LLMFirstDetector with GPT-4-turbo for improved accuracy
-- **Parameter Handling**: ✅ FIXED - Detectors with different parameter names handled via _call_detector_safely()
+- **Verse Retrieval**: ✅ Full verse text, not just references
+- **Detection System**: ✅ LLMFirstDetector with GPT-5/GPT-4o
+- **Book Mapping**: ✅ Handles all 66 books and abbreviations
 - **Endpoints**: Must use /api/enhanced/* endpoints for PostgreSQL storage
 
 ## Comprehensive Verse Detection Patterns
@@ -88,7 +90,10 @@ bible-outline-enhanced-backend/
 │       ├── comprehensive_detector.py  # Combined approach detector
 │       ├── hybrid_verse_detector.py   # Regex pattern detection
 │       ├── training_data_manager.py   # Feedback storage
-│       └── sqlite_bible_database.py   # Verse lookups
+│       ├── sqlite_bible_database.py   # Local verse lookups
+│       ├── postgres_bible_database.py # Production verse lookups
+│       ├── html_structured_processor.py # HTML-based processing
+│       └── pg8000_session_manager.py  # PostgreSQL sessions
 └── requirements.txt               # Dependencies
 ```
 
@@ -103,15 +108,19 @@ bible-outline-enhanced-frontend/
 └── package.json
 ```
 
-## LLM-First Hybrid Detection System
+## LLM-First Detection System
 
-### 1. Primary: LLM Outline Extraction (NEW!)
+### 1. Primary: Intelligent LLM Detection (GPT-5/GPT-4o)
 ```python
-# OpenAI GPT-3.5-turbo analyzes the ENTIRE outline to:
+# Advanced LLM analyzes the ENTIRE outline to:
 - Extract outline structure (I, II, A, B, 1, 2, etc.)
-- Identify ALL verse references per outline point
-- Resolve contextual references (Luke 7 → vv. 47-48)
-- Return structured JSON with outline + verses
+- Identify ALL verse references including:
+  - Standard: "Romans 5:1-11"
+  - Written out: "First Corinthians 1:2"
+  - Abbreviations: "1 Cor. 1:23-24"
+  - Contextual: "vv. 47-48" (resolves from context)
+- Query database for full verse text
+- Return structured JSON with outline + full verses
 ```
 
 ### 2. Database Verse Lookup

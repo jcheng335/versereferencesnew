@@ -183,28 +183,38 @@ class LLMFirstDetector:
     
     def _build_simple_prompt(self, text: str) -> str:
         """Build a simple, effective prompt for verse extraction"""
-        return f"""Extract ALL Bible verse references from this text and return as JSON array.
+        return f"""Extract ALL Bible verse references from this outline and return as JSON array.
 
-CRITICAL: You MUST find ALL of these patterns:
-1. Scripture Reading: "Eph. 4:7-16; 6:10-20" (split into separate entries)
-2. Full references: "Rom. 12:4-5", "1 Cor. 12:14-22"
-3. Parenthetical: "(Psalm 68:18)", "(Num. 10:35)"
-4. With cf.: "cf. Rom. 12:3", "cf. Luke 4:18"
-5. STANDALONE VERSES: "v. 7", "verse 11", "vv. 47-48"
-   - For these, find the book/chapter from Scripture Reading or nearest full reference
-   - Example: If Scripture Reading is "Eph. 4:7-16", then "v. 7" = "Eph. 4:7"
-   - Example: If context mentions "Luke 7", then "vv. 47-48" = "Luke 7:47-48"
+CRITICAL INSTRUCTIONS:
 
-RULES:
-- Include EVERY verse reference, even duplicates
-- For "v." or "verse" references, ALWAYS resolve to full book/chapter
-- Split semicolon-separated references into individual entries
+1. NORMALIZE BOOK NAMES to standard abbreviations:
+   - "First Corinthians" or "1 Corinthians" → "1 Corinthians"
+   - "First Peter" or "1 Peter" → "1 Peter"
+   - "Second Timothy" or "2 Timothy" → "2 Timothy"
+   - "First John" or "1 John" → "1 John"
+   - Always use the number form (1, 2, 3) not written form (First, Second, Third)
 
-Return JSON array only. Format:
-{{"reference": "original text", "book": "Eph", "chapter": 4, "start_verse": 7, "end_verse": 16}}
+2. SCRIPTURE READING - Extract COMPLETE references:
+   - "Scripture Reading: 1 Cor. 1:23-24" → Include full "1 Cor. 1:23-24" not just "23-24"
+   - Split multiple references: "Eph. 4:7-16; 6:10-20" → Two separate entries
+
+3. STANDALONE VERSES - Resolve using context:
+   - "v. 7" → Find book/chapter from Scripture Reading or nearest reference
+   - "vv. 23-24" → Use the book from Scripture Reading section
+   - If Scripture Reading says "1 Cor. 1:23-24", then later "vv. 23-24" = "1 Cor. 1:23-24"
+
+4. DETECT ALL PATTERNS:
+   - Parenthetical: "(Acts 10:43)"
+   - Written out: "First Corinthians chapter one verse two"
+   - Abbreviations: "1 Cor. 1:2"
+   - Ranges: "verses 23-24", "vv. 23-24"
+   - Lists: "Rom. 16:1, 4-5, 16"
+
+Output format - JSON array only:
+[{{"reference": "1 Cor. 1:23-24", "book": "1 Corinthians", "chapter": 1, "start_verse": 23, "end_verse": 24}}]
 
 Text to analyze:
-{text[:5000]}"""
+{text[:6000]}"""
     
     def _get_few_shot_examples(self) -> str:
         """Provide specific examples from actual training data"""
