@@ -82,7 +82,7 @@ class LLMFirstDetector:
         
         try:
             response = self.client.chat.completions.create(
-                model="gpt-3.5-turbo",  # Use GPT-3.5 for faster processing
+                model="gpt-4o",  # Use GPT-4o (latest and most capable model)
                 messages=[
                     {
                         "role": "system", 
