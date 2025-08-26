@@ -7,8 +7,9 @@ services:
       cd bible-outline-enhanced-backend
       pip install -r requirements.txt
     startCommand: |
-      cd bible-outline-enhanced-backend
-      gunicorn --config gunicorn.conf.py src.main:app
+      cd bible-outline-enhanced-backend/src
+      chmod +x run.sh
+      ./run.sh
     envVars:
       - key: FLASK_APP
         value: main.py
