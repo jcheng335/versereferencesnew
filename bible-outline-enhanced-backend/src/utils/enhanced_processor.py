@@ -53,6 +53,14 @@ except ImportError:
     HTML_PROCESSOR_AVAILABLE = False
     print("HTML structured processor not available")
 
+# Import margin formatter for proper output formatting
+try:
+    from .margin_formatter import MarginFormatter
+    MARGIN_FORMATTER_AVAILABLE = True
+except ImportError:
+    MARGIN_FORMATTER_AVAILABLE = False
+    print("Margin formatter not available")
+
 # PostgreSQL Bible database is optional - use if available
 try:
     from .postgres_bible_database import PostgresBibleDatabase
@@ -184,6 +192,13 @@ class EnhancedProcessor:
             self.html_processor = HtmlStructuredProcessor(self.bible_db, openai_key)
             print("HTML structured processor initialized for 100% verse population")
         
+        # Initialize margin formatter
+        if MARGIN_FORMATTER_AVAILABLE:
+            self.margin_formatter = MarginFormatter()
+            print("Margin formatter initialized for proper output")
+        else:
+            self.margin_formatter = None
+        
         # Create models directory if not exists
         os.makedirs('models', exist_ok=True)
         
@@ -290,8 +305,19 @@ class EnhancedProcessor:
                                 }
                                 ref_dicts.append(ref_dict)
                 else:
-                    # Fallback to detector - handle different parameter names
-                    references = self._call_detector_safely(content, use_llm)
+                    # Fallback to detector - handle both dict and list returns
+                    detection_result = self._call_detector_safely(content, use_llm)
+                    
+                    # Check if Pure LLM detector returned dict with metadata
+                    if isinstance(detection_result, dict):
+                        references = detection_result.get('verses', [])
+                        session_metadata = detection_result.get('metadata', {})
+                        session_structure = detection_result.get('outline_structure', [])
+                    else:
+                        references = detection_result
+                        session_metadata = {}
+                        session_structure = []
+                    
                     ref_dicts = []
                     
                     for ref in references:
@@ -307,8 +333,19 @@ class EnhancedProcessor:
                         }
                         ref_dicts.append(ref_dict)
             else:
-                # Use the configured detector - handle different parameter names
-                references = self._call_detector_safely(content, use_llm)
+                # Use the configured detector - handle both dict and list returns
+                detection_result = self._call_detector_safely(content, use_llm)
+                
+                # Check if Pure LLM detector returned dict with metadata
+                if isinstance(detection_result, dict):
+                    references = detection_result.get('verses', [])
+                    session_metadata = detection_result.get('metadata', {})
+                    session_structure = detection_result.get('outline_structure', [])
+                else:
+                    references = detection_result
+                    session_metadata = {}
+                    session_structure = []
+                
                 ref_dicts = []
                 
                 for ref in references:
@@ -331,7 +368,14 @@ class EnhancedProcessor:
                 'references': ref_dicts,
                 'populated_content': None,
                 'use_llm': use_llm,
-                'llm_outline': llm_outline  # Store LLM outline structure if available
+                'llm_outline': llm_outline,  # Store LLM outline structure if available
+                'metadata': session_metadata if 'session_metadata' in locals() else {},
+                'outline_structure': session_structure if 'session_structure' in locals() else [],
+                'structured_data': {
+                    'metadata': session_metadata if 'session_metadata' in locals() else {},
+                    'outline_structure': session_structure if 'session_structure' in locals() else [],
+                    'verses': ref_dicts
+                }
             }
             print(f"Saving session {session_id} with {len(ref_dicts)} references")
             self.session_manager.save_session(session_id, session_data)
@@ -385,9 +429,25 @@ class EnhancedProcessor:
             return {'success': False, 'error': 'Session not found'}
         print(f"Session {session_id} retrieved successfully")
         
-        # Check if this was processed with HTML processor
-        if session.get('html_output'):
-            print("Session was processed with HTML processor - returning pre-populated content")
+        # Check if this was processed with HTML processor or Pure LLM
+        if session.get('html_output') or session.get('structured_data'):
+            print("Session was processed with HTML/Pure LLM processor - formatting with margin formatter")
+            
+            # Use margin formatter if available
+            if self.margin_formatter and format_type == 'margin':
+                structured_data = session.get('structured_data')
+                if structured_data:
+                    html_output = self.margin_formatter.format_html(structured_data)
+                    return {
+                        'success': True,
+                        'populated_content': session.get('populated_content', ''),
+                        'html_content': html_output,
+                        'format': format_type,
+                        'verse_count': session.get('stats', {}).get('total_verses_populated', 0),
+                        'message': f"Formatted with margin formatter"
+                    }
+            
+            # Fallback to original HTML output
             return {
                 'success': True,
                 'populated_content': session.get('populated_content', ''),

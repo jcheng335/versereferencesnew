@@ -367,8 +367,15 @@ The database should have a `bible_verses` table with columns:
 **Detection Method**: GPT-5 with intelligent verse extraction (NO REGEX)
 **Status**: ✅ Pure LLM Detection Implemented
 
-## Latest Updates (2025-08-27 v2)
-1. **FIXED Output Format Issues**:
+## Latest Updates (2025-08-27 v3 - Integration Fixed)
+1. **CRITICAL INTEGRATION FIX**:
+   - Enhanced processor now properly integrates with Pure LLM detector
+   - Margin formatter is now actually used in populate_verses method
+   - Pure LLM detector returns full structure (metadata, outline, verses)
+   - Session storage includes metadata and outline structure
+   - Fixed detector result handling (Dict vs List)
+
+2. **FIXED Output Format Issues**:
    - Created `margin_formatter.py` for proper Message_2.pdf style output
    - Titles properly extracted and displayed (Message Two, Christ as the Emancipator, etc.)
    - Roman numerals (I., II.) properly detected and formatted
