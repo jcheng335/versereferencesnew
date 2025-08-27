@@ -6,7 +6,7 @@ Based on comprehensive analysis of 12 outline PDFs with 3,311 verse references
 
 import json
 import os
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 from dataclasses import dataclass
 from openai import OpenAI
 
@@ -32,8 +32,8 @@ class PureLLMDetector:
         
         self.client = OpenAI(api_key=self.openai_key)
     
-    def detect_verses(self, text: str) -> List[VerseReference]:
-        """Detect verses using pure LLM intelligence"""
+    def detect_verses(self, text: str) -> Dict:
+        """Detect verses and document structure using pure LLM intelligence"""
         
         # Process in chunks for large documents
         if len(text) > 8000:
@@ -61,10 +61,11 @@ class PureLLMDetector:
             )
             
             content = response.choices[0].message.content
-            verses = self._parse_llm_response(content)
+            result = self._parse_llm_response_full(content)
             
-            print(f"Pure LLM detected {len(verses)} verses")
-            return verses
+            if 'verses' in result:
+                print(f"Pure LLM detected {len(result['verses'])} verses")
+            return result
             
         except Exception as e:
             print(f"LLM detection error: {e}")
@@ -92,42 +93,69 @@ class PureLLMDetector:
                 print(f"Fallback LLM also failed: {e2}")
                 return []
     
-    def _detect_verses_chunked(self, text: str) -> List[VerseReference]:
+    def _detect_verses_chunked(self, text: str) -> Dict:
         """Process large text in overlapping chunks"""
+        result = {
+            'metadata': {},
+            'outline_structure': [],
+            'verses': []
+        }
         all_verses = []
         seen_refs = set()
         
-        # Process in 7000 char chunks with 1000 char overlap
+        # First chunk should capture metadata
+        first_chunk = text[:8000]
+        first_result = self.detect_verses(first_chunk)
+        
+        # Get metadata and structure from first chunk
+        if isinstance(first_result, dict):
+            result['metadata'] = first_result.get('metadata', {})
+            result['outline_structure'] = first_result.get('outline_structure', [])
+            if 'verses' in first_result:
+                for v in first_result['verses']:
+                    ref_key = f"{v.book}_{v.chapter}_{v.start_verse}_{v.end_verse}"
+                    if ref_key not in seen_refs:
+                        seen_refs.add(ref_key)
+                        all_verses.append(v)
+        
+        # Process remaining chunks for additional verses
         chunk_size = 7000
         overlap = 1000
         
-        for i in range(0, len(text), chunk_size - overlap):
+        for i in range(7000, len(text), chunk_size - overlap):
             chunk = text[i:i + chunk_size]
             
             # Add context from previous chunk for continuity
             if i > 0:
                 chunk = text[max(0, i-200):i] + "\n[...]\n" + chunk
             
-            chunk_verses = self.detect_verses(chunk)
+            chunk_result = self.detect_verses(chunk)
             
             # Add unique verses
-            for v in chunk_verses:
-                ref_key = f"{v.book}_{v.chapter}_{v.start_verse}_{v.end_verse}"
-                if ref_key not in seen_refs:
-                    seen_refs.add(ref_key)
-                    all_verses.append(v)
+            if isinstance(chunk_result, dict) and 'verses' in chunk_result:
+                for v in chunk_result['verses']:
+                    ref_key = f"{v.book}_{v.chapter}_{v.start_verse}_{v.end_verse}"
+                    if ref_key not in seen_refs:
+                        seen_refs.add(ref_key)
+                        all_verses.append(v)
         
-        return all_verses
+        result['verses'] = all_verses
+        return result
     
     def _build_comprehensive_prompt(self, text: str) -> str:
         """Build comprehensive prompt based on analysis of 3,311 verse references"""
-        return f"""You are analyzing a theological outline document that contains Bible verse references.
-Based on analysis of 12 similar documents with 3,311 verse references, extract ALL verses.
+        return f"""You are analyzing a theological outline document. Extract ALL information and verses.
 
-DOCUMENT STRUCTURE TO RECOGNIZE:
-1. Title section (may contain "Message [Number]", title, subtitle, hymn references)
-2. Scripture Reading section (contains main verses, often with ranges like "Rom. 8:2, 31-39")
-3. Outline points (I., II., A., B., 1., 2., a., b.) with embedded verses
+CRITICAL: Extract DOCUMENT METADATA FIRST:
+1. Message Number (e.g., "Message Two", "Message Six")  
+2. Main Title (line after message number)
+3. Subtitle (second line after message number if exists)
+4. Hymn references (e.g., "EM Hymns: 540, 784")
+
+DOCUMENT STRUCTURE:
+1. Title section at the top
+2. Scripture Reading section with verse references
+3. Outline structure with Roman numerals (I., II.), letters (A., B.), numbers (1., 2.)
 4. Body text with verse references throughout
 
 VERSE FORMATS TO DETECT (all 1,797 variations found):
@@ -182,13 +210,26 @@ CRITICAL EXPANSION RULES:
 - ALWAYS split semicolons: "Eph. 4:7-16; 6:10-20" → two separate ranges
 - ALWAYS normalize books: "Rom" → "Romans", "1 Cor" → "1 Corinthians"
 
-OUTPUT FORMAT (JSON array with expanded verses):
-[
-  {{"reference": "Rom. 8:2", "book": "Romans", "chapter": 8, "start_verse": 2, "end_verse": null}},
-  {{"reference": "Rom. 8:31", "book": "Romans", "chapter": 8, "start_verse": 31, "end_verse": null}},
-  {{"reference": "Rom. 8:32", "book": "Romans", "chapter": 8, "start_verse": 32, "end_verse": null}},
-  ... (continue for EVERY verse in ranges)
-]
+OUTPUT FORMAT - Return JSON with metadata AND verses:
+{{
+  "metadata": {{
+    "message_number": "Message Two",
+    "title": "Christ as the Emancipator",  
+    "subtitle": "and as the One Who Makes Us More Than Conquerors",
+    "hymns": "540, 784"
+  }},
+  "outline_structure": [
+    {{"type": "scripture_reading", "text": "Rom. 8:2, 31-39"}},
+    {{"type": "roman", "number": "I", "text": "We can experience..."}},
+    {{"type": "letter", "number": "A", "text": "The enjoyment..."}}
+  ],
+  "verses": [
+    {{"reference": "Rom. 8:2", "book": "Romans", "chapter": 8, "start_verse": 2, "end_verse": null, "context": "Scripture Reading"}},
+    {{"reference": "Rom. 8:31", "book": "Romans", "chapter": 8, "start_verse": 31, "end_verse": null, "context": "Scripture Reading"}},
+    {{"reference": "Rom. 8:32", "book": "Romans", "chapter": 8, "start_verse": 32, "end_verse": null, "context": "Scripture Reading"}},
+    ... (EVERY verse from ranges expanded individually)
+  ]
+}}
 
 IMPORTANT: 
 - Extract EVERY verse reference, no matter how it appears
@@ -214,6 +255,80 @@ Expand ALL ranges (31-39 = 31,32,33,34,35,36,37,38,39).
 Return JSON array only.
 
 Text: {text[:4000]}"""
+    
+    def _parse_llm_response_full(self, content: str) -> Dict:
+        """Parse the full LLM response including metadata and structure"""
+        result = {
+            'metadata': {},
+            'outline_structure': [],
+            'verses': []
+        }
+        
+        try:
+            # Clean up response
+            if '```json' in content:
+                start_idx = content.find('```json') + 7
+                end_idx = content.find('```', start_idx)
+                json_str = content[start_idx:end_idx].strip()
+            elif '```' in content:
+                start_idx = content.find('```') + 3
+                end_idx = content.find('```', start_idx)
+                json_str = content[start_idx:end_idx].strip()
+                if json_str.startswith(('json', 'JSON')):
+                    json_str = json_str[4:].strip()
+            else:
+                # Find JSON object
+                start_idx = content.find('{')
+                end_idx = content.rfind('}') + 1
+                json_str = content[start_idx:end_idx] if start_idx >= 0 and end_idx > start_idx else ""
+            
+            if json_str:
+                data = json.loads(json_str)
+                
+                # Extract metadata
+                if 'metadata' in data:
+                    result['metadata'] = data['metadata']
+                
+                # Extract outline structure  
+                if 'outline_structure' in data:
+                    result['outline_structure'] = data['outline_structure']
+                
+                # Extract verses
+                if 'verses' in data:
+                    verses = []
+                    for v in data['verses']:
+                        if isinstance(v, dict):
+                            book = v.get('book', '').strip()
+                            chapter = v.get('chapter', 0)
+                            start = v.get('start_verse', 0)
+                            end = v.get('end_verse')
+                            
+                            # Skip invalid entries
+                            if not book or chapter == 0 or start == 0:
+                                continue
+                            
+                            # Normalize book names
+                            book = self._normalize_book_name(book)
+                            
+                            verse = VerseReference(
+                                book=book,
+                                chapter=chapter,
+                                start_verse=start,
+                                end_verse=end,
+                                original_text=v.get('reference', ''),
+                                confidence=0.95,
+                                pattern='pure_llm',
+                                context=v.get('context', '')
+                            )
+                            verses.append(verse)
+                    result['verses'] = verses
+        
+        except Exception as e:
+            print(f"Error parsing LLM response: {e}")
+            # Try to extract verses using simpler method
+            result['verses'] = self._parse_llm_response(content)
+        
+        return result
     
     def _parse_llm_response(self, content: str) -> List[VerseReference]:
         """Parse the LLM response into VerseReference objects"""

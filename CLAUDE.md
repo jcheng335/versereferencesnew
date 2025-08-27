@@ -7,7 +7,7 @@ A comprehensive Bible verse reference application that automatically detects and
 3. **Training data** from 12 Message PDFs (1,630 verses extracted) ✅
 4. **Comprehensive fallback patterns** for edge cases ✅
 
-## Current Status (2025-08-27 Latest Update)
+## Current Status (2025-08-27 v2 - Format Fixes)
 - **Detection System**: Pure LLM with GPT-5 (GPT-4o fallback) - NO REGEX
 - **Database**: PostgreSQL with 31,103 verses - FULL BIBLE TEXT ✅
 - **Detection Accuracy**: Comprehensive based on 3,311 verse references analysis
@@ -367,7 +367,29 @@ The database should have a `bible_verses` table with columns:
 **Detection Method**: GPT-5 with intelligent verse extraction (NO REGEX)
 **Status**: ✅ Pure LLM Detection Implemented
 
-## Work Completed (2025-08-27)
+## Latest Updates (2025-08-27 v2)
+1. **FIXED Output Format Issues**:
+   - Created `margin_formatter.py` for proper Message_2.pdf style output
+   - Titles properly extracted and displayed (Message Two, Christ as the Emancipator, etc.)
+   - Roman numerals (I., II.) properly detected and formatted
+   - Verses in blue color with proper left margin alignment
+   - Each verse expanded to individual lines (Rom. 8:31-39 → 9 separate verse lines)
+
+2. **Enhanced Pure LLM Detection**:
+   - Returns full document structure with metadata
+   - Extracts: message number, title, subtitle, hymns
+   - Identifies outline structure (Roman numerals, letters, numbers)
+   - Expands ALL verse ranges automatically
+   
+3. **Output Format Matches Message_2.pdf**:
+   - Title centered at top
+   - Scripture Reading section
+   - Roman numerals for major sections (I., II.)
+   - Letters for subsections (A., B.)  
+   - Verses in left margin with blue color
+   - Proper indentation throughout
+
+## Work Completed (2025-08-27 v1)
 1. **CRITICAL**: Analyzed all 12 original PDFs - discovered 3,311 verse references with 1,797 unique formats
 2. **Pure LLM Detection System**:
    - Created `pure_llm_detector.py` - NO REGEX, only intelligent LLM detection
