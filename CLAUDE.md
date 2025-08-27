@@ -4,13 +4,21 @@ This file provides comprehensive guidance to Claude Code when working with Pytho
 
 ## Latest Updates (2025-08-27)
 
-### Version 4.2 - Critical Timeout Fix for Render
-- **CRITICAL FIX**: Added explicit timeout in render.yaml and Procfile
-- **Fixed**: Worker timeout by adding --timeout 300 directly to gunicorn command
-- **Added**: Procfile to override Render's default start command
-- **Updated**: render.yaml with explicit timeout parameters
-- **Note**: Render was NOT using gunicorn_config.py, must use explicit flags
-- **Status**: This should finally resolve the 30-second timeout issue
+### Version 4.3 - CRITICAL: Render Service Configuration Issue
+- **CRITICAL ISSUE**: Render service has hardcoded start command that ignores:
+  - Procfile (even in root directory)
+  - render.yaml configuration
+  - gunicorn_config.py
+- **PROBLEM**: Service uses `cd bible-outline-enhanced-backend/src && gunicorn main:app --bind 0.0.0.0:$PORT`
+- **REQUIRED ACTION**: Must manually update service in Render dashboard:
+  - Go to https://dashboard.render.com/web/srv-d2ltokje5dus7396ijh0/settings
+  - Change Start Command to include: `--timeout 300 --graceful-timeout 120 --workers 1`
+- **STATUS**: Network errors will persist until manual dashboard update
+
+### Version 4.2 - Critical Timeout Fix Attempted
+- **ATTEMPTED**: Added explicit timeout in render.yaml and Procfile
+- **ATTEMPTED**: Worker timeout by adding --timeout 300 directly to gunicorn command
+- **ISSUE**: Render ignores these files when service created manually
 
 ### Version 4.1 - Timeout and Fallback Fixes
 - **Fixed**: Worker timeout issues by adding explicit 300s timeout in run.sh

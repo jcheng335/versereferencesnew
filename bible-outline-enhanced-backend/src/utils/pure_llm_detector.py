@@ -274,7 +274,7 @@ IMPORTANT:
 - Return ONLY the JSON array, no explanations
 
 Text to analyze:
-{text[:5000]}"""
+{text[:3500]}"""
     
     def _build_simple_prompt(self, text: str) -> str:
         """Simplified prompt for fallback"""
@@ -361,8 +361,43 @@ Text: {text[:4000]}"""
         
         except Exception as e:
             print(f"Error parsing LLM response: {e}")
-            # Try to extract verses using simpler method
-            result['verses'] = self._parse_llm_response(content)
+            # Try to fix common JSON issues
+            try:
+                # Remove trailing commas and fix unterminated strings
+                import re
+                json_str = re.sub(r',\s*}', '}', json_str)  # Remove trailing commas before }
+                json_str = re.sub(r',\s*]', ']', json_str)  # Remove trailing commas before ]
+                
+                # Try parsing again
+                data = json.loads(json_str)
+                if 'metadata' in data:
+                    result['metadata'] = data['metadata']
+                if 'outline_structure' in data:
+                    result['outline_structure'] = data['outline_structure']
+                if 'verses' in data:
+                    verses = []
+                    for v in data['verses']:
+                        if isinstance(v, dict):
+                            book = v.get('book', '').strip()
+                            chapter = v.get('chapter', 0)
+                            start = v.get('start_verse', 0)
+                            if book and chapter > 0 and start > 0:
+                                verse = VerseReference(
+                                    book=self._normalize_book_name(book),
+                                    chapter=chapter,
+                                    start_verse=start,
+                                    end_verse=v.get('end_verse'),
+                                    original_text=v.get('reference', ''),
+                                    confidence=0.95,
+                                    pattern='pure_llm',
+                                    context=v.get('context', '')
+                                )
+                                verses.append(verse)
+                    result['verses'] = verses
+            except Exception as e2:
+                print(f"Failed to fix JSON: {e2}")
+                # Try to extract verses using simpler method
+                result['verses'] = self._parse_llm_response(content)
         
         return result
     
