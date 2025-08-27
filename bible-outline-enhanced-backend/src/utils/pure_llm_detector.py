@@ -42,7 +42,7 @@ class PureLLMDetector:
         prompt = self._build_comprehensive_prompt(text)
         
         try:
-            # Use GPT-5 for maximum accuracy
+            # Use GPT-5 for maximum accuracy (REQUIRED - per CLAUDE.md)
             response = self.client.chat.completions.create(
                 model="gpt-5",
                 messages=[
@@ -266,7 +266,7 @@ IMPORTANT:
 - Return ONLY the JSON array, no explanations
 
 Text to analyze:
-{text[:7000]}"""
+{text[:5000]}"""
     
     def _build_simple_prompt(self, text: str) -> str:
         """Simplified prompt for fallback"""
