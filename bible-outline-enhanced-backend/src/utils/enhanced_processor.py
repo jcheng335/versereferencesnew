@@ -221,7 +221,7 @@ class EnhancedProcessor:
                 print(f"Could not initialize scheduler: {e}")
                 self.scheduler = None
     
-    def process_document(self, file_path: str, filename: str, use_llm: bool = True, force_html: bool = True) -> Dict[str, Any]:
+    def process_document(self, file_path: str, filename: str, use_llm: bool = True, force_html: bool = False) -> Dict[str, Any]:
         """
         Process document with enhanced verse detection
         
@@ -275,8 +275,37 @@ class EnhancedProcessor:
             
             # Use LLM-first approach if enabled
             llm_outline = None
+            session_structured_data = None
             
-            if self.use_llm_first and use_llm:
+            # Try Pure LLM detector first if use_llm is True
+            if use_llm and self.detector and hasattr(self.detector, 'detect_verses'):
+                print("[INFO] Using Pure LLM detector for verse detection")
+                detection_result = self.detector.detect_verses(content)
+                
+                # Check if Pure LLM detector returned dict with metadata
+                if isinstance(detection_result, dict):
+                    references = detection_result.get('verses', [])
+                    session_metadata = detection_result.get('metadata', {})
+                    session_structure = detection_result.get('outline_structure', [])
+                    session_structured_data = detection_result
+                    ref_dicts = []
+                    
+                    for ref in references:
+                        if hasattr(ref, 'book'):  # VerseReference object
+                            ref_dict = {
+                                'book': ref.book,
+                                'chapter': ref.chapter,
+                                'start_verse': ref.start_verse,
+                                'end_verse': ref.end_verse,
+                                'context': ref.context if hasattr(ref, 'context') else '',
+                                'confidence': ref.confidence if hasattr(ref, 'confidence') else 0.95,
+                                'insertion_point': len(content),
+                                'original_text': ref.original_text if hasattr(ref, 'original_text') else ''
+                            }
+                        else:  # Plain dict
+                            ref_dict = ref
+                        ref_dicts.append(ref_dict)
+            elif self.use_llm_first and use_llm and self.llm_detector:
                 # Process with LLM to extract outline and verses
                 llm_result = self.llm_detector.process_document(content)
                 
