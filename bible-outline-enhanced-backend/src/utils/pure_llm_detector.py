@@ -68,19 +68,19 @@ class PureLLMDetector:
             return result
             
         except Exception as e:
-            print(f"LLM detection error: {e}")
-            # Fallback to GPT-3.5-turbo
+            print(f"GPT-5 detection error (falling back to GPT-4o per CLAUDE.md): {e}")
+            # Fallback to GPT-4o as specified in CLAUDE.md (NOT GPT-3.5 or GPT-4o-mini)
             try:
                 response = self.client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
                         {
                             "role": "system", 
-                            "content": "Extract Bible verses. Return JSON array only."
+                            "content": "You are an expert Bible verse reference extractor. Return ONLY valid JSON."
                         },
                         {
                             "role": "user", 
-                            "content": self._build_simple_prompt(text)
+                            "content": prompt  # Use full prompt for better accuracy
                         }
                     ],
                     temperature=0.1,
@@ -88,10 +88,18 @@ class PureLLMDetector:
                     timeout=60
                 )
                 content = response.choices[0].message.content
-                return self._parse_llm_response(content)
+                result = self._parse_llm_response_full(content)
+                if 'verses' in result:
+                    print(f"GPT-4o fallback detected {len(result['verses'])} verses")
+                return result
             except Exception as e2:
-                print(f"Fallback LLM also failed: {e2}")
-                return []
+                print(f"GPT-4o fallback also failed: {e2}")
+                # Return empty structure per CLAUDE.md requirements
+                return {
+                    'metadata': {},
+                    'outline_structure': [],
+                    'verses': []
+                }
     
     def _detect_verses_chunked(self, text: str) -> Dict:
         """Process large text in overlapping chunks"""

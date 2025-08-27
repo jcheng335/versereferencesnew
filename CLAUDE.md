@@ -4,13 +4,20 @@ This file provides comprehensive guidance to Claude Code when working with Pytho
 
 ## Latest Updates (2025-08-27)
 
+### Version 4.1 - Timeout and Fallback Fixes
+- **Fixed**: Worker timeout issues by adding explicit 300s timeout in run.sh
+- **Fixed**: GPT-4o fallback now properly uses full prompt for better accuracy
+- **Added**: Explicit timeout configuration in multiple places (gunicorn_config.py, run.sh)
+- **Updated**: Error handling to properly fallback from GPT-5 to GPT-4o
+- **Note**: Render service must use run.sh or explicit --timeout 300 flag
+- **Status**: Network errors due to worker timeouts being resolved
+
 ### Version 4.0 - Margin Formatter Integration Fixed
 - **Fixed**: Margin formatter now properly populates HTML body with content
 - **Fixed**: Data structure mismatch between pure_llm_detector and margin_formatter
 - **Added**: _process_outline_structure method to handle outline format from Pure LLM detector
 - **Updated**: Session data storage to preserve structured_data properly
 - **Changed**: Default force_html=False to use Pure LLM detector when use_llm=True
-- **Status**: Deployed to Render, testing with W24ECT02en.pdf
 
 ### Known Issues Being Fixed
 1. Title extraction ("Message Two") not appearing in output
