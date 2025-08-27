@@ -42,9 +42,9 @@ class PureLLMDetector:
         prompt = self._build_comprehensive_prompt(text)
         
         try:
-            # Use GPT-4o-mini for optimal speed and accuracy
+            # Use GPT-5 for maximum accuracy
             response = self.client.chat.completions.create(
-                model="gpt-4o-mini",
+                model="gpt-5",
                 messages=[
                     {
                         "role": "system", 
@@ -71,7 +71,7 @@ class PureLLMDetector:
             # Fallback to GPT-3.5-turbo
             try:
                 response = self.client.chat.completions.create(
-                    model="gpt-3.5-turbo",
+                    model="gpt-4o",
                     messages=[
                         {
                             "role": "system", 

@@ -83,7 +83,7 @@ class LLMFirstDetector:
             # Try GPT-5 first, fallback to GPT-4
             try:
                 response = self.client.chat.completions.create(
-                    model="gpt-4o-mini",  # Use GPT-4o-mini for faster processing
+                    model="gpt-5",  # Use GPT-5 for maximum accuracy
                     messages=[
                         {
                             "role": "system", 
@@ -100,9 +100,9 @@ class LLMFirstDetector:
                 )
             except Exception as gpt5_error:
                 # Fallback to GPT-4 if GPT-5 fails
-                print(f"GPT-4o-mini failed ({str(gpt5_error)[:100]}), falling back to GPT-3.5-turbo...")
+                print(f"GPT-5 failed ({str(gpt5_error)[:100]}), falling back to GPT-4o...")
                 response = self.client.chat.completions.create(
-                    model="gpt-3.5-turbo",  # Fallback to GPT-3.5
+                    model="gpt-4o",  # Fallback to GPT-4o
                     messages=[
                         {
                             "role": "system", 
