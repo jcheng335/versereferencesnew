@@ -1,84 +1,42 @@
 services:
-  # Backend API Service
+  # Backend Service
   - type: web
     name: bible-outline-backend
-    env: python
+    runtime: python
+    repo: https://github.com/jcheng335/versereferencesnew
+    branch: main
     buildCommand: |
       cd bible-outline-enhanced-backend
       pip install -r requirements.txt
     startCommand: |
       cd bible-outline-enhanced-backend/src
-      chmod +x run.sh
-      ./run.sh
+      gunicorn main:app --config ../gunicorn_config.py
     envVars:
-      - key: FLASK_APP
-        value: main.py
-      - key: FLASK_ENV
-        value: production
+      - key: OPENAI_API_KEY
+        sync: false  # Set manually in dashboard
       - key: DATABASE_URL
         fromDatabase:
-          name: bible-outline-db
+          name: bible-verses-db
           property: connectionString
-      - key: SMTP_SERVER
-        value: smtp.gmail.com
-      - key: SMTP_PORT
-        value: 587
-      - key: SMTP_USERNAME
-        sync: false  # Set manually in Render dashboard
-      - key: SMTP_PASSWORD
-        sync: false  # Set manually in Render dashboard
-      - key: SECRET_KEY
-        generateValue: true
-    healthCheckPath: /api/health
-
-  # Frontend React Service (Static Site)
+      - key: PYTHON_VERSION
+        value: "3.11"
+    
+  # Frontend Service  
   - type: static
     name: bible-outline-frontend
+    repo: https://github.com/jcheng335/versereferencesnew
+    branch: main
     buildCommand: |
       cd bible-outline-enhanced-frontend
       npm install --legacy-peer-deps
       npm run build
     staticPublishPath: bible-outline-enhanced-frontend/dist
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
-    headers:
-      - path: /*
-        name: X-Frame-Options
-        value: SAMEORIGIN
     envVars:
-      - key: VITE_API_BASE_URL
-        value: https://bible-outline-backend.onrender.com
-
-  # Scheduled Task for LSM Webcast Scraping
-  - type: cron
-    name: lsm-outline-scraper
-    env: python
-    schedule: "0 9 * * 1"  # Every Monday at 9 AM UTC
-    buildCommand: |
-      cd bible-outline-enhanced-backend
-      pip install -r requirements.txt
-    startCommand: |
-      cd bible-outline-enhanced-backend
-      python scripts/weekly_scraper.py
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: bible-outline-db
-          property: connectionString
-      - key: SMTP_SERVER
-        value: smtp.gmail.com
-      - key: SMTP_PORT
-        value: 587
-      - key: SMTP_USERNAME
-        sync: false
-      - key: SMTP_PASSWORD
-        sync: false
+      - key: NODE_VERSION
+        value: "18"
 
 databases:
-  # PostgreSQL database for scheduling and user data
-  - name: bible-outline-db
-    databaseName: bible_outline_db
-    user: bible_outline_user
-
+  - name: bible-verses-db
+    plan: free
+    databaseName: bible_verses
+    user: bible_user

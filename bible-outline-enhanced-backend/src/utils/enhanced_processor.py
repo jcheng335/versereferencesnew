@@ -12,6 +12,12 @@ from docx import Document
 from .hybrid_verse_detector import HybridVerseDetector, VerseReference
 from .llm_verse_detector import LLMVerseDetector
 try:
+    from .pure_llm_detector import PureLLMDetector
+    PURE_LLM_AVAILABLE = True
+except ImportError:
+    PURE_LLM_AVAILABLE = False
+    print("Pure LLM detector not available")
+try:
     from .master_verse_detector import MasterVerseDetector
     MASTER_AVAILABLE = True
 except ImportError:
@@ -109,8 +115,27 @@ class EnhancedProcessor:
             
         self.use_llm_first = use_llm_first
         
-        # Initialize the best available detector - LLM-first for 100% accuracy
-        if LLM_FIRST_AVAILABLE and openai_key:
+        # Initialize the best available detector - Pure LLM for 100% accuracy without regex
+        if PURE_LLM_AVAILABLE and openai_key:
+            try:
+                self.pure_llm = PureLLMDetector(openai_key)
+                print("Using Pure LLM Detector (no regex) for intelligent detection")
+                self.detector = self.pure_llm
+            except Exception as e:
+                print(f"Could not initialize Pure LLM detector: {e}")
+                # Fallback to LLM-first if available
+                if LLM_FIRST_AVAILABLE:
+                    try:
+                        self.llm_first = LLMFirstDetector(openai_key)
+                        print("Falling back to LLM-First Detector")
+                        self.detector = self.llm_first
+                    except Exception as e2:
+                        print(f"LLM-first also failed: {e2}")
+                        if COMPREHENSIVE_AVAILABLE:
+                            self.comprehensive_detector = ComprehensiveVerseDetector(openai_key)
+                            print("Falling back to Comprehensive Verse Detector")
+                            self.detector = self.comprehensive_detector
+        elif LLM_FIRST_AVAILABLE and openai_key:
             try:
                 self.llm_first = LLMFirstDetector(openai_key)
                 print("Using LLM-First Detector for 100% accuracy")

@@ -92,8 +92,24 @@ class HtmlStructuredProcessor:
                         html_parts.append('<br/>')
                         continue
                     
-                    # Detect line type and add appropriate HTML tags
-                    if line.startswith('Scripture Reading:'):
+                    # Detect document metadata (title, message number, hymns)
+                    if page_num == 0 and line_num < 10:
+                        # Check for Message Number
+                        if re.match(r'^(Message|MESSAGE)\s+(\w+)', line, re.IGNORECASE):
+                            html_parts.append(f'<div class="message-number" data-line="{line_num}">{line}</div>')
+                        # Check for hymn references
+                        elif re.match(r'.*(Hymn|hymn)s?\s*[:.]?\s*\d+', line, re.IGNORECASE):
+                            html_parts.append(f'<div class="hymn-reference" data-line="{line_num}">{line}</div>')
+                        # Check for Scripture Reading
+                        elif line.startswith('Scripture Reading:'):
+                            html_parts.append(f'<div class="scripture-reading" data-line="{line_num}">{line}</div>')
+                        # Otherwise treat as potential title/subtitle
+                        elif line and not re.match(r'^[IVX]+\.', line):
+                            html_parts.append(f'<div class="title-text" data-line="{line_num}">{line}</div>')
+                        else:
+                            html_parts.append(f'<div class="text" data-line="{line_num}">{line}</div>')
+                    # Regular content detection
+                    elif line.startswith('Scripture Reading:'):
                         html_parts.append(f'<div class="scripture-reading" data-line="{line_num}">{line}</div>')
                     elif re.match(r'^[IVX]+\.', line):
                         html_parts.append(f'<div class="outline-roman" data-line="{line_num}">{line}</div>')

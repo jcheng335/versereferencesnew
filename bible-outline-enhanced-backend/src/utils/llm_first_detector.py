@@ -83,7 +83,7 @@ class LLMFirstDetector:
             # Try GPT-5 first, fallback to GPT-4
             try:
                 response = self.client.chat.completions.create(
-                    model="gpt-5",  # Use GPT-5
+                    model="gpt-4o-mini",  # Use GPT-4o-mini for faster processing
                     messages=[
                         {
                             "role": "system", 
@@ -95,14 +95,14 @@ class LLMFirstDetector:
                         }
                     ],
                     temperature=0.1,  # Low temperature for consistency
-                    max_completion_tokens=4000,  # GPT-5 uses max_completion_tokens
-                    timeout=120  # 2 minute timeout for GPT-5 API call
+                    max_completion_tokens=4000,  # Use max_completion_tokens
+                    timeout=60  # 1 minute timeout
                 )
             except Exception as gpt5_error:
                 # Fallback to GPT-4 if GPT-5 fails
-                print(f"GPT-5 failed ({str(gpt5_error)[:100]}), falling back to GPT-4o...")
+                print(f"GPT-4o-mini failed ({str(gpt5_error)[:100]}), falling back to GPT-3.5-turbo...")
                 response = self.client.chat.completions.create(
-                    model="gpt-4o",  # Fallback to GPT-4
+                    model="gpt-3.5-turbo",  # Fallback to GPT-3.5
                     messages=[
                         {
                             "role": "system", 
@@ -114,7 +114,7 @@ class LLMFirstDetector:
                         }
                     ],
                     temperature=0.1,
-                    max_tokens=4000,  # GPT-4 uses max_tokens
+                    max_tokens=4000,  # GPT-3.5 uses max_tokens
                     timeout=60
                 )
             
@@ -209,35 +209,53 @@ class LLMFirstDetector:
     
     def _build_simple_prompt(self, text: str) -> str:
         """Build a simple, effective prompt for verse extraction"""
-        return f"""Extract ALL Bible verse references from this outline and return as JSON array.
+        return f"""Extract ALL Bible verse references from this theological outline. Return ONLY a JSON array.
 
-CRITICAL INSTRUCTIONS:
+CRITICAL: This is a theological outline with:
+- Title/Message Number at the top
+- Scripture Reading section with verse ranges
+- Outline points (I, II, A, B, 1, 2, etc.)
+- Verses embedded throughout the text
 
-1. NORMALIZE BOOK NAMES to standard abbreviations:
-   - "First Corinthians" or "1 Corinthians" → "1 Corinthians"
-   - "First Peter" or "1 Peter" → "1 Peter"
-   - "Second Timothy" or "2 Timothy" → "2 Timothy"
-   - "First John" or "1 John" → "1 John"
-   - Always use the number form (1, 2, 3) not written form (First, Second, Third)
+INSTRUCTIONS:
 
-2. SCRIPTURE READING - Extract COMPLETE references:
-   - "Scripture Reading: 1 Cor. 1:23-24" → Include full "1 Cor. 1:23-24" not just "23-24"
-   - Split multiple references: "Eph. 4:7-16; 6:10-20" → Two separate entries
+1. EXTRACT DOCUMENT METADATA (if present):
+   - Message number (e.g., "Message Two", "Message Six")
+   - Title/subtitle lines after the message number
+   - Hymn references
 
-3. STANDALONE VERSES - Resolve using context:
-   - "v. 7" → Find book/chapter from Scripture Reading or nearest reference
-   - "vv. 23-24" → Use the book from Scripture Reading section
-   - If Scripture Reading says "1 Cor. 1:23-24", then later "vv. 23-24" = "1 Cor. 1:23-24"
+2. SCRIPTURE READING - EXPAND ALL RANGES:
+   - "Scripture Reading: Rom. 8:2, 31-39" → Extract EVERY verse:
+     * Rom. 8:2 (single verse)
+     * Rom. 8:31, 8:32, 8:33, 8:34, 8:35, 8:36, 8:37, 8:38, 8:39 (entire range)
+   - IMPORTANT: Ranges like "31-39" mean ALL verses from 31 through 39
+   - Split multiple references: "Eph. 4:7-16; 6:10-20" → Expand both ranges
+
+3. VERSE RANGES - ALWAYS EXPAND:
+   - "Rom. 8:31-39" → Create entries for verses 31, 32, 33, 34, 35, 36, 37, 38, 39
+   - "Matt. 5:3-12" → Create entries for verses 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+   - Each verse in a range gets its own entry
 
 4. DETECT ALL PATTERNS:
    - Parenthetical: "(Acts 10:43)"
    - Written out: "First Corinthians chapter one verse two"
    - Abbreviations: "1 Cor. 1:2"
-   - Ranges: "verses 23-24", "vv. 23-24"
-   - Lists: "Rom. 16:1, 4-5, 16"
+   - Standalone: "v. 7", "vv. 23-24" (resolve from context)
+   - Lists: "Rom. 16:1, 4-5, 16" → Rom. 16:1, Rom. 16:4-5, Rom. 16:16
 
-Output format - JSON array only:
-[{{"reference": "1 Cor. 1:23-24", "book": "1 Corinthians", "chapter": 1, "start_verse": 23, "end_verse": 24}}]
+5. BOOK NAME NORMALIZATION:
+   - Rom → Romans
+   - 1 Cor → 1 Corinthians
+   - Matt → Matthew
+   - etc.
+
+Output format - JSON array with EVERY verse (expand all ranges):
+[
+  {{"reference": "Rom. 8:2", "book": "Romans", "chapter": 8, "start_verse": 2, "end_verse": 2}},
+  {{"reference": "Rom. 8:31", "book": "Romans", "chapter": 8, "start_verse": 31, "end_verse": 31}},
+  {{"reference": "Rom. 8:32", "book": "Romans", "chapter": 8, "start_verse": 32, "end_verse": 32}},
+  ...continue for EVERY verse in the range...
+]
 
 Text to analyze:
 {text[:6000]}"""
