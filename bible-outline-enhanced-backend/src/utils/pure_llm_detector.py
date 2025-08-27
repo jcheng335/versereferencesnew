@@ -55,7 +55,7 @@ class PureLLMDetector:
                         "content": prompt
                     }
                 ],
-                temperature=0.1,
+                temperature=1,  # GPT-5 only supports default temperature
                 max_completion_tokens=8000,  # Increased for comprehensive detection
                 timeout=90  # 90 second timeout
             )
