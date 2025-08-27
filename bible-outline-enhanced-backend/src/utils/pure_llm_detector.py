@@ -146,17 +146,22 @@ class PureLLMDetector:
         """Build comprehensive prompt based on analysis of 3,311 verse references"""
         return f"""You are analyzing a theological outline document. Extract ALL information and verses.
 
-CRITICAL: Extract DOCUMENT METADATA FIRST:
-1. Message Number (e.g., "Message Two", "Message Six")  
-2. Main Title (line after message number)
-3. Subtitle (second line after message number if exists)
-4. Hymn references (e.g., "EM Hymns: 540, 784")
+STEP 1 - EXTRACT DOCUMENT METADATA (FIRST 3-4 LINES):
+Look at the very first lines of the document:
+- Line 1: Message Number (e.g., "Message Two", "Message Three")
+- Line 2: Main Title (e.g., "Christ as the Emancipator")
+- Line 3: Subtitle if present (e.g., "and as the One Who Makes Us More Than Conquerors")
+- Line 4 or 5: Scripture Reading (e.g., "Scripture Reading: Rom. 8:2, 31-39")
 
-DOCUMENT STRUCTURE:
-1. Title section at the top
-2. Scripture Reading section with verse references
-3. Outline structure with Roman numerals (I., II.), letters (A., B.), numbers (1., 2.)
-4. Body text with verse references throughout
+The document starts with:
+{text[:500]}
+
+STEP 2 - EXTRACT OUTLINE STRUCTURE:
+Find the hierarchical outline with:
+- Roman numerals (I., II., III.)
+- Letters (A., B., C.)
+- Numbers (1., 2., 3.)
+- Sub-letters (a., b., c.)
 
 VERSE FORMATS TO DETECT (all 1,797 variations found):
 
@@ -205,10 +210,26 @@ VERSE FORMATS TO DETECT (all 1,797 variations found):
    - Written forms: "First Corinthians" = "1 Corinthians"
 
 CRITICAL EXPANSION RULES:
-- ALWAYS expand ranges: "Rom. 8:31-39" → create 9 separate verse entries
+- ALWAYS expand ranges: "Rom. 8:31-39" → create INDIVIDUAL entries for verses 31, 32, 33, 34, 35, 36, 37, 38, 39
+- For "Scripture Reading: Rom. 8:2, 31-39" you MUST create:
+  * One entry for Rom. 8:2
+  * Nine separate entries for Rom. 8:31 through Rom. 8:39
 - ALWAYS resolve context: "v. 2" needs book/chapter from Scripture Reading
 - ALWAYS split semicolons: "Eph. 4:7-16; 6:10-20" → two separate ranges
 - ALWAYS normalize books: "Rom" → "Romans", "1 Cor" → "1 Corinthians"
+
+EXAMPLE for "Scripture Reading: Rom. 8:2, 31-39":
+You must return 10 verse entries total:
+1. Rom. 8:2
+2. Rom. 8:31
+3. Rom. 8:32
+4. Rom. 8:33
+5. Rom. 8:34
+6. Rom. 8:35
+7. Rom. 8:36
+8. Rom. 8:37
+9. Rom. 8:38
+10. Rom. 8:39
 
 OUTPUT FORMAT - Return JSON with metadata AND verses:
 {{
@@ -216,18 +237,25 @@ OUTPUT FORMAT - Return JSON with metadata AND verses:
     "message_number": "Message Two",
     "title": "Christ as the Emancipator",  
     "subtitle": "and as the One Who Makes Us More Than Conquerors",
-    "hymns": "540, 784"
+    "hymns": ""
   }},
   "outline_structure": [
     {{"type": "scripture_reading", "text": "Rom. 8:2, 31-39"}},
-    {{"type": "roman", "number": "I", "text": "We can experience..."}},
-    {{"type": "letter", "number": "A", "text": "The enjoyment..."}}
+    {{"type": "outline", "number": "I", "text": "We can experience, enjoy, and express Christ as our Emancipator by the law of the Spirit of life"}},
+    {{"type": "outline", "number": "A", "text": "The enjoyment of the law of the Spirit of life..."}}
   ],
   "verses": [
     {{"reference": "Rom. 8:2", "book": "Romans", "chapter": 8, "start_verse": 2, "end_verse": null, "context": "Scripture Reading"}},
     {{"reference": "Rom. 8:31", "book": "Romans", "chapter": 8, "start_verse": 31, "end_verse": null, "context": "Scripture Reading"}},
     {{"reference": "Rom. 8:32", "book": "Romans", "chapter": 8, "start_verse": 32, "end_verse": null, "context": "Scripture Reading"}},
-    ... (EVERY verse from ranges expanded individually)
+    {{"reference": "Rom. 8:33", "book": "Romans", "chapter": 8, "start_verse": 33, "end_verse": null, "context": "Scripture Reading"}},
+    {{"reference": "Rom. 8:34", "book": "Romans", "chapter": 8, "start_verse": 34, "end_verse": null, "context": "Scripture Reading"}},
+    {{"reference": "Rom. 8:35", "book": "Romans", "chapter": 8, "start_verse": 35, "end_verse": null, "context": "Scripture Reading"}},
+    {{"reference": "Rom. 8:36", "book": "Romans", "chapter": 8, "start_verse": 36, "end_verse": null, "context": "Scripture Reading"}},
+    {{"reference": "Rom. 8:37", "book": "Romans", "chapter": 8, "start_verse": 37, "end_verse": null, "context": "Scripture Reading"}},
+    {{"reference": "Rom. 8:38", "book": "Romans", "chapter": 8, "start_verse": 38, "end_verse": null, "context": "Scripture Reading"}},
+    {{"reference": "Rom. 8:39", "book": "Romans", "chapter": 8, "start_verse": 39, "end_verse": null, "context": "Scripture Reading"}},
+    ... (continue with ALL other verses found in the document)
   ]
 }}
 

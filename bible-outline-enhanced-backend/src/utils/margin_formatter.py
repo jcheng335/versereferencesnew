@@ -129,14 +129,15 @@ class MarginFormatter:
                 scripture_reading_found = True
                 # Add expanded verses for Scripture Reading
                 scripture_text = item.get("text", "")
+                # Display all verses that are marked as Scripture Reading context
                 for verse in verses:
                     if isinstance(verse, dict):
-                        verse_ref = verse.get('original_text', '')
-                        # Check if this verse is part of Scripture Reading
-                        if 'Rom. 8' in scripture_text and 'Romans' in str(verse.get('book', '')):
-                            chapter = verse.get('chapter', 0)
-                            if chapter == 8:
-                                self._add_verse_line({'reference': verse_ref, 'text': ''}, html_parts)
+                        # Check context field for Scripture Reading
+                        if verse.get('context', '').lower() == 'scripture reading':
+                            verse_ref = f"{verse.get('book', '')} {verse.get('chapter', '')}:{verse.get('start_verse', '')}"
+                            if verse.get('original_text'):
+                                verse_ref = verse.get('original_text')
+                            self._add_verse_line({'reference': verse_ref, 'text': ''}, html_parts)
                 break
         
         # Process outline items
