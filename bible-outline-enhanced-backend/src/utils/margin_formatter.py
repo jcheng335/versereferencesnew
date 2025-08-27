@@ -102,14 +102,59 @@ class MarginFormatter:
                 if 'hymns' in meta:
                     html_parts.append(f'<div class="hymns">EM Hymns: {meta["hymns"]}</div>')
             
-            # Process content
-            if 'content' in structured_data:
+            # Process content based on what's available
+            if 'content' in structured_data and structured_data['content']:
                 self._process_content(structured_data['content'], html_parts)
+            elif 'outline_structure' in structured_data and structured_data['outline_structure']:
+                # Convert outline_structure to content format
+                self._process_outline_structure(structured_data['outline_structure'], structured_data.get('verses', []), html_parts)
             elif 'structured_data' in structured_data:
                 self._process_node(structured_data['structured_data'], html_parts)
+            elif 'verses' in structured_data:
+                # If only verses available, display them
+                for verse in structured_data['verses']:
+                    if isinstance(verse, dict) and 'original_text' in verse:
+                        self._add_verse_line({'reference': verse['original_text'], 'text': ''}, html_parts)
         
         html_parts.append('</body></html>')
         return '\n'.join(html_parts)
+    
+    def _process_outline_structure(self, outline_structure: List[Dict], verses: List, html_parts: List[str]):
+        """Process outline_structure from pure LLM detector"""
+        # Process Scripture Reading first if present
+        scripture_reading_found = False
+        for item in outline_structure:
+            if item.get('type') == 'scripture_reading':
+                html_parts.append(f'<div class="scripture-reading">Scripture Reading: {item.get("text", "")}</div>')
+                scripture_reading_found = True
+                # Add expanded verses for Scripture Reading
+                scripture_text = item.get("text", "")
+                for verse in verses:
+                    if isinstance(verse, dict):
+                        verse_ref = verse.get('original_text', '')
+                        # Check if this verse is part of Scripture Reading
+                        if 'Rom. 8' in scripture_text and 'Romans' in str(verse.get('book', '')):
+                            chapter = verse.get('chapter', 0)
+                            if chapter == 8:
+                                self._add_verse_line({'reference': verse_ref, 'text': ''}, html_parts)
+                break
+        
+        # Process outline items
+        for item in outline_structure:
+            if item.get('type') in ['outline', 'roman', 'letter', 'number']:
+                # Simplified processing for outline items
+                number = item.get('number', '')
+                text = item.get('text', '')
+                
+                if item.get('type') == 'roman' or (number and re.match(r'^[IVX]+$', str(number))):
+                    html_parts.append(f'<div class="outline-point roman-numeral">')
+                    html_parts.append(f'<span class="outline-text">{number}. {text}</span>')
+                    html_parts.append('</div>')
+                else:
+                    html_parts.append(f'<div class="outline-point">')
+                    html_parts.append(f'<span class="outline-text">{number}. {text}</span>')
+                    html_parts.append('</div>')
+                    html_parts.append('<div class="clear"></div>')
     
     def _process_content(self, content: List[Dict], html_parts: List[str]):
         """Process content array with proper formatting"""

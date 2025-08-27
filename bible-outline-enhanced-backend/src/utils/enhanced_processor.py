@@ -313,10 +313,13 @@ class EnhancedProcessor:
                         references = detection_result.get('verses', [])
                         session_metadata = detection_result.get('metadata', {})
                         session_structure = detection_result.get('outline_structure', [])
+                        # Store the full detection result as structured_data for margin formatter
+                        session_structured_data = detection_result
                     else:
                         references = detection_result
                         session_metadata = {}
                         session_structure = []
+                        session_structured_data = None
                     
                     ref_dicts = []
                     
@@ -341,10 +344,13 @@ class EnhancedProcessor:
                     references = detection_result.get('verses', [])
                     session_metadata = detection_result.get('metadata', {})
                     session_structure = detection_result.get('outline_structure', [])
+                    # Store the full detection result as structured_data for margin formatter
+                    session_structured_data = detection_result
                 else:
                     references = detection_result
                     session_metadata = {}
                     session_structure = []
+                    session_structured_data = None
                 
                 ref_dicts = []
                 
@@ -371,9 +377,10 @@ class EnhancedProcessor:
                 'llm_outline': llm_outline,  # Store LLM outline structure if available
                 'metadata': session_metadata if 'session_metadata' in locals() else {},
                 'outline_structure': session_structure if 'session_structure' in locals() else [],
-                'structured_data': {
+                'structured_data': session_structured_data if 'session_structured_data' in locals() and session_structured_data else {
                     'metadata': session_metadata if 'session_metadata' in locals() else {},
                     'outline_structure': session_structure if 'session_structure' in locals() else [],
+                    'content': [],  # Will be populated with formatted content
                     'verses': ref_dicts
                 }
             }
