@@ -4,13 +4,19 @@ This file provides comprehensive guidance to Claude Code when working with Pytho
 
 ## Latest Updates (2025-08-27)
 
+### Version 4.2 - Critical Timeout Fix for Render
+- **CRITICAL FIX**: Added explicit timeout in render.yaml and Procfile
+- **Fixed**: Worker timeout by adding --timeout 300 directly to gunicorn command
+- **Added**: Procfile to override Render's default start command
+- **Updated**: render.yaml with explicit timeout parameters
+- **Note**: Render was NOT using gunicorn_config.py, must use explicit flags
+- **Status**: This should finally resolve the 30-second timeout issue
+
 ### Version 4.1 - Timeout and Fallback Fixes
 - **Fixed**: Worker timeout issues by adding explicit 300s timeout in run.sh
 - **Fixed**: GPT-4o fallback now properly uses full prompt for better accuracy
 - **Added**: Explicit timeout configuration in multiple places (gunicorn_config.py, run.sh)
 - **Updated**: Error handling to properly fallback from GPT-5 to GPT-4o
-- **Note**: Render service must use run.sh or explicit --timeout 300 flag
-- **Status**: Network errors due to worker timeouts being resolved
 
 ### Version 4.0 - Margin Formatter Integration Fixed
 - **Fixed**: Margin formatter now properly populates HTML body with content
