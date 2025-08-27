@@ -36,7 +36,7 @@ class PureLLMDetector:
         """Detect verses and document structure using pure LLM intelligence"""
         
         # Process in chunks for large documents
-        if len(text) > 8000:
+        if len(text) > 15000:  # Increased threshold since GPT-5 can handle more
             return self._detect_verses_chunked(text)
         
         prompt = self._build_comprehensive_prompt(text)
